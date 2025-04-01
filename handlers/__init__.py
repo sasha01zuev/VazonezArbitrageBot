@@ -6,7 +6,6 @@ routers_list = [
     *users_router  # * - распаковка списка
 ]
 
-
 __all__ = [
     "routers_list",
 ]

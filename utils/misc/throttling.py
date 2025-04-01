@@ -10,6 +10,6 @@ def rate_limit(limit: float = 1.0):
     Работает совместно с ThrottlingMiddleware.
     """
     def decorator(handler: Callable):
-        THROTTLE_LIMITS[id(handler)] = limit
+        setattr(handler, "rate_limit", limit)
         return handler
     return decorator

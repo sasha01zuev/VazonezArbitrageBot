@@ -6,7 +6,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 import middlewares
 from handlers import routers_list
-
+from utils.notify_admins import on_startup_notify
 from config import config
 import betterlogging as blog
 
@@ -66,6 +66,7 @@ async def main():
     # Регистрация роутеров
     dp.include_routers(*routers_list)
 
+    await on_startup_notify(bot)
     await dp.start_polling(bot)
     await bot.session.close()
 
@@ -73,5 +74,5 @@ async def main():
 if __name__ == "__main__":
     try:
         asyncio.run(main())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, SystemExit):
         logging.info("Bot stopped")
