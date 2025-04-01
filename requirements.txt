@@ -1,0 +1,3 @@
+aiogram==3.19.0
+environs==14.1.1
+betterlogging==1.0.0
