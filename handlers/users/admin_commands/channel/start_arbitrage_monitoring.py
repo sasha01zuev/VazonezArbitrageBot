@@ -1,4 +1,5 @@
 import asyncio
+import copy
 
 from aiogram import Router
 from aiogram.types import Message
@@ -9,7 +10,8 @@ from data.get_files import load_channel_monitoring_available
 from services.redis_clients import inter_exchange_redis
 from pprint import pprint
 
-from utils.filter_pairs import filter_negative_profit_pairs, recalculate_net_profit_with_spot_fees
+from utils.filter_pairs import (recalculate_spread_from_net_profit, filter_significant_pairs_changes,
+                                recalculate_and_filter_by_net_profit)
 
 admin_channel_router = Router()
 
@@ -25,12 +27,16 @@ async def arbitrage_channel_monitoring(message: Message):
 
         if is_monitoring_available:
             all_pairs_from_redis = await inter_exchange_redis.get_all_pairs()
-            all_pairs = await filter_negative_profit_pairs(all_pairs_from_redis)
-            all_pairs = await recalculate_net_profit_with_spot_fees(all_pairs)
+            raw_pairs_for_prev = copy.deepcopy(all_pairs_from_redis)
+
+            all_pairs = await filter_significant_pairs_changes(current_pairs=all_pairs_from_redis,
+                                                               previous_pairs=prev_pairs)
+            all_pairs = await recalculate_and_filter_by_net_profit(all_pairs)
+            all_pairs = await recalculate_spread_from_net_profit(all_pairs)
 
             if all_pairs:
                 # pprint(all_pairs)
-
+                print(len(all_pairs))
                 for pair, data in all_pairs.items():
                     # region ИНИЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ
 
@@ -71,12 +77,11 @@ async def arbitrage_channel_monitoring(message: Message):
                     withdraw_fee = data['withdraw_fee']
 
                     # endregion
-
                     if pair not in prev_pairs:
                         await message.bot.send_message(chat_id="@VazonezArbitrageChannel",
                                                        disable_web_page_preview=True,
                                                        parse_mode="HTML",
-                                                       text=f"""<b><a href="{data['trade_urls']['buy_link']}">{data['exchange_buy']}</a> -> <a href="{data['trade_urls']['sell_link']}">{data['exchange_sell']}</a></b>
+                                                       text=f"""Н<b><a href="{data['trade_urls']['buy_link']}">{data['exchange_buy']}</a> -> <a href="{data['trade_urls']['sell_link']}">{data['exchange_sell']}</a></b>
 
 <b>Монета: ${coin} <code>{coin}</code></b>
 <b>Сеть: {network}</b>
@@ -87,9 +92,23 @@ async def arbitrage_channel_monitoring(message: Message):
 
 <b><a href="{first_exchange_deposit_withdraw_links['withdraw_link']}">ВЫВОД МОНЕТЫ</a></b>
 <b><a href="{second_exchange_deposit_withdraw_links['deposit_link']}">ДЕПОЗИТ МОНЕТЫ</a></b>""")
-                        await asyncio.sleep(3)
+
                     else:
-                        pass
+                        await message.bot.send_message(chat_id="@VazonezArbitrageChannel",
+                                                       disable_web_page_preview=True,
+                                                       parse_mode="HTML",
+                                                       text=f"""С<b><a href="{data['trade_urls']['buy_link']}">{data['exchange_buy']}</a> -> <a href="{data['trade_urls']['sell_link']}">{data['exchange_sell']}</a></b>
+                    
+<b>Монета: ${coin} <code>{coin}</code></b>
+<b>Сеть: {network}</b>
+<b>Чистый профит: {net_profit} USDT</b>
+<b>Профит в монете: {profit_coin}</b>
+<b>Спред: {spread}%</b>
+
+
+<b><a href="{first_exchange_deposit_withdraw_links['withdraw_link']}">ВЫВОД МОНЕТЫ</a></b>
+<b><a href="{second_exchange_deposit_withdraw_links['deposit_link']}">ДЕПОЗИТ МОНЕТЫ</a></b>""")
+                    await asyncio.sleep(3)
                         # prev_data = prev_pairs[pair]
                         # if data != prev_data:
                         #     await message.bot.send_message(chat_id="@VazonezArbitrageChannel",
@@ -98,5 +117,5 @@ async def arbitrage_channel_monitoring(message: Message):
                 # await message.bot.send_message(chat_id="@VazonezArbitrageChannel",
                 #                                text="Связка")
 
-            prev_pairs = all_pairs_from_redis
+            prev_pairs = raw_pairs_for_prev
             await asyncio.sleep(1)
