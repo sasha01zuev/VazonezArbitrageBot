@@ -218,9 +218,8 @@ async def group_and_pack_pairs_into_messages(pairs: Dict[str, dict], previous_pa
         # region ПРОВЕРКА НА ФЬЮЧЕРСЫ
         futures_message = ""
         if futures:
-            futures_message = "<b>🛡️ Фьючерсы:</b> "
-            for exchange, futures_link in futures.items():
-                futures_message += f"<b><a href='{futures_link}'>{exchange}</a></b> | "
+            links = [f"<b><a href='{link}'>{exchange}</a></b>" for exchange, link in futures.items()]
+            futures_message = "<b>🛡️ Фьючерсы:</b> " + " | ".join(links)
         # endregion
 
         message = (f"<b><code>{coin_name}</code> | <a href='{trade_urls_buy_link}'>{exchange_buy}</a> → "
