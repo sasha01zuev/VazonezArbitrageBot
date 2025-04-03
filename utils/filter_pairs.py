@@ -222,6 +222,18 @@ async def group_and_pack_pairs_into_messages(pairs: Dict[str, dict], previous_pa
             futures_message = "<b>🛡️ Фьючерсы:</b> " + " | ".join(links)
         # endregion
 
+        # region ПРОВЕРКА НА ЗАЙМ
+        loan_message = ""
+        if second_exchange_loan:
+            loan_message = f"\n        <b>🔐 <a href='{second_exchange_loan}'>Крипто займ</a></b>"
+        # endregion
+
+        # region ПРОВЕРКА НА МАРЖИНАЛЬНЫЙ ЗАЙМ
+        margin_message = ""
+        if second_exchange_margin:
+            margin_message = f"\n        <b>🔐 <a href='{second_exchange_margin}'>Маржинальный заём</a></b>"
+        # endregion
+
         message = (f"<b><code>{coin_name}</code> | <a href='{trade_urls_buy_link}'>{exchange_buy}</a> → "
                    f"<a href='{trade_urls_sell_link}'>{exchange_sell}</a></b>\n\n"
                    f""
@@ -239,7 +251,11 @@ async def group_and_pack_pairs_into_messages(pairs: Dict[str, dict], previous_pa
                    f""
                    f"        Средняя цена: <b>{avg_sell_price}$</b>\n"
                    f"        Ордера: <b>{sell_price_range}</b>\n"
-                   f"        Объём: <b>{total_sell_amount}$</b>\n\n"
+                   f"        Объём: <b>{total_sell_amount}$</b>"
+                   f"{loan_message}"
+                   f"{margin_message}"
+                   f""
+                   f"\n\n"
                    f""
                    f""
                    f"{contract_message}"
