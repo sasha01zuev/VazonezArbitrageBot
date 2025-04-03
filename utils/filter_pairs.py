@@ -1,5 +1,6 @@
 import logging
 from typing import List, Dict
+from decimal import Decimal, InvalidOperation
 
 
 async def recalculate_and_filter_by_net_profit(pairs: dict) -> dict:
@@ -130,15 +131,132 @@ async def group_and_pack_pairs_into_messages(pairs: Dict[str, dict], previous_pa
     max_message_length = 4096
     max_messages_per_batch = 10
 
+    def smart_round(value) -> float:
+        try:
+            num = float(value)
+
+            # Оставляем как есть, если число <= 1 и после точки <= 6 символов
+            if num < 1:
+                after_dot = str(num).split(".")[1]
+                if len(after_dot) <= 6:
+                    return num
+                # иначе — ищем первые 3 значащих цифры после ведущих нулей
+                cleaned = after_dot.lstrip("0")
+                return float(f"0.{after_dot[:len(after_dot) - len(cleaned) + 3]}")
+
+            # >=1 и <100 — округляем до 2 знаков
+            elif num < 100:
+                return round(num, 2)
+
+            # >=100 — округляем до 1 знака
+            else:
+                return round(num, 1)
+
+        except (ValueError, TypeError, InvalidOperation) as e:
+            logging.exception(f"Ошибка преобразования {value} в число: {e}")
+            return value
+
     def format_pair(arbitrage_pair: dict) -> str:
-        return (
-            f"<b>{arbitrage_pair['exchange_buy']} → {arbitrage_pair['exchange_sell']}</b>\n"
-            f"<b>Профит:</b> {arbitrage_pair['net_profit']} USDT\n"
-            f"<b>Спред:</b> {arbitrage_pair['spread']}%</b>\n"
-            f"<b>Сеть:</b> {arbitrage_pair['network']}\n"
-            f"<b><a href=\"{arbitrage_pair['first_exchange_deposit_withdraw_links']['withdraw_link']}\">Вывод</a></b> | "
-            f"<b><a href=\"{arbitrage_pair['second_exchange_deposit_withdraw_links']['deposit_link']}\">Депозит</a></b>\n\n"
-        )
+        # region ИНИЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ
+
+        coin_name = arbitrage_pair['coin']
+        avg_buy_price = smart_round(arbitrage_pair['avg_buy_price'])
+        avg_sell_price = smart_round(arbitrage_pair['avg_sell_price'])
+        buy_orders = arbitrage_pair['buy_orders']
+        buy_price_range = arbitrage_pair['buy_price_range']
+        exchange_buy = arbitrage_pair['exchange_buy']
+        exchange_sell = arbitrage_pair['exchange_sell']
+        trade_urls = arbitrage_pair['trade_urls']
+        trade_urls_buy_link = trade_urls['buy_link']
+        trade_urls_sell_link = trade_urls['sell_link']
+        first_exchange_coin_confirmations = arbitrage_pair['first_exchange_coin_confirmations']
+        first_exchange_coin_contract = arbitrage_pair['first_exchange_coin_contract']
+        first_exchange_deposit_withdraw_links = arbitrage_pair['first_exchange_deposit_withdraw_links']
+        first_exchange_deposit_withdraw_links_withdraw_link = first_exchange_deposit_withdraw_links['withdraw_link']
+        first_exchange_loan = arbitrage_pair['first_exchange_loan']
+        first_exchange_margin = arbitrage_pair['first_exchange_margin']
+        futures = arbitrage_pair['futures']
+        net_profit = smart_round(arbitrage_pair['net_profit'])
+        network = arbitrage_pair['network']
+        profit_coin = smart_round(arbitrage_pair['profit_coin'])
+        profit_usdt = arbitrage_pair['profit_usdt']
+        second_exchange_coin_confirmations = arbitrage_pair['second_exchange_coin_confirmations']
+        second_exchange_coin_contract = arbitrage_pair['second_exchange_coin_contract']
+        second_exchange_deposit_withdraw_links = arbitrage_pair['second_exchange_deposit_withdraw_links']
+        second_exchange_deposit_withdraw_links_deposit_link = second_exchange_deposit_withdraw_links['deposit_link']
+        second_exchange_loan = arbitrage_pair['second_exchange_loan']
+        second_exchange_margin = arbitrage_pair['second_exchange_margin']
+        sell_orders = arbitrage_pair['sell_orders']
+        sell_price_range = arbitrage_pair['sell_price_range']
+        spot_fee_first_exchange = smart_round(arbitrage_pair['spot_fee_first_exchange'])
+        spot_fee_second_exchange = smart_round(arbitrage_pair['spot_fee_second_exchange'])
+        spot_percent_fee_first_exchange = arbitrage_pair['spot_percent_fee_first_exchange']
+        spot_percent_fee_second_exchange = arbitrage_pair['spot_percent_fee_second_exchange']
+        spread = arbitrage_pair['spread']
+        total_buy_amount = smart_round(arbitrage_pair['total_buy_amount'])
+        total_sell_amount = smart_round(arbitrage_pair['total_sell_amount'])
+        volume_coin = arbitrage_pair['volume_coin']
+        volume_usdt = arbitrage_pair['volume_usdt']
+        withdraw_fee = smart_round(arbitrage_pair['withdraw_fee'])
+
+        # endregion
+
+        # region ПРОВЕРКА НА СХОЖЕСТЬ КОНТРАКТОВ
+        contract_message = ""
+        if (first_exchange_coin_contract and second_exchange_coin_contract) and (
+                first_exchange_coin_contract.lower() == second_exchange_coin_contract.lower()):
+            contract_message = ("<b>✅ Одинаковые контракты</b>\n"
+                                f"<blockquote>{first_exchange_coin_contract}</blockquote>\n\n")
+        # endregion
+
+        # region ПРОВЕРКА НА ПОДТВЕРЖДЕНИЯ СЕТИ
+        confirmations_message = ""
+        if second_exchange_coin_confirmations:
+            confirmations_message = f"| {second_exchange_coin_confirmations} подтверждений "
+        # endregion
+
+        # region ПРОВЕРКА НА ФЬЮЧЕРСЫ
+        futures_message = ""
+        if futures:
+            futures_message = "<b>🛡️ Фьючерсы:</b> "
+            for exchange, futures_link in futures.items():
+                futures_message += f"<b><a href='{futures_link}'>{exchange}</a></b> | "
+        # endregion
+
+        message = (f"<b><code>{coin_name}</code> | <a href='{trade_urls_buy_link}'>{exchange_buy}</a> → "
+                   f"<a href='{trade_urls_sell_link}'>{exchange_sell}</a></b>\n\n"
+                   f""
+                   f""
+                   f"<b>1️⃣ <a href='{trade_urls_buy_link}'>{exchange_buy}</a> | "
+                   f"<a href='{first_exchange_deposit_withdraw_links_withdraw_link}'>Вывод</a></b>\n"
+                   f""
+                   f"        Средняя цена: <b>{avg_buy_price}$</b>\n"
+                   f"        Ордера: <b>{buy_price_range}</b>\n"
+                   f"        Объём: <b>{total_buy_amount}$</b>\n\n"
+                   f""
+                   f""
+                   f"<b>2️⃣ <a href='{trade_urls_sell_link}'>{exchange_sell}</a> | "
+                   f"<a href='{second_exchange_deposit_withdraw_links_deposit_link}'>Депозит</a></b>\n"
+                   f""
+                   f"        Средняя цена: <b>{avg_sell_price}$</b>\n"
+                   f"        Ордера: <b>{sell_price_range}</b>\n"
+                   f"        Объём: <b>{total_sell_amount}$</b>\n\n"
+                   f""
+                   f""
+                   f"{contract_message}"
+                   f""
+                   f""
+                   f"<b>🔗 Сеть:</b> {network} {confirmations_message}\n"
+                   f"<b>💵 Чистый профит:</b> {net_profit}$ | {profit_coin} ${coin_name}\n"
+                   f"<b>📊 Spread:</b> {spread}%\n"
+                   f"<b>✂️ Комиссии:</b> <b>B</b> — {spot_fee_first_exchange}$, <b>S</b> — {spot_fee_second_exchange}$, "
+                   f"<b>W</b> — {withdraw_fee}$\n\n"
+                   f""
+                   f"{futures_message}"
+                   f""
+                   f"\n\n\n")
+
+        return message
 
     # 1. Разделение на новые и старые
     new_pairs = {k: v for k, v in pairs.items() if k not in previous_pairs}
@@ -161,14 +279,14 @@ async def group_and_pack_pairs_into_messages(pairs: Dict[str, dict], previous_pa
     # 4. Упаковка в сообщения
     final_messages = []
     for coin, coin_pairs in grouped_by_coin.items():
-        current_message = f"<b>🔹 ARBITRAGE: {coin}</b>\n\n"
+        current_message = ""
         for pair in coin_pairs:
             formatted = format_pair(pair)
             if len(current_message) + len(formatted) <= max_message_length:
                 current_message += formatted
             else:
                 final_messages.append(current_message.strip())
-                current_message = f"<b>🔹 ARBITRAGE: {coin}</b>\n\n{formatted}"
+                current_message = formatted
 
         if current_message.strip():
             final_messages.append(current_message.strip())
