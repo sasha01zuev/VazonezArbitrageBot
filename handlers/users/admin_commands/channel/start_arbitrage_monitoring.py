@@ -10,7 +10,7 @@ from filters.admin import IsMainAdmin
 from data.get_files import load_channel_monitoring_available
 from services.redis_clients import inter_exchange_redis
 from pprint import pprint
-
+from aiogram.exceptions import TelegramRetryAfter
 from utils.filter_pairs import (recalculate_spread_from_net_profit, filter_significant_pairs_changes,
                                 recalculate_and_filter_by_net_profit, group_and_pack_pairs_into_messages)
 
@@ -44,22 +44,27 @@ async def arbitrage_channel_monitoring(message: Message):
 
                 logging.info(f"🔹 Подготовлено {len(messages_pairs)} сообщений к отправке")
 
-                for i, msg in enumerate(messages_pairs, start=1):
-                    logging.info(f"📤 Отправка сообщения {i}/{len(messages_pairs)} ({len(msg)} символов)")
-                    await message.bot.send_message(
-                        chat_id="@VazonezArbitrageChannel",
-                        text=msg,
-                        parse_mode="HTML",
-                        disable_web_page_preview=True
-                    )
-                    await asyncio.sleep(3)
-                        # prev_data = prev_pairs[pair]
-                        # if data != prev_data:
-                        #     await message.bot.send_message(chat_id="@VazonezArbitrageChannel",
-                        #                                    text="Связка")
-                        #     await asyncio.sleep(10)
-                # await message.bot.send_message(chat_id="@VazonezArbitrageChannel",
-                #                                text="Связка")
+                try:
+                    for i, msg in enumerate(messages_pairs, start=1):
+                        logging.info(f"📤 Отправка сообщения {i}/{len(messages_pairs)} ({len(msg)} символов)")
+                        # await message.bot.send_message(
+                        #     chat_id="@VazonezArbitrageChannel",
+                        #     text=msg,
+                        #     parse_mode="HTML",
+                        #     disable_web_page_preview=True
+                        # )
+                        await message.bot.send_message(
+                            chat_id="-1002666568267",
+                            text=msg,
+                            parse_mode="HTML",
+                            disable_web_page_preview=True
+                        )
+                        await asyncio.sleep(3)
+                except TelegramRetryAfter as e:
+                    logging.warning(f"⚠️ FLOOD WARNING: Telegram ограничил рассылку: FloodControl на {e.retry_after} сек")
+                    await asyncio.sleep(e.retry_after)
+                except Exception as e:
+                    logging.error(f"❌ Ошибка при отправке сообщения: {e}")
 
             prev_pairs = raw_pairs_for_prev
             await asyncio.sleep(1)
