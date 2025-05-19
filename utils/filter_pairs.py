@@ -190,7 +190,6 @@ async def group_and_pack_pairs_into_messages(pairs: Dict[str, dict], previous_pa
 
     def format_pair(arbitrage_pair: dict) -> str:
         # region ИНИЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ
-
         coin_name = arbitrage_pair['coin']
         avg_buy_price = smart_round(arbitrage_pair['avg_buy_price'])
         avg_sell_price = smart_round(arbitrage_pair['avg_sell_price'])
@@ -198,12 +197,22 @@ async def group_and_pack_pairs_into_messages(pairs: Dict[str, dict], previous_pa
         buy_price_range = arbitrage_pair['buy_price_range']
         exchange_buy = arbitrage_pair['exchange_buy']
         exchange_sell = arbitrage_pair['exchange_sell']
-        trade_urls = arbitrage_pair['trade_urls']
+        trade_urls = arbitrage_pair.get('trade_urls')
+
+        if not trade_urls:
+            print(arbitrage_pair)
+            return ""
+
         trade_urls_buy_link = trade_urls['buy_link']
         trade_urls_sell_link = trade_urls['sell_link']
         first_exchange_coin_confirmations = arbitrage_pair['first_exchange_coin_confirmations']
         first_exchange_coin_contract = arbitrage_pair['first_exchange_coin_contract']
-        first_exchange_deposit_withdraw_links = arbitrage_pair['first_exchange_deposit_withdraw_links']
+        first_exchange_deposit_withdraw_links = arbitrage_pair.get('first_exchange_deposit_withdraw_links')
+
+        if not first_exchange_deposit_withdraw_links:
+            print(arbitrage_pair)
+            return ""
+
         first_exchange_deposit_withdraw_links_withdraw_link = first_exchange_deposit_withdraw_links['withdraw_link']
         first_exchange_loan = arbitrage_pair['first_exchange_loan']
         first_exchange_margin = arbitrage_pair['first_exchange_margin']

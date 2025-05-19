@@ -9,8 +9,8 @@ from handlers import routers_list
 from utils.notify_admins import on_startup_notify
 from config import config
 import betterlogging as blog
-
-from middlewares import ThrottlingMiddleware
+from services.database.postgresql import Database
+from middlewares.database import DatabaseMiddleware
 from logging.handlers import RotatingFileHandler
 
 
@@ -26,7 +26,7 @@ def setup_logging(log_file: str = "bot.log", max_bytes: int = 20 * 1024 * 1024, 
     Returns:
         None
     """
-    log_level = logging.INFO
+    log_level = logging.DEBUG
     blog.basic_colorized_config(level=log_level)
 
     # Файл логов с ротацией
@@ -60,6 +60,12 @@ async def main():
     # Инициализация бота и диспетчера
     bot = Bot(token=config.BOT_TOKEN)
     dp = Dispatcher(storage=MemoryStorage())
+
+    # База данных
+    db = await Database.create()
+    # dp.workflow_data['db'] = db
+
+    dp.update.middleware(DatabaseMiddleware(db))  # Регистрация middleware для работы с БД для всех типов событий
 
     middlewares.setup(dp)
 
