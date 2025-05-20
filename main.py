@@ -59,6 +59,8 @@ async def main():
 
     # Инициализация бота и диспетчера
     bot = Bot(token=config.BOT_TOKEN)
+    await bot.delete_webhook(drop_pending_updates=True)
+
     dp = Dispatcher(storage=MemoryStorage())
 
     # База данных

@@ -27,7 +27,7 @@ class RegisterUserMiddleware(BaseMiddleware):
         elif hasattr(event, "edited_message") and hasattr(event.edited_message, "from_user"):
             user = event.edited_message.from_user
         else:
-            logging.warning("User not found in event.")
+            logging.warning("User не найден в событии")
             return await handler(event, data)
 
         db: Database = data["db"]
@@ -45,9 +45,9 @@ class RegisterUserMiddleware(BaseMiddleware):
                 first_name=user.first_name,
                 language="ru"
             )
-            logging.debug(f"User {user.id} registered in the database.")
+            logging.debug(f"User {user.id} зарегистрирован в базу данных.")
         else:
-            logging.debug(f"User {user.id} already exists in the database.")
+            logging.debug(f"User {user.id} уже был зарегистрирован в базе данных.")
 
         # TODO: В будущем добавить проверку на другие параметры, например на подписку, настройки и т.д.
 
