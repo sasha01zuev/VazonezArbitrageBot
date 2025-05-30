@@ -16,3 +16,7 @@ class ExchangesCallbackFactory(CallbackData, prefix="set_exchange"):
 
 class SetSpreadCallbackFactory(CallbackData, prefix="set_spread"):
     spread_type: str
+
+
+class SetProfitCallbackFactory(CallbackData, prefix="set_profit"):
+    profit_type: str

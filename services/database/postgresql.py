@@ -195,3 +195,18 @@ class Database:
             logging.info(f"Обновлено значение {spread_type} для пользователя {user_id}: {spread}")
         except Exception as e:
             logging.exception(f"Ошибка обновления значения {spread_type} для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_profit(self, user_id: int, profit: float):
+        """
+        profit: float
+        """
+        sql = """
+        UPDATE user_inter_exchange_settings
+        SET profit = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, profit)
+            logging.info(f"Обновлено значение профита для пользователя {user_id}: {profit}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления профита для пользователя {user_id}: {e}")

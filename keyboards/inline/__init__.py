@@ -1,6 +1,7 @@
 from .callback_factories import (SettingsCallbackFactory, LanguageCallbackFactory, ExchangesCallbackFactory,
-                                 SetSpreadCallbackFactory)
+                                 SetSpreadCallbackFactory, SetProfitCallbackFactory)
 
+from .settings_profit_keyboard import get_settings_profit_keyboard
 from .settings_spread_keyboard import get_settings_spread_keyboard
 from .settings_exchanges_keyboard import get_settings_exchanges_keyboard
 from .language_keyboad import get_language_keyboard

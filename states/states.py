@@ -14,3 +14,8 @@ ExampleSoloState = State()
 class SetSpreadGroup(StatesGroup):
     SetMaxSpread = State()
     SetMinSpread = State()
+
+
+class SetProfitGroup(StatesGroup):
+    SetMaxProfit = State()
+    SetMinProfit = State()

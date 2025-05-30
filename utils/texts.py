@@ -186,6 +186,46 @@ TEXTS = {
                     }
                 }
             },
+            "profit": {
+                "current_profit": {
+                    "ru": "<b>Ваши текущие настройки профита:</b>\n\n"
+                          "Минимальный профит: <b>{profit}$</b>",
+                    "en": "<b>Your current profit settings:</b>\n\n"
+                          "Minimum profit: <b>{profit}$</b>"
+                },
+                "set_profit": {
+                    "ru": "<b>Введите минимальный профит ниже ⬇️</b>",
+                    "en": "<b>Input minimum profit below ⬇️</b>"
+                },
+                "errors": {
+                    "not_a_number": {
+                        "ru": "❗️ Минимальный профит должен быть числом!\n\n"
+                              "<b>Введите минимальный профит ниже ⬇️</b>",
+                        "en": "❗️ The minimum profit must be a number!\n\n"
+                              "<b>Input minimum profit below ⬇️</b>"
+                    },
+                    "less_than_0": {
+                        "ru": "❗️ Минимальный профит не может быть меньше или равен нулю!\n\n"
+                              "<b>Введите минимальный профит ниже ⬇️</b>",
+                        "en": "❗️ The minimum profit can't be less than or equal to zero!\n\n"
+                              "<b>Input minimum profit below ⬇️</b>"
+                    },
+                    "greater_than_50000": {
+                        "ru": "❗️ Минимальный профит не может быть больше 50,000!\n\n"
+                              "<b>Введите минимальный профит ниже ⬇️</b>",
+                        "en": "❗️ The minimum profit can't be greater than 50,000!\n\n"
+                              "<b>Input minimum profit below ⬇️</b>"
+                    }
+                },
+                "success": {
+                    "profit": {
+                        "ru": "<b>✅ Минимальный профит успешно изменён!</b>\n\n"
+                              "<b>Текущий минимальный профит: {profit}$</b>",
+                        "en": "<b>✅ Minimum profit successfully changed!</b>\n\n"
+                              "<b>Current minimum profit: {profit}$</b>"
+                    }
+                }
+            },
         },
         "state": {
             "canceled_state": {
@@ -324,6 +364,12 @@ TEXTS = {
                     "en": "⬆️ Set minimum spread"
                 },
 
+            },
+            "profit": {
+                "set_min_profit": {
+                    "ru": "⬇️ Установить минимальный профит",
+                    "en": "⬇️ Set minimum profit"
+                }
             }
         }
     },
