@@ -53,3 +53,145 @@ class Database:
         except Exception as e:
             logging.exception(f"Ошибка получения пользователя: {e}")
             return None
+
+    async def get_user_language(self, user_id: int):
+        sql = "SELECT language FROM users WHERE id = $1"
+        try:
+            language = await self.pool.fetchval(sql, user_id)
+            logging.debug(f"Получен язык пользователя {user_id}: {language}")
+            return language
+        except Exception as e:
+            logging.exception(f"Ошибка получения языка пользователя: {e}")
+            return None
+
+    async def set_user_language(self, user_id: int, language: str):
+        """
+        Languages: ru, en
+        """
+        sql = """
+        UPDATE users SET language = $1 WHERE id = $2
+        """
+        try:
+            await self.pool.execute(sql, language, user_id)
+            logging.info(f"Обновлён язык пользователя {user_id} на {language}")
+        except Exception as e:
+            logging.exception(f"Ошибка при обновлении языка пользователя {user_id}: {e}")
+
+    async def get_availability_user_subscriptions(self, user_id: int):
+        sql = "SELECT * FROM user_subscriptions WHERE user_id = $1"
+        try:
+            user_subscriptions = await self.pool.fetchrow(sql, user_id)
+            logging.debug(f"Получены подписки пользователя {user_id}: {user_subscriptions}")
+            return user_subscriptions
+        except Exception as e:
+            logging.exception(f"Ошибка получения подписок пользователя: {e}")
+            return None
+
+    async def add_user_default_subscriptions(self, user_id: int):
+        sql = f"""
+        INSERT INTO user_subscriptions(user_id)
+        VALUES($1);
+        """
+        try:
+            await self.pool.execute(sql, user_id)
+            logging.info(f"Подписки для пользователя {user_id} добавлены в базу данных.")
+        except Exception as e:
+            logging.exception(f"{user_id} - ошибка при добавлении подписок в базу: {e}")
+
+    async def get_user_subscription(self, user_id: int, subscription_type: str):
+        """
+        subscription_type: inter_exchange
+        """
+
+        sql = (f"SELECT {subscription_type} FROM user_subscriptions "
+               f"WHERE (user_id = $1 AND {subscription_type} > NOW())")
+        try:
+            subscription = await self.pool.fetchval(sql, user_id)
+            logging.debug(f"Получена подписка {subscription_type} пользователя {user_id}: {subscription}")
+            return subscription
+        except Exception as e:
+            logging.exception(f"Ошибка получения подписки {subscription_type} пользователя {user_id}: {e}")
+            return None
+
+    async def get_availability_user_inter_exchange_exchanges(self, user_id: int):
+        sql = "SELECT * FROM user_inter_exchange_exchanges WHERE user_id = $1"
+        try:
+            user_exchanges = await self.pool.fetchrow(sql, user_id)
+            logging.debug(f"Получены биржи пользователя {user_id}: {user_exchanges}")
+            return user_exchanges
+        except Exception as e:
+            logging.exception(f"Ошибка получения бирж пользователя: {e}")
+            return None
+
+    async def add_user_default_inter_exchange_exchanges(self, user_id):
+        sql = f"""
+        INSERT INTO user_inter_exchange_exchanges(user_id)
+        VALUES($1);
+        """
+        try:
+            await self.pool.execute(sql, user_id)
+            logging.info(f"Межбиржевые биржи для пользователя {user_id} добавлены в базу данных.")
+        except Exception as e:
+            logging.exception(f"{user_id} - ошибка при добавлении межбиржевых бирж в базу: {e}")
+
+    async def get_user_inter_exchange_exchanges(self, user_id: int):
+        sql = "SELECT * FROM user_inter_exchange_exchanges WHERE user_id = $1"
+        try:
+            exchanges = await self.pool.fetchrow(sql, user_id)
+            logging.debug(f"Получены межбиржевые биржи пользователя {user_id}: {exchanges}")
+            return exchanges
+        except Exception as e:
+            logging.exception(f"Ошибка получения межбиржевых бирж пользователя {user_id}: {e}")
+            return None
+
+    async def set_user_inter_exchange_exchange(self, user_id: int, exchange: str, value: bool):
+        """
+        exchange: binance, bybit, huobi, kucoin, mexc, okx, cryptocom,
+                  bitmart, poloniex, bitget, gate, bingx, lbank, coinw
+        """
+        sql = f"""
+        UPDATE user_inter_exchange_exchanges
+        SET {exchange} = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, value)
+            logging.info(f"Обновлено значение {exchange} для пользователя {user_id}: {value}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления значения {exchange} для пользователя {user_id}: {e}")
+
+    async def get_user_inter_exchange_settings(self, user_id: int):
+        sql = "SELECT * FROM user_inter_exchange_settings WHERE user_id = $1"
+        try:
+            user_exchanges = await self.pool.fetchrow(sql, user_id)
+            logging.debug(f"Получены настройки межбиржевых бирж пользователя {user_id}: {user_exchanges}")
+            return user_exchanges
+        except Exception as e:
+            logging.exception(f"Ошибка получения настроек межбиржевых бирж пользователя: {e}")
+            return None
+
+    async def add_user_default_inter_exchange_settings(self, user_id):
+        sql = f"""
+        INSERT INTO user_inter_exchange_settings(user_id)
+        VALUES($1);
+        """
+        try:
+            await self.pool.execute(sql, user_id)
+            logging.info(f"Межбиржевые настройки для пользователя {user_id} добавлены в базу данных.")
+        except Exception as e:
+            logging.exception(f"{user_id} - ошибка при добавлении межбиржевых настроек в базу: {e}")
+
+    async def set_user_inter_exchange_spread(self, user_id: int, spread_type: str, spread: float):
+        """
+        spread_type: min_spread, max_spread
+        """
+        sql = f"""
+        UPDATE user_inter_exchange_settings
+        SET {spread_type} = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, spread)
+            logging.info(f"Обновлено значение {spread_type} для пользователя {user_id}: {spread}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления значения {spread_type} для пользователя {user_id}: {e}")

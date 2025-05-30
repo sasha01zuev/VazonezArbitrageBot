@@ -9,3 +9,8 @@ class ExampleGroup(StatesGroup):
 
 # Пример одиночного состояния
 ExampleSoloState = State()
+
+
+class SetSpreadGroup(StatesGroup):
+    SetMaxSpread = State()
+    SetMinSpread = State()
