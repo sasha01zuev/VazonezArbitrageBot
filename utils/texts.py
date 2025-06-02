@@ -226,6 +226,46 @@ TEXTS = {
                     }
                 }
             },
+            "volume": {
+                "current_volume": {
+                    "ru": "<b>Ваши текущие настройки объёма:</b>\n\n"
+                          "Максимальный объём: <b>{volume} USDT</b>",
+                    "en": "<b>Your current volume settings:</b>\n\n"
+                          "Max volume: <b>{volume} USDT</b>"
+                },
+                "set_volume": {
+                    "ru": "<b>Введите максимальный объём ниже ⬇️</b>",
+                    "en": "<b>Input max volume below ⬇️</b>"
+                },
+                "errors": {
+                    "not_a_number": {
+                        "ru": "❗️ Максимальный объём должен быть числом!\n\n"
+                              "<b>Введите минимальный объём ниже ⬇️</b>",
+                        "en": "❗️ The max volume must be a number!\n\n"
+                              "<b>Input max volume below ⬇️</b>"
+                    },
+                    "less_than_0": {
+                        "ru": "❗️ Максимальный объём не может быть меньше или равен нулю!\n\n"
+                              "<b>Введите минимальный объём ниже ⬇️</b>",
+                        "en": "❗️ The max volume can't be less than or equal to zero!\n\n"
+                              "<b>Input max volume below ⬇️</b>"
+                    },
+                    "greater_than_1000000": {
+                        "ru": "❗️ Максимальный объём не может быть больше 1,000,000 USDT!\n\n"
+                              "<b>Введите минимальный объём ниже ⬇️</b>",
+                        "en": "❗️ The max volume can't be greater than 1,000,000 USDT!\n\n"
+                              "<b>Input max volume below ⬇️</b>"
+                    }
+                },
+                "success": {
+                    "volume": {
+                        "ru": "<b>✅ Максимальный объём успешно изменён!</b>\n\n"
+                              "<b>Текущий максимальный объём: {volume} USDT</b>",
+                        "en": "<b>✅ Max volume successfully changed!</b>\n\n"
+                              "<b>Current max volume: {volume} USDT</b>"
+                    }
+                }
+            }
         },
         "state": {
             "canceled_state": {
@@ -369,6 +409,12 @@ TEXTS = {
                 "set_min_profit": {
                     "ru": "⬇️ Установить минимальный профит",
                     "en": "⬇️ Set minimum profit"
+                }
+            },
+            "volume": {
+                "set_max_volume": {
+                    "ru": "⬇️ Установить максимальный объём",
+                    "en": "⬇️ Set maximum volume"
                 }
             }
         }

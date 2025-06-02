@@ -1,6 +1,7 @@
 from .callback_factories import (SettingsCallbackFactory, LanguageCallbackFactory, ExchangesCallbackFactory,
-                                 SetSpreadCallbackFactory, SetProfitCallbackFactory)
+                                 SetSpreadCallbackFactory, SetProfitCallbackFactory, SetVolumeCallbackFactory)
 
+from .settings_volume_keyboard import get_settings_volume_keyboard
 from .settings_profit_keyboard import get_settings_profit_keyboard
 from .settings_spread_keyboard import get_settings_spread_keyboard
 from .settings_exchanges_keyboard import get_settings_exchanges_keyboard

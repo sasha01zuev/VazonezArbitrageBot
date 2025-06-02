@@ -52,11 +52,6 @@ async def set_max_spread(callback: CallbackQuery, texts: TextProxy, state: FSMCo
     await state.clear()
 
     await callback.answer(cache_time=1)
-    user_id = callback.from_user.id
-
-    user_settings = await db.get_user_inter_exchange_settings(user_id=user_id)
-    min_spread = round(float(user_settings['min_spread']), 1)
-    max_spread = round(float(user_settings['max_spread']), 1)
 
     await callback.message.edit_text(text=texts.commands.settings.spread.set_max_spread,
                                      disable_web_page_preview=True, parse_mode="HTML",
@@ -83,10 +78,12 @@ async def set_max_spread_handler(message: Message, texts: TextProxy, state: FSMC
 
         if max_spread <= min_spread:
             await message.answer(text=texts.commands.settings.spread.errors.max_spread.less_than_min,
-                                 disable_web_page_preview=True, parse_mode="HTML")
+                                 disable_web_page_preview=True, parse_mode="HTML",
+                                 reply_markup=get_back_keyboard(texts=texts, callback_data="settings:spread"))
         elif max_spread > 100:
             await message.answer(text=texts.commands.settings.spread.errors.max_spread.greater_than_100,
-                                 disable_web_page_preview=True, parse_mode="HTML")
+                                 disable_web_page_preview=True, parse_mode="HTML",
+                                 reply_markup=get_back_keyboard(texts=texts, callback_data="settings:spread"))
         else:
             await db.set_user_inter_exchange_spread(user_id=user_id, spread_type='max_spread', spread=max_spread)
             await message.answer(texts.commands.settings.spread.success.max_spread.format(max_spread=max_spread,
@@ -141,10 +138,12 @@ async def set_min_spread_handler(message: Message, texts: TextProxy, state: FSMC
 
         if min_spread >= max_spread:
             await message.answer(text=texts.commands.settings.spread.errors.min_spread.greater_than_max,
-                                 disable_web_page_preview=True, parse_mode="HTML")
+                                 disable_web_page_preview=True, parse_mode="HTML",
+                                 reply_markup=get_back_keyboard(texts=texts, callback_data="settings:spread"))
         elif min_spread < 0:
             await message.answer(text=texts.commands.settings.spread.errors.min_spread.less_than_0,
-                                 disable_web_page_preview=True, parse_mode="HTML")
+                                 disable_web_page_preview=True, parse_mode="HTML",
+                                 reply_markup=get_back_keyboard(texts=texts, callback_data="settings:spread"))
         else:
             await db.set_user_inter_exchange_spread(user_id=user_id, spread_type='min_spread', spread=min_spread)
             await message.answer(texts.commands.settings.spread.success.min_spread.format(min_spread=min_spread,

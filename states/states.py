@@ -19,3 +19,8 @@ class SetSpreadGroup(StatesGroup):
 class SetProfitGroup(StatesGroup):
     SetMaxProfit = State()
     SetMinProfit = State()
+
+
+class SetVolumeGroup(StatesGroup):
+    SetMaxVolume = State()
+    SetMinVolume = State()

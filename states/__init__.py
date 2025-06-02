@@ -1,1 +1,1 @@
-from .states import ExampleGroup, ExampleSoloState, SetSpreadGroup, SetProfitGroup
+from .states import ExampleGroup, ExampleSoloState, SetSpreadGroup, SetProfitGroup, SetVolumeGroup

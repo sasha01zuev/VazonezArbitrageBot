@@ -51,10 +51,6 @@ async def set_profit_value(callback: CallbackQuery, texts: TextProxy, state: FSM
     await state.clear()
 
     await callback.answer(cache_time=1)
-    user_id = callback.from_user.id
-
-    user_settings = await db.get_user_inter_exchange_settings(user_id=user_id)
-    profit = round(float(user_settings['profit']), 1)
 
     await callback.message.edit_text(texts.commands.settings.profit.set_profit,
                                      disable_web_page_preview=True, parse_mode="HTML",
@@ -77,10 +73,16 @@ async def set_min_profit(message: Message, state: FSMContext, texts: TextProxy, 
 
         if profit <= 0:
             await message.answer(texts.commands.settings.profit.errors.less_than_0,
-                                 disable_web_page_preview=True, parse_mode="HTML")
+                                 disable_web_page_preview=True, parse_mode="HTML",
+                                 reply_markup=get_back_keyboard(texts=texts,
+                                                                callback_data="settings:profit"
+                                                                ))
         elif profit >= 50_000:
             await message.answer(texts.commands.settings.profit.errors.greater_than_50000,
-                                 disable_web_page_preview=True, parse_mode="HTML")
+                                 disable_web_page_preview=True, parse_mode="HTML",
+                                 reply_markup=get_back_keyboard(texts=texts,
+                                                                callback_data="settings:profit"
+                                                                ))
         else:
             await db.set_user_inter_exchange_profit(user_id=user_id, profit=profit)
             await message.answer(texts.commands.settings.profit.success.profit.format(profit=profit),

@@ -20,3 +20,7 @@ class SetSpreadCallbackFactory(CallbackData, prefix="set_spread"):
 
 class SetProfitCallbackFactory(CallbackData, prefix="set_profit"):
     profit_type: str
+
+
+class SetVolumeCallbackFactory(CallbackData, prefix="set_volume"):
+    volume_type: str

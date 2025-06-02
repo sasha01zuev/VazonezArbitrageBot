@@ -210,3 +210,18 @@ class Database:
             logging.info(f"Обновлено значение профита для пользователя {user_id}: {profit}")
         except Exception as e:
             logging.exception(f"Ошибка обновления профита для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_volume(self, user_id: int, volume: int):
+        """
+        volume: int
+        """
+        sql = """
+        UPDATE user_inter_exchange_settings
+        SET volume = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, volume)
+            logging.info(f"Обновлено значение объема для пользователя {user_id}: {volume}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления объема для пользователя {user_id}: {e}")
