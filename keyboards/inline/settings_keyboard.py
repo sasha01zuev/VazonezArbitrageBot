@@ -21,7 +21,7 @@ def get_settings_keyboard(texts: TextProxy) -> InlineKeyboardMarkup:
     builder.button(text=texts.keyboard.settings.buttons.contracts, callback_data=SettingsCallbackFactory(item="contracts").pack())
     builder.button(text=texts.keyboard.settings.buttons.withdraw_fee, callback_data=SettingsCallbackFactory(item="withdraw_fee").pack())
 
-    builder.button(text=texts.keyboard.settings.buttons.volume_24h, callback_data=SettingsCallbackFactory(item="volume_24h").pack())
+    builder.button(text=texts.keyboard.settings.buttons.volume_24h, callback_data=SettingsCallbackFactory(item="coin_volume_24h").pack())
     builder.button(text=texts.keyboard.settings.buttons.last_trade_time, callback_data=SettingsCallbackFactory(item="last_trade_time").pack())
 
     builder.button(text=texts.keyboard.settings.buttons.notification, callback_data=SettingsCallbackFactory(item="notification").pack())

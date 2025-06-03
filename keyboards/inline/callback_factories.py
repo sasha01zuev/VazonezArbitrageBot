@@ -38,3 +38,7 @@ class SetContractsCallbackFactory(CallbackData, prefix="set_profit"):
 
 class SetWithdrawFeeCallbackFactory(CallbackData, prefix="set_withdraw_fee"):
     withdraw_fee_type: str
+
+
+class SetCoinVolume24hCallbackFactory(CallbackData, prefix="set_spread"):
+    coin_volume_24h_type: str

@@ -68,8 +68,8 @@ async def set_max_volume(message: Message, state: FSMContext, texts: TextProxy, 
 
         if ',' in volume:
             volume = volume.replace(',', '.')
-            volume = float(volume)
 
+        volume = float(volume)
         volume = int(volume)
 
         if volume <= 0:

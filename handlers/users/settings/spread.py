@@ -95,7 +95,8 @@ async def set_max_spread_handler(message: Message, texts: TextProxy, state: FSMC
 
     except ValueError:
         await message.answer(text=texts.commands.settings.spread.errors.max_spread.not_a_number,
-                             disable_web_page_preview=True, parse_mode="HTML")
+                             disable_web_page_preview=True, parse_mode="HTML",
+                             reply_markup=get_back_keyboard(texts=texts, callback_data="settings:spread"))
 
 
 @router.callback_query(SetSpreadCallbackFactory.filter(F.spread_type == "min_spread"), StateFilter("*"))
@@ -155,4 +156,5 @@ async def set_min_spread_handler(message: Message, texts: TextProxy, state: FSMC
 
     except ValueError:
         await message.answer(text=texts.commands.settings.spread.errors.min_spread.not_a_number,
-                             disable_web_page_preview=True, parse_mode="HTML")
+                             disable_web_page_preview=True, parse_mode="HTML",
+                             reply_markup=get_back_keyboard(texts=texts, callback_data="settings:spread"))

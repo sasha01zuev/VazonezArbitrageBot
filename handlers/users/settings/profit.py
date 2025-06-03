@@ -93,4 +93,6 @@ async def set_min_profit(message: Message, state: FSMContext, texts: TextProxy, 
             await state.clear()
     except ValueError:
         await message.answer(texts.commands.settings.profit.errors.not_a_number,
-                             disable_web_page_preview=True, parse_mode="HTML")
+                             disable_web_page_preview=True, parse_mode="HTML",
+                             reply_markup=get_back_keyboard(texts=texts,callback_data="settings:profit")
+                             )

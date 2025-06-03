@@ -337,6 +337,86 @@ TEXTS = {
                               "<b>Current max withdrawal fee: {withdraw_fee} USDT</b>"
                     }
                 }
+            },
+            "volume_24h": {
+                "current_volume_24h": {
+                    "ru": "<b>Ваши текущие настройки оборота за 24ч:</b>\n\n"
+                          "Максимальный оборот: <b>{max_coin_volume_24h} USDT</b>\n"
+                          "Минимальный оборот: <b>{min_coin_volume_24h} USDT</b>",
+                    "en": "<b>Your current 24h turnover settings:</b>\n\n"
+                          "Max turnover: <b>{max_coin_volume_24h} USDT</b>\n"
+                          "Minimum turnover: <b>{min_coin_volume_24h} USDT</b>"
+                },
+                "set_max_coin_volume_24h": {
+                    "ru": "<b>Введите максимальный оборот за 24ч ниже ⬇️</b>",
+                    "en": "<b>Input max 24h turnover below ⬇️</b>"
+                },
+                "set_min_coin_volume_24h": {
+                    "ru": "<b>Введите минимальный оборот за 24ч ниже ⬇️</b>",
+                    "en": "<b>Input min 24h turnover below ⬇️</b>"
+                },
+                "errors": {
+                    "max_coin_volume_24h": {
+                        "not_a_number": {
+                            "ru": "❗️ Максимальный оборот должен быть числом!\n\n"
+                                    "<b>Введите максимальный оборот за 24ч ниже ⬇️</b>",
+                            "en": "❗️ The max 24h turnover must be a number!\n\n"
+                                    "<b>Input max 24h turnover below ⬇️</b>"
+                        },
+                        "less_than_0": {
+                            "ru": "❗️ Максимальный оборот не может быть меньше или равен нулю!\n\n"
+                                  "<b>Введите максимальный оборот за 24ч ниже ⬇️</b>",
+                            "en": "❗️ The max 24h turnover can't be less than or equal to zero!\n\n"
+                                  "<b>Input max 24h turnover below ⬇️</b>"
+                        },
+                        "greater_than_100000000000": {
+                            "ru": "❗️ Максимальный оборот не может быть больше 100,000,000,000 USDT!\n\n"
+                                  "<b>Введите максимальный оборот за 24ч ниже ⬇️</b>",
+                            "en": "❗️ The max 24h turnover can't be greater than 100,000,000,000 USDT!\n\n"
+                                  "<b>Input max 24h turnover below ⬇️</b>"
+                        },
+                        "less_than_min": {
+                            "ru": "❗️ Максимальный оборот не может быть меньше или равен минимальному обороту!\n\n"
+                                  "<b>Введите максимальный оборот за 24ч ниже ⬇️</b>",
+                            "en": "❗️ The max 24h turnover can't be less than or equal to the min 24h turnover!\n\n"
+                                  "<b>Input max 24h turnover below ⬇️</b>"
+                        }
+                    },
+                    "min_coin_volume_24h": {
+                        "not_a_number": {
+                            "ru": "❗️ Минимальный оборот должен быть числом!\n\n"
+                                  "<b>Введите минимальный оборот за 24ч ниже ⬇️</b>",
+                            "en": "❗️ The min 24h turnover must be a number!\n\n"
+                                  "<b>Input min 24h turnover below ⬇️</b>"
+                        },
+                        "less_than_0": {
+                            "ru": "❗️ Минимальный оборот не может быть меньше или равен нулю!\n\n"
+                                  "<b>Введите минимальный оборот за 24ч ниже ⬇️</b>",
+                            "en": "❗️ The min 24h turnover can't be less than or equal to zero!\n\n"
+                                  "<b>Input min 24h turnover below ⬇️</b>"
+                        },
+                        "greater_than_max": {
+                            "ru": "❗️ Минимальный оборот не может быть больше или равен максимальному обороту!\n\n"
+                                  "<b>Введите минимальный оборот за 24ч ниже ⬇️</b>",
+                            "en": "❗️ The min 24h turnover can't be greater than or equal to the max 24h turnover!\n\n"
+                                  "<b>Input min 24h turnover below ⬇️</b>"
+                        }
+                    }
+                },
+                "success": {
+                    "max_coin_volume_24h": {
+                        "ru": "<b>✅ Максимальный оборот за 24ч успешно изменён!</b>\n\n"
+                              "<b>Текущий максимальный оборот: {max_coin_volume_24h} USDT</b>",
+                        "en": "<b>✅ Max 24h turnover successfully changed!</b>\n\n"
+                              "<b>Current max 24h turnover: {max_coin_volume_24h} USDT</b>"
+                    },
+                    "min_coin_volume_24h": {
+                        "ru": "<b>✅ Минимальный оборот за 24ч успешно изменён!</b>\n\n"
+                              "<b>Текущий минимальный оборот: {min_coin_volume_24h} USDT</b>",
+                        "en": "<b>✅ Min 24h turnover successfully changed!</b>\n\n"
+                              "<b>Current min 24h turnover: {min_coin_volume_24h} USDT</b>"
+                    }
+                }
             }
         },
         "state": {
@@ -526,6 +606,17 @@ TEXTS = {
                     "ru": "⬇️ Установить максимальную комиссию вывода",
                     "en": "⬇️ Set maximum withdrawal fee"
                 }
+            },
+            "coin_volume_24h": {
+                "set_max_coin_volume_24h": {
+                    "ru": "⬇️ Установить максимальный оборот за 24ч",
+                    "en": "⬇️ Set maximum 24h turnover"
+                },
+                "set_min_coin_volume_24h": {
+                    "ru": "⬆️ Установить минимальный оборот за 24ч",
+                    "en": "⬆️ Set minimum 24h turnover"
+                }
+
             }
         }
     },

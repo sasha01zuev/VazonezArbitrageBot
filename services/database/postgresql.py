@@ -286,3 +286,20 @@ class Database:
             logging.info(f"Обновлено значение комиссии за вывод для пользователя {user_id}: {withdraw_fee}")
         except Exception as e:
             logging.exception(f"Ошибка обновления комиссии за вывод для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_coin_volume_24h(self, user_id: int, coin_volume_24h: int,
+                                                      coin_volume_24h_type: str):
+        """
+        coin_volume_24h: int
+        coin_volume_24h_type: min_coin_volume_24h, max_coin_volume_24h
+        """
+        sql = f"""
+        UPDATE user_inter_exchange_settings
+        SET {coin_volume_24h_type} = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, coin_volume_24h)
+            logging.info(f"Обновлено значение {coin_volume_24h_type} для пользователя {user_id}: {coin_volume_24h}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления значения {coin_volume_24h_type} для пользователя {user_id}: {e}")

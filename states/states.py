@@ -28,3 +28,8 @@ class SetVolumeGroup(StatesGroup):
 
 class SetWithdrawFeeGroup(StatesGroup):
     SetMaxWithdrawFee = State()
+
+
+class SetCoinVolume24hGroup(StatesGroup):
+    SetMaxCoinVolume24h = State()
+    SetMinCoinVolume24h = State()
