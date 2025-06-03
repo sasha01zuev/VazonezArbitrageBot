@@ -256,3 +256,18 @@ class Database:
             logging.info(f"Обновлено значение показа неопределенных сетей для пользователя {user_id}: {show_undefined_networks}")
         except Exception as e:
             logging.exception(f"Ошибка обновления показа неопределенных сетей для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_contracts(self, user_id: int, contracts: bool):
+        """
+        contracts:bool
+        """
+        sql = f"""
+        UPDATE user_inter_exchange_settings
+        SET contracts = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, contracts)
+            logging.info(f"Обновлено значение контрактов для пользователя {user_id}: {contracts}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления контрактов для пользователя {user_id}: {e}")

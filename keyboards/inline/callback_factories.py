@@ -30,3 +30,7 @@ class SetNetworkSpeedCallbackFactory(CallbackData, prefix="set_network_speed"):
     network_speed: int
     is_show_undefined_networks_chosen: bool
     show_undefined_networks: bool
+
+
+class SetContractsCallbackFactory(CallbackData, prefix="set_profit"):
+    contracts_type: bool

@@ -285,6 +285,18 @@ TEXTS = {
                           "⚪️ - Undefined network speed\n\n"
                           "By selecting network speed you determine the maximum confirmation time for which pairs will be shown."
                 }
+            },
+            "contracts": {
+                "set_contracts": {
+                    "ru": "<b>📜 ФИЛЬТР ПО КОНТРАКТАМ</b>\n\n"
+                          "Выберите, какие связки показывать:\n"
+                          "• Только с одинаковыми контрактами\n"
+                          "• Или все, независимо от контрактов",
+                    "en": "<b>📜 CONTRACTS FILTER</b>\n\n"
+                          "Choose which pairs to show:\n"
+                          "• Only with the same contracts\n"
+                          "• Or all, regardless of contracts"
+                }
             }
         },
         "state": {
@@ -316,6 +328,10 @@ TEXTS = {
         "no_subscription": {
             "ru": "❕ У вас нет подписки!",
             "en": "❕ You don't have a subscription!"
+        },
+        "successfully_changed": {
+            "ru": "✅ Успешно изменено!",
+            "en": "✅ Successfully changed!"
         }
     },
     "keyboard": {
@@ -453,8 +469,18 @@ TEXTS = {
                 "undefined_network_off": {
                     "ru": "Неопределённая скорость сети: ВЫКЛ",
                     "en": "Undefined network speed: OFF"
+                }
+            },
+            "contracts": {
+                "contracts_match": {
+                    "ru": "Контракты совпадают",
+                    "en": "Contracts match"
                 },
-            }
+                "all_pairs": {
+                    "ru": "Все связки",
+                    "en": "All arbitrage pairs"
+                }
+            },
         }
     },
     "button": {

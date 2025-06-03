@@ -84,12 +84,12 @@ async def set_network_speed_value(callback: CallbackQuery, texts: TextProxy, sta
             show_undefined_networks = callback_data.show_undefined_networks
             network_speed = callback_data.network_speed
 
-            await db.set_user_inter_exchange_network_speed(user_id=user_id, network_speed=network_speed)
             await callback.message.edit_text(text=texts.commands.settings.network_speed.set_network_speed,
                 disable_web_page_preview=True, parse_mode="HTML",
                 reply_markup=get_settings_network_speed_keyboard(texts=texts, network_speed=network_speed,
                                                          show_undefined_networks=show_undefined_networks)
             )
+            await db.set_user_inter_exchange_network_speed(user_id=user_id, network_speed=network_speed)
             await callback.answer(cache_time=2, text=texts.callback.network_speed)
         except TelegramBadRequest:
             await callback.answer(cache_time=2, text=texts.callback.no_changes)
