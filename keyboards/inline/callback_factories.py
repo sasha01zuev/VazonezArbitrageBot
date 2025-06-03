@@ -46,3 +46,7 @@ class SetCoinVolume24hCallbackFactory(CallbackData, prefix="set_spread"):
 
 class SetLastTradeTimeCallbackFactory(CallbackData, prefix="set_last_trade_time"):
     last_trade_time_type: str
+
+
+class SetNotificationCallbackFactory(CallbackData, prefix="set_notification"):
+    notification: bool

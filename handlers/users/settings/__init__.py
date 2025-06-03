@@ -8,6 +8,7 @@ from .contracts import router as contracts_router
 from .withdraw_fee import router as withdraw_fee_router
 from .coin_volume_24h import router as coin_volume_24h_router
 from .last_trade_time import router as last_trade_time_router
+from .notification import router as notification_router
 
 routers = [language_router, exchanges_router, spread_router, profit_router, volume_router, network_speed_router,
-           contracts_router, withdraw_fee_router, coin_volume_24h_router, last_trade_time_router]
+           contracts_router, withdraw_fee_router, coin_volume_24h_router, last_trade_time_router, notification_router]

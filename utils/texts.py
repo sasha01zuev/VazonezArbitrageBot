@@ -550,6 +550,12 @@ TEXTS = {
                               "<b>Current min time: {min_last_trade_time}</b>"
                     }
                 }
+            },
+            "notification": {
+                "current_notification": {
+                    "ru": "<b>Включение/отключение транслирования связок</b>",
+                    "en": "<b>Enable/disable pair broadcasting</b>"
+                }
             }
         },
         "state": {
@@ -585,6 +591,16 @@ TEXTS = {
         "successfully_changed": {
             "ru": "✅ Успешно изменено!",
             "en": "✅ Successfully changed!"
+        },
+        "notification": {
+            "notification_enabled": {
+                "ru": "🔔 Уведомления включены",
+                "en": "🔔 Notifications enabled"
+            },
+            "notification_disabled": {
+                "ru": "🔕 Уведомления отключены",
+                "en": "🔕 Notifications disabled"
+            }
         }
     },
     "keyboard": {
@@ -759,6 +775,12 @@ TEXTS = {
                 "set_max_last_trade_time": {
                     "ru": "⬆️ Установить максимальное время",
                     "en": "⬆️ Set maximum last trade time"
+                }
+            },
+            "notification": {
+                "inter_exchange": {
+                    "ru": "Межбиржевые уведомления",
+                    "en": "Inter-exchange notifications"
                 }
             }
         }

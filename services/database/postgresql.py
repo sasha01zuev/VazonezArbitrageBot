@@ -323,3 +323,18 @@ class Database:
             logging.info(f"Обновлено значение {last_trade_time_type} для пользователя {user_id}: {last_trade_time}")
         except Exception as e:
             logging.exception(f"Ошибка обновления значения {last_trade_time_type} для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_notification(self, user_id: int, notification: bool):
+        """
+        notification: bool
+        """
+        sql = """
+        UPDATE user_inter_exchange_settings
+        SET notification = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, notification)
+            logging.info(f"Обновлено значение уведомлений для пользователя {user_id}: {notification}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления уведомлений для пользователя {user_id}: {e}")
