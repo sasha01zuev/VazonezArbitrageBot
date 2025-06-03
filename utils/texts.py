@@ -452,13 +452,13 @@ TEXTS = {
                           "Если вы хотите ввести только минуты — можно так: <code>0 15 0</code>\n"
                           "Если вы хотите ввести только секунды — можно так: <code>0 0 15</code>\n"
                           "Связки включая от текущего времени последней торговли:\n"
-                          "<code>0 0 0</code>",
+                          "<code>0</code> ИЛИ <code>0 0 0</code>",
                     "en": "🕒 Input min time in format: <b>Hours Minutes Seconds</b>\n\n"
                           "For example: <code>2 30 0</code> — this is 2 hours 30 minutes.\n"
                           "If you want to input only minutes — you can do it like this: <code>0 15 0</code>\n"
-                          "If you want to input only seconds — you can do it like this: <code>0 0 15</code>"
+                          "If you want to input only seconds — you can do it like this: <code>0 0 15</code>\n"
                           "Pairs including from the current last trade time:\n"
-                          "<code>0 0 0</code>"
+                          "<code>0</code> OR <code>0 0 0</code>"
                 },
                 "errors": {
                     "max_last_trade_time": {
@@ -522,14 +522,14 @@ TEXTS = {
                                   "Если вы хотите ввести только минуты — можно так: <code>0 15 0</code>\n"
                                   "Если вы хотите ввести только секунды — можно так: <code>0 0 15</code>\n"
                                   "Связки включая от текущего времени последней торговли: \n"
-                                  "<code>0 0 0</code>",
+                                  "<code>0</code> ИЛИ <code>0 0 0</code>",
                             "en": "❗️ Invalid time format!\n\n"
                                   "<b>Input time in format: Hours Minutes Seconds</b>\n\n"
                                   "For example: <code>2 30 0</code> — this is 2 hours 30 minutes.\n"
                                   "If you want to input only minutes — you can do it like this: <code>0 15 0</code>\n"
                                   "If you want to input only seconds — you can do it like this: <code>0 0 15</code>"
                                   "Pairs including from the current last trade time: \n"
-                                  "<code>0 0 0</code>"
+                                  "<code>0</code> OR <code>0 0 0</code>"
                         },
                         "greater_than_1000000": {
                             "ru": "❗️ Слишком много!\n\n"

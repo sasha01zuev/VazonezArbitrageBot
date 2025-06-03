@@ -14,11 +14,12 @@ from states import SetLastTradeTimeGroup
 router = Router()
 
 
-def format_seconds_to_hms(seconds: int) -> str:
+def format_seconds_to_hms(seconds: int, texts: TextProxy) -> str:
     hours = seconds // 3600
     minutes = (seconds % 3600) // 60
     secs = seconds % 60
-    return f"{hours}ч. {minutes}м. {secs}с."
+    return (f"{hours}{texts.commands.settings.hour} {minutes}{texts.commands.settings.minute} "
+            f"{secs}{texts.commands.settings.seconds}")
 
 
 def parse_hms_input_to_seconds(text: str) -> int:
@@ -57,8 +58,8 @@ async def set_last_trade_time(callback: CallbackQuery, texts: TextProxy, state: 
         max_last_trade_time = user_settings['max_last_trade_time']
 
         await callback.message.edit_text(text=texts.commands.settings.last_trade_time.current_last_trade_time.format(
-            min_last_trade_time=format_seconds_to_hms(min_last_trade_time),
-            max_last_trade_time=format_seconds_to_hms(max_last_trade_time)),
+            min_last_trade_time=format_seconds_to_hms(seconds=min_last_trade_time, texts=texts),
+            max_last_trade_time=format_seconds_to_hms(max_last_trade_time, texts=texts)),
             disable_web_page_preview=True, parse_mode="HTML",
             reply_markup=get_settings_last_trade_time_keyboard(texts=texts)
         )
@@ -128,7 +129,7 @@ async def set_max_last_trade_time_value(message: Message, texts: TextProxy, stat
                                                      last_trade_time_type="max_last_trade_time")
 
     await message.answer(text=texts.commands.settings.last_trade_time.success.max_last_trade_time.format(
-        max_last_trade_time=format_seconds_to_hms(max_last_trade_time)),
+        max_last_trade_time=format_seconds_to_hms(max_last_trade_time, texts=texts)),
         disable_web_page_preview=True, parse_mode="HTML",
         reply_markup=get_back_keyboard(texts=texts, callback_data="settings:last_trade_time"))
 
@@ -198,7 +199,7 @@ async def set_min_last_trade_time_value(message: Message, texts: TextProxy, stat
                                                      last_trade_time_type="min_last_trade_time")
 
     await message.answer(text=texts.commands.settings.last_trade_time.success.min_last_trade_time.format(
-        min_last_trade_time=format_seconds_to_hms(min_last_trade_time)),
+        min_last_trade_time=format_seconds_to_hms(min_last_trade_time, texts=texts)),
         disable_web_page_preview=True, parse_mode="HTML",
         reply_markup=get_back_keyboard(texts=texts, callback_data="settings:last_trade_time"))
 
