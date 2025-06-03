@@ -225,3 +225,34 @@ class Database:
             logging.info(f"Обновлено значение объема для пользователя {user_id}: {volume}")
         except Exception as e:
             logging.exception(f"Ошибка обновления объема для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_network_speed(self, user_id: int, network_speed: int):
+        """
+        network_speed: int (1-5)
+        От 1 до 5. 1 - до 2 минут. 2 - до 5 минут. 3 - до 20 минут. 4 - до 1 часа. 5 - больше одного часа
+        """
+        sql = """
+        UPDATE user_inter_exchange_settings
+        SET network_speed = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, network_speed)
+            logging.info(f"Обновлено значение скорости сети для пользователя {user_id}: {network_speed}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления скорости сети для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_show_undefined_networks(self, user_id: int, show_undefined_networks: bool):
+        """
+        show_undefined_networks: bool
+        """
+        sql = """
+        UPDATE user_inter_exchange_settings
+        SET show_undefined_networks = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, show_undefined_networks)
+            logging.info(f"Обновлено значение показа неопределенных сетей для пользователя {user_id}: {show_undefined_networks}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления показа неопределенных сетей для пользователя {user_id}: {e}")

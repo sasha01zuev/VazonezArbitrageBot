@@ -24,3 +24,9 @@ class SetProfitCallbackFactory(CallbackData, prefix="set_profit"):
 
 class SetVolumeCallbackFactory(CallbackData, prefix="set_volume"):
     volume_type: str
+
+
+class SetNetworkSpeedCallbackFactory(CallbackData, prefix="set_network_speed"):
+    network_speed: int
+    is_show_undefined_networks_chosen: bool
+    show_undefined_networks: bool

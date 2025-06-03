@@ -265,6 +265,26 @@ TEXTS = {
                               "<b>Current max volume: {volume} USDT</b>"
                     }
                 }
+            },
+            "network_speed": {
+                "set_network_speed": {
+                    "ru": "<b>Выберите ниже скорость сети</b>\n\n"
+                          "⚡️ - До 2 минут\n"
+                          "🟢 - До 5 минут\n"
+                          "🟡 - До 20 минут\n"
+                          "🔴 - До 1 часа\n"
+                          "💀 - Более 1 часа\n\n"
+                          "⚪️ - Неопределённая скорость сети\n\n"
+                          "Выбирая скорость сети, вы опеределяете до какого максимального времени подтверждения буду показываться связки.",
+                    "en": "<b>Select network speed below</b>\n\n"
+                          "⚡️ - Up to 2 minutes\n"
+                          "🟢 - Up to 5 minutes\n"
+                          "🟡 - Up to 20 minutes\n"
+                          "🔴 - Up to 1 hour\n"
+                          "💀 - More than 1 hour\n\n"
+                          "⚪️ - Undefined network speed\n\n"
+                          "By selecting network speed you determine the maximum confirmation time for which pairs will be shown."
+                }
             }
         },
         "state": {
@@ -284,6 +304,14 @@ TEXTS = {
         "exchange_changed": {
             "ru": "✅ Успешно изменено!",
             "en": "✅ Successfully changed!"
+        },
+        "network_speed": {
+            "ru": "✅ Скорость сети успешно изменена!",
+            "en": "✅ Network speed successfully changed!"
+        },
+        "no_changes": {
+            "ru": "❕ Нет изменений!",
+            "en": "❕ No changes!"
         },
         "no_subscription": {
             "ru": "❕ У вас нет подписки!",
@@ -416,6 +444,16 @@ TEXTS = {
                     "ru": "⬇️ Установить максимальный объём",
                     "en": "⬇️ Set maximum volume"
                 }
+            },
+            "network_speed": {
+                "undefined_network_on": {
+                    "ru": "Неопределённая скорость сети: ВКЛ",
+                    "en": "Undefined network speed: ON"
+                },
+                "undefined_network_off": {
+                    "ru": "Неопределённая скорость сети: ВЫКЛ",
+                    "en": "Undefined network speed: OFF"
+                },
             }
         }
     },
