@@ -43,7 +43,6 @@ async def set_contracts_value(callback: CallbackQuery, texts: TextProxy, state: 
     await state.clear()
 
     user_id = callback.from_user.id
-    print(f"Callback data: {callback_data}")
     contracts = callback_data.contracts_type
 
     try:

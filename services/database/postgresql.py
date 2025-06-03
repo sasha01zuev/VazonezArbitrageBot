@@ -271,3 +271,18 @@ class Database:
             logging.info(f"Обновлено значение контрактов для пользователя {user_id}: {contracts}")
         except Exception as e:
             logging.exception(f"Ошибка обновления контрактов для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_withdraw_fee(self, user_id: int, withdraw_fee: float):
+        """
+        withdraw_fee: float
+        """
+        sql = """
+        UPDATE user_inter_exchange_settings
+        SET withdraw_fee = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, withdraw_fee)
+            logging.info(f"Обновлено значение комиссии за вывод для пользователя {user_id}: {withdraw_fee}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления комиссии за вывод для пользователя {user_id}: {e}")

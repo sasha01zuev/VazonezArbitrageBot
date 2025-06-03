@@ -297,6 +297,46 @@ TEXTS = {
                           "• Only with the same contracts\n"
                           "• Or all, regardless of contracts"
                 }
+            },
+            "withdraw_fee": {
+                "current_withdraw_fee": {
+                    "ru": "<b>Ваши текущие настройки комиссии вывода:</b>\n\n"
+                            "Максимальная комиссия вывода: <b>{withdraw_fee} USDT</b>",
+                    "en": "<b>Your current withdrawal fee settings:</b>\n\n"
+                            "Max ithdrawal fee: <b>{withdraw_fee} USDT</b>"
+                },
+                "set_withdraw_fee": {
+                    "ru": "<b>Введите максимальную комиссию вывода ниже ⬇️</b>",
+                    "en": "<b>Input max withdrawal fee below ⬇️</b>"
+                },
+                "errors": {
+                    "not_a_number": {
+                        "ru": "❗️ Максимальная комиссия вывода должна быть числом!\n\n"
+                              "<b>Введите максимальную комиссию вывода ниже ⬇️</b>",
+                        "en": "❗️ The max withdrawal fee must be a number!\n\n"
+                              "<b>Input max withdrawal fee below ⬇️</b>"
+                    },
+                    "less_than_0": {
+                        "ru": "❗️ Максимальная комиссия вывода не может быть меньше или равна нулю!\n\n"
+                              "<b>Введите максимальную комиссию вывода ниже ⬇️</b>",
+                        "en": "❗️ The max withdrawal fee can't be less than or equal to zero!\n\n"
+                              "<b>Input max withdrawal fee below ⬇️</b>"
+                    },
+                    "greater_than_100000": {
+                        "ru": "❗️ Максимальная комиссия вывода не может быть больше 100,000 USDT!\n\n"
+                              "<b>Введите максимальную комиссию вывода ниже ⬇️</b>",
+                        "en": "❗️ The max withdrawal fee can't be greater than 100,000 USDT!\n\n"
+                              "<b>Input max withdrawal fee below ⬇️</b>"
+                    }
+                },
+                "success": {
+                    "withdraw_fee": {
+                        "ru": "<b>✅ Максимальная комиссия вывода успешно изменена!</b>\n\n"
+                              "<b>Текущая максимальная комиссия вывода: {withdraw_fee} USDT</b>",
+                        "en": "<b>✅ Max withdrawal fee successfully changed!</b>\n\n"
+                              "<b>Current max withdrawal fee: {withdraw_fee} USDT</b>"
+                    }
+                }
             }
         },
         "state": {
@@ -481,6 +521,12 @@ TEXTS = {
                     "en": "All arbitrage pairs"
                 }
             },
+            "withdraw_fee": {
+                "set_max_withdraw_fee": {
+                    "ru": "⬇️ Установить максимальную комиссию вывода",
+                    "en": "⬇️ Set maximum withdrawal fee"
+                }
+            }
         }
     },
     "button": {

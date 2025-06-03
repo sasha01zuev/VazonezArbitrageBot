@@ -34,3 +34,7 @@ class SetNetworkSpeedCallbackFactory(CallbackData, prefix="set_network_speed"):
 
 class SetContractsCallbackFactory(CallbackData, prefix="set_profit"):
     contracts_type: bool
+
+
+class SetWithdrawFeeCallbackFactory(CallbackData, prefix="set_withdraw_fee"):
+    withdraw_fee_type: str

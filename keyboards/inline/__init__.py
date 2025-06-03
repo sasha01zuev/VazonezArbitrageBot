@@ -1,7 +1,8 @@
 from .callback_factories import (SettingsCallbackFactory, LanguageCallbackFactory, ExchangesCallbackFactory,
                                  SetSpreadCallbackFactory, SetProfitCallbackFactory, SetVolumeCallbackFactory,
-                                 SetNetworkSpeedCallbackFactory, SetContractsCallbackFactory)
+                                 SetNetworkSpeedCallbackFactory, SetContractsCallbackFactory, SetWithdrawFeeCallbackFactory)
 
+from .settings_withdraw_fee_keyboard import get_settings_withdraw_fee_keyboard
 from .settings_contracts_keyboard import get_settings_contracts_keyboard
 from .settings_network_speed_keyboard import get_settings_network_speed_keyboard
 from .settings_volume_keyboard import get_settings_volume_keyboard

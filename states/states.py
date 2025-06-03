@@ -24,3 +24,7 @@ class SetProfitGroup(StatesGroup):
 class SetVolumeGroup(StatesGroup):
     SetMaxVolume = State()
     SetMinVolume = State()
+
+
+class SetWithdrawFeeGroup(StatesGroup):
+    SetMaxWithdrawFee = State()
