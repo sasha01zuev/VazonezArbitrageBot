@@ -303,3 +303,23 @@ class Database:
             logging.info(f"Обновлено значение {coin_volume_24h_type} для пользователя {user_id}: {coin_volume_24h}")
         except Exception as e:
             logging.exception(f"Ошибка обновления значения {coin_volume_24h_type} для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_last_trade_time(self, user_id: int, last_trade_time: int,
+                                                      last_trade_time_type: str):
+        """
+        Устанавливает время последней торговли для пользователя.
+        :param user_id:
+        :param last_trade_time:
+        :param last_trade_time_type:
+        :return:
+        """
+        sql = f"""
+        UPDATE user_inter_exchange_settings
+        SET {last_trade_time_type} = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, last_trade_time)
+            logging.info(f"Обновлено значение {last_trade_time_type} для пользователя {user_id}: {last_trade_time}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления значения {last_trade_time_type} для пользователя {user_id}: {e}")

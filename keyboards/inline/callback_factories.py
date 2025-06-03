@@ -42,3 +42,7 @@ class SetWithdrawFeeCallbackFactory(CallbackData, prefix="set_withdraw_fee"):
 
 class SetCoinVolume24hCallbackFactory(CallbackData, prefix="set_spread"):
     coin_volume_24h_type: str
+
+
+class SetLastTradeTimeCallbackFactory(CallbackData, prefix="set_last_trade_time"):
+    last_trade_time_type: str

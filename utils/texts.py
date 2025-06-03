@@ -86,6 +86,10 @@ TEXTS = {
                 "ru": "м.",
                 "en": "m."
             },
+            "seconds": {
+                "ru": "с.",
+                "en": "s."
+            },
             "remain": {
                 "ru": "осталось",
                 "en": "remain"
@@ -301,9 +305,9 @@ TEXTS = {
             "withdraw_fee": {
                 "current_withdraw_fee": {
                     "ru": "<b>Ваши текущие настройки комиссии вывода:</b>\n\n"
-                            "Максимальная комиссия вывода: <b>{withdraw_fee} USDT</b>",
+                          "Максимальная комиссия вывода: <b>{withdraw_fee} USDT</b>",
                     "en": "<b>Your current withdrawal fee settings:</b>\n\n"
-                            "Max ithdrawal fee: <b>{withdraw_fee} USDT</b>"
+                          "Max ithdrawal fee: <b>{withdraw_fee} USDT</b>"
                 },
                 "set_withdraw_fee": {
                     "ru": "<b>Введите максимальную комиссию вывода ниже ⬇️</b>",
@@ -359,9 +363,9 @@ TEXTS = {
                     "max_coin_volume_24h": {
                         "not_a_number": {
                             "ru": "❗️ Максимальный оборот должен быть числом!\n\n"
-                                    "<b>Введите максимальный оборот за 24ч ниже ⬇️</b>",
+                                  "<b>Введите максимальный оборот за 24ч ниже ⬇️</b>",
                             "en": "❗️ The max 24h turnover must be a number!\n\n"
-                                    "<b>Input max 24h turnover below ⬇️</b>"
+                                  "<b>Input max 24h turnover below ⬇️</b>"
                         },
                         "less_than_0": {
                             "ru": "❗️ Максимальный оборот не может быть меньше или равен нулю!\n\n"
@@ -415,6 +419,135 @@ TEXTS = {
                               "<b>Текущий минимальный оборот: {min_coin_volume_24h} USDT</b>",
                         "en": "<b>✅ Min 24h turnover successfully changed!</b>\n\n"
                               "<b>Current min 24h turnover: {min_coin_volume_24h} USDT</b>"
+                    }
+                }
+            },
+            "last_trade_time": {
+                "current_last_trade_time": {
+                    "ru": "<b>Ваши текущие настройки времени последней торговли:</b>\n\n"
+                          "Максимальное время: <b>{max_last_trade_time}</b>\n"
+                          "Минимальное время: <b>{min_last_trade_time}</b>\n\n"
+                          "Связки будут показываться, если время последней торговли монеты на второй бирже будет "
+                          "входить в ваш диапазон времени - <b>ОТ</b> {min_last_trade_time} "
+                          "<b>ДО</b> {max_last_trade_time}.",
+                    "en": "<b>Your current last trade time settings:</b>\n\n"
+                          "Maximum time: <b>{max_last_trade_time}</b>\n"
+                          "Minimum time: <b>{min_last_trade_time}</b>\n\n"
+                          "Pairs will be shown if the last trade time of the coin on the second exchange falls "
+                          "within your time range - <b>FROM</b> {min_last_trade_time} <b>TO</b> {max_last_trade_time}."
+                },
+                "set_max_last_trade_time": {
+                    "ru": "🕒 Введите максимальное время в формате: <b>Часы Минуты Секунды</b>\n\n"
+                          "Например: <code>2 30 0</code> — это 2 часа 30 минут.\n"
+                          "Если вы хотите ввести только минуты — можно так: <code>0 15 0</code>\n"
+                          "Если вы хотите ввести только секунды — можно так: <code>0 0 15</code>",
+                    "en": "🕒 Input max time in format: <b>Hours Minutes Seconds</b>\n\n"
+                          "For example: <code>2 30 0</code> — this is 2 hours 30 minutes.\n"
+                          "If you want to input only minutes — you can do it like this: <code>0 15 0</code>\n"
+                          "If you want to input only seconds — you can do it like this: <code>0 0 15</code>"
+                },
+                "set_min_last_trade_time": {
+                    "ru": "🕒 Введите минимальное время в формате: <b>Часы Минуты Секунды</b>\n\n"
+                          "Например: <code>2 30 0</code> — это 2 часа 30 минут.\n"
+                          "Если вы хотите ввести только минуты — можно так: <code>0 15 0</code>\n"
+                          "Если вы хотите ввести только секунды — можно так: <code>0 0 15</code>\n"
+                          "Связки включая от текущего времени последней торговли:\n"
+                          "<code>0 0 0</code>",
+                    "en": "🕒 Input min time in format: <b>Hours Minutes Seconds</b>\n\n"
+                          "For example: <code>2 30 0</code> — this is 2 hours 30 minutes.\n"
+                          "If you want to input only minutes — you can do it like this: <code>0 15 0</code>\n"
+                          "If you want to input only seconds — you can do it like this: <code>0 0 15</code>"
+                          "Pairs including from the current last trade time:\n"
+                          "<code>0 0 0</code>"
+                },
+                "errors": {
+                    "max_last_trade_time": {
+                        "not_a_number": {
+                            "ru": "❗️ Максимальное время должно быть числом!\n\n"
+                                  "<b>Введите максимальное время ниже ⬇️</b>",
+                            "en": "❗️ The max time must be a number!\n\n"
+                                  "<b>Input max time below ⬇️</b>"
+                        },
+                        "less_than_min": {
+                            "ru": "❗️ Максимальное время не может быть меньше или равно минимальному времени!\n\n"
+                                  "<b>Введите максимальное время ниже ⬇️</b>",
+                            "en": "❗️ The max time can't be less than or equal to the min time!\n\n"
+                                  "<b>Input max time below ⬇️</b>"
+                        },
+                        "less_than_0": {
+                            "ru": "❗️ Максимальное время не может быть меньше нуля!\n\n"
+                                    "<b>Введите максимальное время ниже ⬇️</b>",
+                            "en": "❗️ The max time can't be less than zero!\n\n"
+                                    "<b>Input max time below ⬇️</b>"
+                        },
+                        "invalid_format": {
+                            "ru": "❗️ Неверный формат времени!\n\n"
+                                  "<b>Введите время в формате: Часы Минуты Секунды</b>\n\n"
+                                  "Например: <code>2 30 0</code> — это 2 часа 30 минут.\n"
+                                  "Если вы хотите ввести только минуты — можно так: <code>0 15 0</code>\n"
+                                  "Если вы хотите ввести только секунды — можно так: <code>0 0 15</code>\n",
+                            "en": "❗️ Invalid time format!\n\n"
+                                  "<b>Input time in format: Hours Minutes Seconds</b>\n\n"
+                                  "For example: <code>2 30 0</code> — this is 2 hours 30 minutes.\n"
+                                  "If you want to input only minutes — you can do it like this: <code>0 15 0</code>\n"
+                                  "If you want to input only seconds — you can do it like this: <code>0 0 15</code>\n"
+                        },
+                        "greater_than_1000000": {
+                            "ru": "❗️ Слишком много!\n\n"
+                        }
+                    },
+                    "min_last_trade_time": {
+                        "not_a_number": {
+                            "ru": "❗️ Минимальное время должно быть числом!\n\n"
+                                  "<b>Введите минимальное время ниже ⬇️</b>",
+                            "en": "❗️ The min time must be a number!\n\n"
+                                  "<b>Input min time below ⬇️</b>"
+                        },
+                        "greater_than_max": {
+                            "ru": "❗️ Минимальное время не может быть больше или равно максимальному времени!\n\n"
+                                  "<b>Введите минимальное время ниже ⬇️</b>",
+                            "en": "❗️ The min time can't be greater than or equal to the max time!\n\n"
+                                  "<b>Input min time below ⬇️</b>"
+                        },
+                        "less_than_0": {
+                            "ru": "❗️ Минимальное время не может быть меньше нуля!\n\n"
+                                  "<b>Введите минимальное время ниже ⬇️</b>",
+                            "en": "❗️ The min time can't be less than zero!\n\n"
+                                  "<b>Input min time below ⬇️</b>"
+                        },
+                        "invalid_format": {
+                            "ru": "❗️ Неверный формат времени!\n\n"
+                                  "<b>Введите время в формате: Часы Минуты Секунды</b>\n\n"
+                                  "Например: <code>2 30 0</code> — это 2 часа 30 минут.\n"
+                                  "Если вы хотите ввести только минуты — можно так: <code>0 15 0</code>\n"
+                                  "Если вы хотите ввести только секунды — можно так: <code>0 0 15</code>\n"
+                                  "Связки включая от текущего времени последней торговли: \n"
+                                  "<code>0 0 0</code>",
+                            "en": "❗️ Invalid time format!\n\n"
+                                  "<b>Input time in format: Hours Minutes Seconds</b>\n\n"
+                                  "For example: <code>2 30 0</code> — this is 2 hours 30 minutes.\n"
+                                  "If you want to input only minutes — you can do it like this: <code>0 15 0</code>\n"
+                                  "If you want to input only seconds — you can do it like this: <code>0 0 15</code>"
+                                  "Pairs including from the current last trade time: \n"
+                                  "<code>0 0 0</code>"
+                        },
+                        "greater_than_1000000": {
+                            "ru": "❗️ Слишком много!\n\n"
+                        }
+                    }
+                },
+                "success": {
+                    "max_last_trade_time": {
+                        "ru": "<b>✅ Максимальное время успешно изменено!</b>\n\n"
+                              "<b>Текущее максимальное время: {max_last_trade_time}</b>",
+                        "en": "<b>✅ Max time successfully changed!</b>\n\n"
+                              "<b>Current max time: {max_last_trade_time}</b>"
+                    },
+                    "min_last_trade_time": {
+                        "ru": "<b>✅ Минимальное время успешно изменено!</b>\n\n"
+                              "<b>Текущее минимальное время: {min_last_trade_time}</b>",
+                        "en": "<b>✅ Min time successfully changed!</b>\n\n"
+                              "<b>Current min time: {min_last_trade_time}</b>"
                     }
                 }
             }
@@ -617,6 +750,16 @@ TEXTS = {
                     "en": "⬆️ Set minimum 24h turnover"
                 }
 
+            },
+            "last_trade_time": {
+                "set_min_last_trade_time": {
+                    "ru": "⬇️ Установить минимальное время",
+                    "en": "⬇️ Set minimum last trade time"
+                },
+                "set_max_last_trade_time": {
+                    "ru": "⬆️ Установить максимальное время",
+                    "en": "⬆️ Set maximum last trade time"
+                }
             }
         }
     },

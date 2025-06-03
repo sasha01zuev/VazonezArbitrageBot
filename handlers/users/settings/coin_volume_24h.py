@@ -4,9 +4,8 @@ from aiogram import Router, F, Bot
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
-from keyboards.inline import SettingsCallbackFactory, LanguageCallbackFactory, get_settings_exchanges_keyboard, \
-    ExchangesCallbackFactory, get_settings_spread_keyboard, SetSpreadCallbackFactory, get_back_keyboard, \
-    get_settings_coin_volume_24h_keyboard, SetCoinVolume24hCallbackFactory
+from keyboards.inline import (SettingsCallbackFactory, get_back_keyboard, get_settings_coin_volume_24h_keyboard,
+                              SetCoinVolume24hCallbackFactory)
 from services.database.postgresql import Database
 from utils.i18n import TextProxy
 from states import SetCoinVolume24hGroup
@@ -158,10 +157,9 @@ async def set_min_coin_volume_24h_value(message: Message, texts: TextProxy, stat
 
             await state.clear()
 
-    except ValueError as e:
+    except ValueError:
         await message.answer(text=texts.commands.settings.volume_24h.errors.min_coin_volume_24h.not_a_number,
                              disable_web_page_preview=True, parse_mode="HTML",
                              reply_markup=get_back_keyboard(texts=texts, callback_data="settings:coin_volume_24h"))
-        logging.error(f"Ошибка при преобразовании min_coin_volume_24h: {message.text} для пользователя {user_id}, ошибка: {e}")
 
 

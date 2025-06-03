@@ -1,8 +1,10 @@
 from .callback_factories import (SettingsCallbackFactory, LanguageCallbackFactory, ExchangesCallbackFactory,
                                  SetSpreadCallbackFactory, SetProfitCallbackFactory, SetVolumeCallbackFactory,
                                  SetNetworkSpeedCallbackFactory, SetContractsCallbackFactory,
-                                 SetWithdrawFeeCallbackFactory, SetCoinVolume24hCallbackFactory)
+                                 SetWithdrawFeeCallbackFactory, SetCoinVolume24hCallbackFactory,
+                                 SetLastTradeTimeCallbackFactory)
 
+from .settings_last_trade_time_keyboard import get_settings_last_trade_time_keyboard
 from .settings_coin_volume_24h_keyboard import get_settings_coin_volume_24h_keyboard
 from .settings_withdraw_fee_keyboard import get_settings_withdraw_fee_keyboard
 from .settings_contracts_keyboard import get_settings_contracts_keyboard
