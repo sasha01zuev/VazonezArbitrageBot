@@ -3,8 +3,14 @@ from .callback_factories import (SettingsCallbackFactory, LanguageCallbackFactor
                                  SetNetworkSpeedCallbackFactory, SetContractsCallbackFactory,
                                  SetWithdrawFeeCallbackFactory, SetCoinVolume24hCallbackFactory,
                                  SetLastTradeTimeCallbackFactory, SetNotificationCallbackFactory,
-                                 SetIsLowBidsCallbackFactory)
+                                 SetIsLowBidsCallbackFactory, SetHedgingTypesCallbackFactory,
+                                 SetFuturesHedgingCallbackFactory, SetMarginHedgingCallbackFactory,
+                                 SetLoanHedgingCallbackFactory)
 
+from .settings_hedging_types_keyboard import (get_settings_hedging_types_keyboard,
+                                              get_settings_futures_hedging_keyboard,
+                                              get_settings_margin_hedging_keyboard,
+                                              get_settings_loan_hedging_keyboard)
 from .settings_is_low_bids_keyboard import get_settings_is_low_bids_keyboard
 from .settings_notification_keyboard import get_settings_notification_keyboard
 from .settings_last_trade_time_keyboard import get_settings_last_trade_time_keyboard

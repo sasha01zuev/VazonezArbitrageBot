@@ -565,7 +565,25 @@ TEXTS = {
                           "Show pairs with a small number of orders in the order book?"
 
                 }
-            }
+            },
+            "hedging_types": {
+                "current_hedging_types": {
+                    "ru": "<b>⚖️ ТИПЫ ХЕДЖИРОВАНИЯ:</b>\n\n",
+                    "en": "<b>⚖️ HEDGING TYPES:</b>\n\n"
+                },
+                "set_futures_hedging": {
+                    "ru": "Выберите фильтр фьючерсного хеджирования:",
+                    "en": "Select futures hedging filter:"
+                },
+                "set_margin_hedging": {
+                    "ru": "Выберите фильтр маржинального хеджирования:",
+                    "en": "Select margin hedging filter:"
+                },
+                "set_loan_hedging": {
+                    "ru": "Выберите фильтр займового хеджирования:",
+                    "en": "Select loan hedging filter:"
+                }
+            },
         },
         "state": {
             "canceled_state": {
@@ -801,6 +819,51 @@ TEXTS = {
                     "ru": "Скрыть",
                     "en": "Hide"
                 }
+            },
+            "hedging_types": {
+                "futures_hedging_type": {
+                    "ru": "Фьючерсное хеджирование",
+                    "en": "Futures hedging"
+                },
+                "margin_hedging_type": {
+                    "ru": "Маржинальное хеджирование",
+                    "en": "Margin hedging"
+                },
+                "loan_hedging_type": {
+                    "ru": "Займовое хеджирование",
+                    "en": "Loan hedging"
+                },
+                "futures_hedging": {
+                    "hedging_only": {
+                        "ru": "Только с фьючерсным хеджированием",
+                        "en": "Futures hedging only"
+                    },
+                    "all_pairs": {
+                        "ru": "Все связки",
+                        "en": "All pairs"
+                    }
+                },
+                "margin_hedging": {
+                    "hedging_only": {
+                        "ru": "Только с маржинальным хеджированием",
+                        "en": "Margin hedging only"
+                    },
+                    "all_pairs": {
+                        "ru": "Все связки",
+                        "en": "All pairs"
+                    }
+                },
+                "loan_hedging": {
+                    "hedging_only": {
+                        "ru": "Только с займовым хеджированием",
+                        "en": "Loan hedging only"
+                    },
+                    "all_pairs": {
+                        "ru": "Все связки",
+                        "en": "All pairs"
+                    }
+                }
+
             }
         }
     },

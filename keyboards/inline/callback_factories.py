@@ -54,3 +54,19 @@ class SetNotificationCallbackFactory(CallbackData, prefix="set_notification"):
 
 class SetIsLowBidsCallbackFactory(CallbackData, prefix="set_is_low_bids"):
     is_low_bids: bool
+
+
+class SetHedgingTypesCallbackFactory(CallbackData, prefix="set_hedging_types"):
+    hedging_type: str
+
+
+class SetFuturesHedgingCallbackFactory(CallbackData, prefix="set_futures_hedging"):
+    hedging_value: bool
+
+
+class SetMarginHedgingCallbackFactory(CallbackData, prefix="set_margin_hedging"):
+    hedging_value: bool
+
+
+class SetLoanHedgingCallbackFactory(CallbackData, prefix="set_loan_hedging"):
+    hedging_value: bool

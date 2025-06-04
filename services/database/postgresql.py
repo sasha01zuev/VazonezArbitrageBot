@@ -353,3 +353,19 @@ class Database:
             logging.info(f"Обновлено значение is_low_bids для пользователя {user_id}: {is_low_bids}")
         except Exception as e:
             logging.exception(f"Ошибка обновления is_low_bids для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_hedging(self, user_id, hedging_value: bool, hedging_type: str):
+        """
+        hedging_value: bool
+        hedging_type: hedging_futures, margin_hedging, loan_hedging
+        """
+        sql = f"""
+        UPDATE user_inter_exchange_settings
+        SET {hedging_type} = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, hedging_value)
+            logging.info(f"Обновлено значение {hedging_type} для пользователя {user_id}: {hedging_value}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления значения {hedging_type} для пользователя {user_id}: {e}")
