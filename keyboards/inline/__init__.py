@@ -2,8 +2,10 @@ from .callback_factories import (SettingsCallbackFactory, LanguageCallbackFactor
                                  SetSpreadCallbackFactory, SetProfitCallbackFactory, SetVolumeCallbackFactory,
                                  SetNetworkSpeedCallbackFactory, SetContractsCallbackFactory,
                                  SetWithdrawFeeCallbackFactory, SetCoinVolume24hCallbackFactory,
-                                 SetLastTradeTimeCallbackFactory, SetNotificationCallbackFactory)
+                                 SetLastTradeTimeCallbackFactory, SetNotificationCallbackFactory,
+                                 SetIsLowBidsCallbackFactory)
 
+from .settings_is_low_bids_keyboard import get_settings_is_low_bids_keyboard
 from .settings_notification_keyboard import get_settings_notification_keyboard
 from .settings_last_trade_time_keyboard import get_settings_last_trade_time_keyboard
 from .settings_coin_volume_24h_keyboard import get_settings_coin_volume_24h_keyboard

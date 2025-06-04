@@ -338,3 +338,18 @@ class Database:
             logging.info(f"Обновлено значение уведомлений для пользователя {user_id}: {notification}")
         except Exception as e:
             logging.exception(f"Ошибка обновления уведомлений для пользователя {user_id}: {e}")
+
+    async def set_user_inter_exchange_is_low_bids(self, user_id: int, is_low_bids: bool):
+        """
+        is_low_bids: bool
+        """
+        sql = """
+        UPDATE user_inter_exchange_settings
+        SET is_low_bids = $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, is_low_bids)
+            logging.info(f"Обновлено значение is_low_bids для пользователя {user_id}: {is_low_bids}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления is_low_bids для пользователя {user_id}: {e}")

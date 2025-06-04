@@ -50,3 +50,7 @@ class SetLastTradeTimeCallbackFactory(CallbackData, prefix="set_last_trade_time"
 
 class SetNotificationCallbackFactory(CallbackData, prefix="set_notification"):
     notification: bool
+
+
+class SetIsLowBidsCallbackFactory(CallbackData, prefix="set_is_low_bids"):
+    is_low_bids: bool
