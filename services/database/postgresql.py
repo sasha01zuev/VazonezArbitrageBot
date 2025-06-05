@@ -370,7 +370,7 @@ class Database:
         except Exception as e:
             logging.exception(f"Ошибка обновления значения {hedging_type} для пользователя {user_id}: {e}")
 
-    async def add_blacklist_coins(self, user_id: int, value: str):
+    async def add_blacklist_coins(self, user_id: int, coin: str):
         """
         value: str
         """
@@ -380,12 +380,12 @@ class Database:
         WHERE user_id = $1 AND NOT ($2 = ANY(blacklist_coins));
         """
         try:
-            await self.pool.execute(sql, user_id, value)
-            logging.info(f"Обновлено значение blacklist_coins для пользователя {user_id}: {value}")
+            await self.pool.execute(sql, user_id, coin)
+            logging.info(f"Обновлено значение blacklist_coins для пользователя {user_id}: {coin}")
         except Exception as e:
             logging.exception(f"Ошибка обновления значения blacklist_coins для пользователя {user_id}: {e}")
 
-    async def remove_blacklist_coins(self, user_id: int, value: str):
+    async def remove_blacklist_coins(self, user_id: int, coin: str):
         """
         value: str
         """
@@ -395,8 +395,8 @@ class Database:
         WHERE user_id = $1;
         """
         try:
-            await self.pool.execute(sql, user_id, value)
-            logging.info(f"Удалено значение blacklist_coins для пользователя {user_id}: {value}")
+            await self.pool.execute(sql, user_id, coin)
+            logging.info(f"Удалено значение blacklist_coins для пользователя {user_id}: {coin}")
         except Exception as e:
             logging.exception(f"Ошибка удаления значения blacklist_coins для пользователя {user_id}: {e}")
 

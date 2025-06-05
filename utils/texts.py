@@ -599,12 +599,50 @@ TEXTS = {
                         "en": "<b>🗑 Coins blacklist is empty</b>"
                     },
                     "add_coins_blacklist": {
-                        "ru": "<b>Введите название монеты ниже ⬇️</b>",
-                        "en": "<b>Input coin name below ⬇️</b>"
+                        "ru": "<b>Введите название монеты, либо выберите монету ниже ⬇️</b>",
+                        "en": "Input coin name or select coin below ⬇️"
                     },
                     "remove_coins_blacklist": {
-                        "ru": "<b>Введите название монеты для удаления ниже ⬇️</b>",
-                        "en": "<b>Input coin name to remove below ⬇️</b>"
+                        "ru": "<b>Введите название монеты для удаления, либо выберите монету ниже ⬇️</b>",
+                        "en": "<b>Input coin name to remove or select coin below ⬇️</b>"
+                    },
+                    "errors": {
+                        "already_in_blacklist": {
+                            "ru": "<b>️❗ Монета {coin} уже в чёрном списке!</b>\n\n"
+                                  "<b>Введите название монеты, либо выберите монету ниже ⬇️</b>",
+                            "en": "<b>❗️ Coin {coin} is already in the blacklist!</b>\n\n"
+                                  "Input coin name or select coin below ⬇️"
+                        },
+                        "coin_name_too_long": {
+                            "ru": "<b>️❗ Название монеты слишком длинное!\n\n</b>"
+                                  "Максимальная длина названия монеты: <b>15 символов</b>\n\n"
+                                  "Введите название монеты, либо выберите монету ниже ⬇️",
+                            "en": "<b>❗️ Coin name is too long!\n\n</b>"
+                                  "Maximum coin name length: <b>15 characters</b>\n\n"
+                                  "Input coin name or select coin below ⬇️"
+                        },
+                        "unexpected_error": {
+                            "ru": "<b>❗️ Произошла непредвиденная ошибка!</b>\n\n"
+                                  "<b>Введите название монеты, либо выберите монету ниже ⬇️</b>",
+                            "en": "<b>❗️ An unexpected error occurred!</b>\n\n"
+                                  "Input coin name or select coin below ⬇️"
+                        },
+                        "not_in_blacklist": {
+                            "ru": "<b>❗ Монета {coin} не в чёрном списке!</b>\n\n"
+                                  "<b>Введите название монеты для удаления, либо выберите монету ниже ⬇️</b>",
+                            "en": "<b>❗️ Coin {coin} is not in the blacklist!</b>\n\n"
+                                  "<b>Input coin name to remove or select coin below ⬇️</b>"
+                        }
+                    },
+                    "success": {
+                        "coin_added": {
+                            "ru": "<b>✅ Монета {coin} успешно добавлена в чёрный список!</b>",
+                            "en": "<b>✅ Coin {coin} successfully added to the blacklist!</b>"
+                        },
+                        "coin_removed": {
+                            "ru": "<b>✅ Монета {coin} успешно удалена из чёрного списка!</b>",
+                            "en": "<b>✅ Coin {coin} successfully removed from the blacklist!</b>"
+                        }
                     }
                 }
             }
@@ -652,6 +690,14 @@ TEXTS = {
                 "ru": "🔕 Уведомления отключены",
                 "en": "🔕 Notifications disabled"
             }
+        },
+        "successfully_added": {
+            "ru": "✅ Успешно добавлено!",
+            "en": "✅ Successfully added!"
+        },
+        "successfully_removed": {
+            "ru": "✅ Успешно удалено!",
+            "en": "✅ Successfully removed!"
         }
     },
     "keyboard": {
