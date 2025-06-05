@@ -70,3 +70,19 @@ class SetMarginHedgingCallbackFactory(CallbackData, prefix="set_margin_hedging")
 
 class SetLoanHedgingCallbackFactory(CallbackData, prefix="set_loan_hedging"):
     hedging_value: bool
+
+
+class SetBlacklistTypesCallbackFactory(CallbackData, prefix="set_blacklist_types"):
+    blacklist_type: str
+
+
+class SetCoinsBlacklistCallbackFactory(CallbackData, prefix="set_coins_blacklist"):
+    action: str
+
+
+class SetCoinsBlacklistCoinCallbackFactory(CallbackData, prefix="set_coins_blacklist_coin"):
+    coin: str
+
+
+class SetCoinsInCoinsBlacklistCallbackFactory(CallbackData, prefix="set_coins_blacklist_coin"):
+    coin: str

@@ -38,3 +38,8 @@ class SetCoinVolume24hGroup(StatesGroup):
 class SetLastTradeTimeGroup(StatesGroup):
     SetMaxLastTradeTime = State()
     SetMinLastTradeTime = State()
+
+
+class SetBlacklistCoinsActionGroup(StatesGroup):
+    SetAddCoin = State()
+    SetRemoveCoin = State()

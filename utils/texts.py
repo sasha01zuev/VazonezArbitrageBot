@@ -584,6 +584,30 @@ TEXTS = {
                     "en": "Select loan hedging filter:"
                 }
             },
+            "blacklist_types": {
+                "current_blacklist_types": {
+                    "ru": "<b>🗑 ТИПЫ ЧЁРНЫХ СПИСКОВ:</b>\n\n",
+                    "en": "<b>🗑 BLACKLIST TYPES:</b>\n\n"
+                },
+                "coins_blacklist": {
+                    "current_coins_blacklist": {
+                        "ru": "<b>🗑 МОНЕТЫ В ЧЕРНОМ СПИСКЕ:</b>\n\n",
+                        "en": "<b>🗑 COINS IN BLACKLIST:</b>\n\n"
+                    },
+                    "no_coins_in_blacklist": {
+                        "ru": "<b>🗑 Чёрный список монет пуст</b>",
+                        "en": "<b>🗑 Coins blacklist is empty</b>"
+                    },
+                    "add_coins_blacklist": {
+                        "ru": "<b>Введите название монеты ниже ⬇️</b>",
+                        "en": "<b>Input coin name below ⬇️</b>"
+                    },
+                    "remove_coins_blacklist": {
+                        "ru": "<b>Введите название монеты для удаления ниже ⬇️</b>",
+                        "en": "<b>Input coin name to remove below ⬇️</b>"
+                    }
+                }
+            }
         },
         "state": {
             "canceled_state": {
@@ -864,6 +888,30 @@ TEXTS = {
                     }
                 }
 
+            },
+            "blacklist_types": {
+                "coins_blacklist_type": {
+                    "ru": "Чёрный список монет",
+                    "en": "Coins blacklist"
+                },
+                "networks_blacklist_type": {
+                    "ru": "Чёрный список сетей",
+                    "en": "Networks blacklist"
+                },
+                "coin_for_exchange_blacklist_type": {
+                    "ru": "Чёрный список монет к биржи",
+                    "en": "Coins blacklist for exchange"
+                },
+                "coins_blacklist": {
+                    "add_coin": {
+                        "ru": "➕ Добавить монету",
+                        "en": "➕ Add coin"
+                    },
+                    "remove_coin": {
+                        "ru": "➖ Удалить монету",
+                        "en": "➖ Remove coin"
+                    }
+                }
             }
         }
     },
@@ -879,6 +927,14 @@ TEXTS = {
         "sell_exchange": {
             "ru": "Биржа продажи:",
             "en": "Exchange sell:"
+        },
+        "most_often_blocked": {
+            "ru": "🔻ЧАЩЕ ВСЕГО БЛОКИРУЮТ🔻",
+            "en": "🔻MOST OFTEN BLOCKED🔻"
+        },
+        "last_blocked": {
+            "ru": "🔻ПОСЛЕДНИЕ ЗАБЛОКИРОВАННЫЕ🔻",
+            "en": "🔻LAST BLOCKED🔻"
         }
     }
 }
