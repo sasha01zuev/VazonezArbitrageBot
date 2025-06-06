@@ -13,8 +13,10 @@ from .is_low_bids import router as is_low_bids_router
 from .hedging import router as hedging_types_router
 from .blacklist import router as blacklist_types_router
 from .blacklist_coins import router as blacklist_coins_router
+from .blacklist_networks import router as blacklist_networks_router
 
 
 routers = [language_router, exchanges_router, spread_router, profit_router, volume_router, network_speed_router,
            contracts_router, withdraw_fee_router, coin_volume_24h_router, last_trade_time_router, notification_router,
-           is_low_bids_router, hedging_types_router, blacklist_types_router, blacklist_coins_router]
+           is_low_bids_router, hedging_types_router, blacklist_types_router, blacklist_coins_router,
+           blacklist_networks_router]

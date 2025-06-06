@@ -6,7 +6,10 @@ from .back_button import back_button
 from utils.i18n import TextProxy
 from .callback_factories import (SetBlacklistTypesCallbackFactory, SetMarginHedgingCallbackFactory,
                                  SetLoanHedgingCallbackFactory, SetCoinsBlacklistCallbackFactory,
-                                 SetCoinsBlacklistCoinCallbackFactory, SetCoinsInCoinsBlacklistCallbackFactory)
+                                 SetCoinsBlacklistCoinCallbackFactory, SetCoinsInCoinsBlacklistCallbackFactory,
+                                 SetNetworksBlacklistCallbackFactory, SetNetworksBlacklistNetworkCallbackFactory,
+                                 SetNetworksInNetworksBlacklistCallbackFactory
+                                 )
 
 
 def get_settings_blacklist_types_keyboard(texts: TextProxy) -> InlineKeyboardMarkup:
@@ -113,3 +116,74 @@ def get_settings_coins_blacklist_remove_coin_keyboard(texts: TextProxy, blacklis
         builder.adjust(1)
 
     return builder.as_markup()
+
+
+def get_settings_networks_blacklist_keyboard(texts: TextProxy, blacklist_networks: List[str]) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(
+        text=texts.keyboard.settings.blacklist_types.networks_blacklist.add_network,
+        callback_data=SetNetworksBlacklistCallbackFactory(action="add_network")
+    )
+    if blacklist_networks:
+        builder.button(
+            text=texts.keyboard.settings.blacklist_types.networks_blacklist.remove_network,
+            callback_data=SetNetworksBlacklistCallbackFactory(action="remove_network")
+        )
+    builder.add(back_button(texts=texts, callback_data="settings:blacklist_types"))
+    builder.adjust(1)
+    return builder.as_markup()
+
+
+def get_settings_networks_blacklist_add_network_keyboard(texts: TextProxy, top_blacklisted_networks: List[str]) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    # Эмодзи для цифр 1️⃣, 2️⃣, 3️⃣ и т.д. — максимум 10 (по желанию можно расширить)
+    number_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
+
+    if top_blacklisted_networks:
+        builder.button(
+            text=texts.button.most_often_blocked,
+            callback_data="None"  # Заголовок, неактивная кнопка
+        )
+
+        for i, network in enumerate(top_blacklisted_networks):
+            emoji = number_emojis[i] if i < len(number_emojis) else f"{i + 1}."
+            builder.button(
+                text=f"{emoji} {network}",
+                callback_data=SetNetworksBlacklistNetworkCallbackFactory(network=network)
+            )
+
+        builder.add(back_button(texts=texts, callback_data="set_blacklist_types:networks_blacklist"))
+        builder.adjust(1)
+    else:
+        builder.add(back_button(texts=texts, callback_data="set_blacklist_types:networks_blacklist"))
+        builder.adjust(1)
+    return builder.as_markup()
+
+
+def get_settings_networks_blacklist_remove_networks_keyboard(texts: TextProxy, blacklisted_networks: List[str]) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    # Эмодзи для цифр 1️⃣, 2️⃣, 3️⃣ и т.д. — максимум 10 (по желанию можно расширить)
+    number_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
+
+    if blacklisted_networks:
+        builder.button(
+            text=texts.button.last_blocked,
+            callback_data="None"  # Заголовок, неактивная кнопка
+        )
+
+        for i, network in enumerate(blacklisted_networks):
+            emoji = number_emojis[i] if i < len(number_emojis) else f"{i + 1}."
+            builder.button(
+                text=f"{emoji} {network}",
+                callback_data=SetNetworksInNetworksBlacklistCallbackFactory(network=network)
+            )
+
+        builder.add(back_button(texts=texts, callback_data="set_blacklist_types:networks_blacklist"))
+        builder.adjust(1)
+    else:
+        builder.add(back_button(texts=texts, callback_data="set_blacklist_types:networks_blacklist"))
+        builder.adjust(1)
+
+    return builder.as_markup()
+

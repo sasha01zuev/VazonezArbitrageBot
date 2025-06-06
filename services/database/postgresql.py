@@ -372,7 +372,7 @@ class Database:
 
     async def add_blacklist_coins(self, user_id: int, coin: str):
         """
-        value: str
+        coin: str
         """
         sql = f"""
         UPDATE user_inter_exchange_settings
@@ -387,7 +387,7 @@ class Database:
 
     async def remove_blacklist_coins(self, user_id: int, coin: str):
         """
-        value: str
+        coin: str
         """
         sql = f"""
         UPDATE user_inter_exchange_settings
@@ -425,4 +425,61 @@ class Database:
             return [(row['coin'], row['frequency']) for row in top_coins]
         except Exception as e:
             logging.exception(f"Ошибка получения топ монет из черного списка без учёта пользователя {user_id}: {e}")
+            return []
+
+    async def add_blacklist_networks(self, user_id: int, network: str):
+        """
+        network: str
+        """
+        sql = f"""
+        UPDATE user_inter_exchange_settings
+        SET blacklist_networks = array_append(blacklist_networks, $2)
+        WHERE user_id = $1 AND NOT ($2 = ANY(blacklist_networks));
+        """
+        try:
+            await self.pool.execute(sql, user_id, network)
+            logging.info(f"Обновлено значение blacklist_networks для пользователя {user_id}: {network}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления значения blacklist_networks для пользователя {user_id}: {e}")
+
+    async def remove_blacklist_networks(self, user_id: int, network: str):
+        """
+        coin: str
+        """
+        sql = f"""
+        UPDATE user_inter_exchange_settings
+        SET blacklist_networks = array_remove(blacklist_networks, $2)
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, network)
+            logging.info(f"Удалено значение blacklist_networks для пользователя {user_id}: {network}")
+        except Exception as e:
+            logging.exception(f"Ошибка удаления значения blacklist_networks для пользователя {user_id}: {e}")
+
+    async def get_top_blacklist_networks(self, user_id: int, top_n: int = 5) -> list[tuple[str, int]]:
+        sql = """
+        WITH user_blacklist AS (
+            SELECT unnest(blacklist_networks) AS network
+            FROM user_inter_exchange_settings
+            WHERE user_id = $1
+        ),
+        all_blacklists AS (
+            SELECT unnest(blacklist_networks) AS network
+            FROM user_inter_exchange_settings
+        )
+        SELECT network, COUNT(*) AS frequency
+        FROM all_blacklists
+        WHERE network NOT IN (SELECT network FROM user_blacklist)
+        GROUP BY network
+        ORDER BY frequency DESC
+        LIMIT $2;
+        """
+        try:
+            top_networks = await self.pool.fetch(sql, user_id, top_n)
+            logging.debug(
+                f"Получены топ {top_n} сетей из чёрного списка, которых нет у пользователя {user_id}: {top_networks}")
+            return [(row['network'], row['frequency']) for row in top_networks]
+        except Exception as e:
+            logging.exception(f"Ошибка получения топ сетей из черного списка без учёта пользователя {user_id}: {e}")
             return []

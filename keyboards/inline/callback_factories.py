@@ -86,3 +86,18 @@ class SetCoinsBlacklistCoinCallbackFactory(CallbackData, prefix="set_coins_black
 
 class SetCoinsInCoinsBlacklistCallbackFactory(CallbackData, prefix="set_coins_blacklist_coin"):
     coin: str
+
+
+class SetNetworksBlacklistCallbackFactory(CallbackData, prefix="set_networks_blacklist"):
+    action: str
+
+
+class SetNetworksBlacklistNetworkCallbackFactory(CallbackData, prefix="set_network_blacklist_network"):
+    network: str
+
+
+class SetNetworksInNetworksBlacklistCallbackFactory(CallbackData, prefix="set_networks_blacklist_coin"):
+    network: str
+
+
+

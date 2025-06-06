@@ -43,3 +43,8 @@ class SetLastTradeTimeGroup(StatesGroup):
 class SetBlacklistCoinsActionGroup(StatesGroup):
     SetAddCoin = State()
     SetRemoveCoin = State()
+
+
+class SetBlacklistNetworksActionGroup(StatesGroup):
+    SetAddNetwork = State()
+    SetRemoveNetwork = State()

@@ -644,6 +644,62 @@ TEXTS = {
                             "en": "<b>✅ Coin {coin} successfully removed from the blacklist!</b>"
                         }
                     }
+                },
+                "networks_blacklist": {
+                    "current_networks_blacklist": {
+                        "ru": "<b>🗑 СЕТИ В ЧЁРНОМ СПИСКЕ:</b>\n\n",
+                        "en": "<b>🗑 NETWORKS IN BLACKLIST:</b>\n\n"
+                    },
+                    "no_networks_in_blacklist": {
+                        "ru": "<b>🗑 Чёрный список сетей пуст</b>",
+                        "en": "<b>🗑 Networks blacklist is empty</b>"
+                    },
+                    "add_networks_blacklist": {
+                        "ru": "<b>Введите название сети, либо выберите сеть ниже ⬇️</b>",
+                        "en": "Input network name or select network below ⬇️"
+                    },
+                    "remove_networks_blacklist": {
+                        "ru": "<b>Введите название сети для удаления, либо выберите сеть ниже ⬇️</b>",
+                        "en": "<b>Input network name to remove or select network below ⬇️</b>"
+                    },
+                    "errors": {
+                        "already_in_blacklist": {
+                            "ru": "<b>️❗ Сеть {network} уже в чёрном списке!</b>\n\n"
+                                  "<b>Введите название сети, либо выберите сеть ниже ⬇️</b>",
+                            "en": "<b>❗️ Network {network} is already in the blacklist!</b>\n\n"
+                                  "Input network name or select network below ⬇️"
+                        },
+                        "network_name_too_long": {
+                            "ru": "<b>️❗ Название сети слишком длинное!\n\n</b>"
+                                  "Максимальная длина названия сети: <b>15 символов</b>\n\n"
+                                  "Введите название сети, либо выберите сеть ниже ⬇️",
+                            "en": "<b>❗️ Network name is too long!\n\n</b>"
+                                  "Maximum network name length: <b>15 characters</b>\n\n"
+                                  "Input network name or select network below ⬇️"
+                        },
+                        "unexpected_error": {
+                            "ru": "<b>❗️ Произошла непредвиденная ошибка!</b>\n\n"
+                                  "<b>Введите название сети, либо выберите сеть ниже ⬇️</b>",
+                            "en": "<b>❗️ An unexpected error occurred!</b>\n\n"
+                                  "Input network name or select network below ⬇️"
+                        },
+                        "not_in_blacklist": {
+                            "ru": "<b>❗ Сеть {network} не в чёрном списке!</b>\n\n"
+                                  "<b>Введите название сети для удаления, либо выберите сеть ниже ⬇️</b>",
+                            "en": "<b>❗️ Network {network} is not in the blacklist!</b>\n\n"
+                                  "<b>Input network name to remove or select network below ⬇️</b>"
+                        }
+                    },
+                    "success": {
+                        "network_added": {
+                            "ru": "<b>✅ Сеть {network} успешно добавлена в чёрный список!</b>",
+                            "en": "<b>✅ Network {network} successfully added to the blacklist!</b>"
+                        },
+                        "network_removed": {
+                            "ru": "<b>✅ Сеть {network} успешно удалена из чёрного списка!</b>",
+                            "en": "<b>✅ Network {network} successfully removed from the blacklist!</b>"
+                        }
+                    }
                 }
             }
         },
@@ -956,6 +1012,16 @@ TEXTS = {
                     "remove_coin": {
                         "ru": "➖ Удалить монету",
                         "en": "➖ Remove coin"
+                    }
+                },
+                "networks_blacklist": {
+                    "add_network": {
+                        "ru": "➕ Добавить сеть",
+                        "en": "➕ Add network"
+                    },
+                    "remove_network": {
+                        "ru": "➖ Удалить сеть",
+                        "en": "➖ Remove network"
                     }
                 }
             }
