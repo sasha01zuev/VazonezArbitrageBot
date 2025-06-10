@@ -700,6 +700,140 @@ TEXTS = {
                             "en": "<b>✅ Network {network} successfully removed from the blacklist!</b>"
                         }
                     }
+                },
+                "coin_for_exchange_blacklist": {
+                    "current_coin_for_exchange_blacklist": {
+                        "ru": "<b>🗑 МОНЕТЫ К БИРЖЕ В ЧЁРНОМ СПИСКЕ:</b>\n\n",
+                        "en": "<b>🗑 COINS FOR EXCHANGE IN BLACKLIST:</b>\n\n"
+                    },
+                    "no_coin_for_exchange_blacklist": {
+                        "ru": "<b>🗑 Чёрный список монет к бирже пуст</b>",
+                        "en": "<b>🗑 Coins for exchange blacklist is empty</b>"
+                    },
+                    "add_coin_for_exchange_blacklist": {
+                        "ru": "<b>Введите название монеты или монеты к бирже в формате:</b>\n\n"
+                              "<code>Монета</code>\n"
+                              "<code>Монета-Биржа</code>\n\n"
+                              "<b>Например:</b> <code>BTC-Binance</code>",
+                        "en": "<b>Input coin name or coins for exchange in format:</b>\n\n"
+                              "<code>Coin</code>\n"
+                              "<code>Coin-Exchange</code>\n\n"
+                              "<b>For example:</b> <code>BTC-Binance</code>"
+                    },
+                    "remove_coin_for_exchange_blacklist": {
+                        "ru": "<b>Введите название монеты или монеты к бирже для удаления в формате:</b>\n\n"
+                              "<code>Монета</code>\n"
+                              "<code>Монета-Биржа</code>\n\n"
+                              "<b>Например:</b> <code>BTC-Binance</code>",
+                        "en": "<b>Input coin name or coins for exchange to remove in format:</b>\n\n"
+                              "<code>Coin</code>\n"
+                              "<code>Coin-Exchange</code>\n\n"
+                              "<b>For example:</b> <code>BTC-Binance</code>"
+                    },
+                    "select_exchange": {
+                        "ru": "Выберите биржу для монеты <b>{coin}</b>",
+                        "en": "Select exchange for coin <b>{coin}</b>"
+                    },
+                    "errors": {
+                        "add": {
+                            "wrong_input_format": {
+                                "ru": "<b>❗️ Неверный формат ввода!</b>\n\n"
+                                      "<b>Введите название монеты или монеты к бирже в формате:</b>\n\n"
+                                      "<code>Монета</code>\n"
+                                      "<code>Монета-Биржа</code>\n\n"
+                                      "<b>Например:</b> <code>BTC-Binance</code>",
+                                "en": "<b>❗️ Wrong input format!</b>\n\n"
+                                      "<b>Input coin name or coins for exchange in format:</b>\n\n"
+                                      "<code>Coin</code>\n"
+                                      "<code>Coin-Exchange</code>\n\n"
+                                      "<b>For example:</b> <code>BTC-Binance</code>"
+                            },
+                            "more_than_15_symbols": {
+                                "ru": "<b>❗️ Название монеты не может быть длиннее 15 символов!</b>\n\n"
+                                      "<b>Введите название монеты или монеты к бирже в формате:</b>\n\n"
+                                      "<code>Монета</code>\n"
+                                      "<code>Монета-Биржа</code>\n\n"
+                                      "<b>Например:</b> <code>BTC-Binance</code>",
+                                "en": "<b>❗️ Coin name can't be longer than 15 characters!</b>\n\n"
+                                      "<b>Input coin name or coins for exchange in format:</b>\n\n"
+                                      "<code>Coin</code>\n"
+                                      "<code>Coin-Exchange</code>\n\n"
+                                      "<b>For example:</b> <code>BTC-Binance</code>"
+                            },
+                            "wrong_exchange": {
+                                "ru": "<b>❗️ Биржа не найдена!</b>\n\n"
+                                      "<b>Введите название монеты или монеты к бирже в формате:</b>\n\n"
+                                      "<code>Монета</code>\n"
+                                      "<code>Монета-Биржа</code>\n\n"
+                                      "<b>Например:</b> <code>BTC-Binance</code>",
+                                "en": "<b>❗️ Exchange not found!</b>\n\n"
+                                      "<b>Input coin name or coins for exchange in format:</b>\n\n"
+                                      "<code>Coin</code>\n"
+                                      "<code>Coin-Exchange</code>\n\n"
+                                      "<b>For example:</b> <code>BTC-Binance</code>"
+                            },
+                            "coin_for_exchange_already_exists": {
+                                "ru": "<b>❗️ Монета {coin} к бирже {exchange} уже в чёрном списке!</b>\n\n"
+                                      "<b>Введите название монеты или монеты к бирже в формате:</b>\n\n"
+                                      "<code>Монета</code>\n"
+                                      "<code>Монета-Биржа</code>\n\n"
+                                      "<b>Например:</b> <code>BTC-Binance</code>",
+                                "en": "<b>❗️ Coin {coin} for exchange {exchange} is already in the blacklist!</b>\n\n"
+                                      "<b>Input coin name or coins for exchange in format:</b>\n\n"
+                                      "<code>Coin</code>\n"
+                                      "<code>Coin-Exchange</code>\n\n"
+                                      "<b>For example:</b> <code>BTC-Binance</code>"
+                            }
+                        },
+                        "remove": {
+                            "wrong_input_format": {
+                                "ru": "<b>❗️ Неверный формат ввода!</b>\n\n"
+                                      "<b>Введите название монеты или монеты к бирже для удаления в формате:</b>\n\n"
+                                      "<code>Монета</code>\n"
+                                      "<code>Монета-Биржа</code>\n\n"
+                                      "<b>Например:</b> <code>BTC-Binance</code>\n\n",
+                                "en": "<b>❗️ Wrong input format!</b>\n\n"
+                                      "<b>Input coin name or coins for exchange to remove in format:</b>\n\n"
+                                      "<code>Coin</code>\n"
+                                      "<code>Coin-Exchange</code>\n\n"
+                                      "<b>For example:</b> <code>BTC-Binance</code>\n\n"
+                            },
+                            "no_available_exchanges": {
+                                "ru": "<b>❗️ Монеты {coin} нет в чёрном списке!</b>\n\n"
+                                      "<b>Введите название монеты или монеты к бирже для удаления в формате:</b>\n\n"
+                                      "<code>Монета</code>\n"
+                                      "<code>Монета-Биржа</code>\n\n"
+                                      "<b>Например:</b> <code>BTC-Binance</code>",
+                                "en": "<b>❗️ Coin {coin} is not in the blacklist!</b>\n\n"
+                                      "<b>Input coin name or coins for exchange to remove in format:</b>\n\n"
+                                      "<code>Coin</code>\n"
+                                      "<code>Coin-Exchange</code>\n\n"
+                                      "<b>For example:</b> <code>BTC-Binance</code>"
+                            },
+                            "wrong_exchange": {
+                                "ru": "<b>❗️ Биржа {exchange} к монете {coin} не найдена!</b>\n\n"
+                                        "<b>Введите название монеты или монеты к бирже для удаления в формате:</b>\n\n"
+                                        "<code>Монета</code>\n"
+                                        "<code>Монета-Биржа</code>\n\n"
+                                        "<b>Например:</b> <code>BTC-Binance</code>",
+                                "en": "<b>❗️ Exchange {exchange} for coin {coin} not found!</b>\n\n"
+                                        "<b>Input coin name or coins for exchange to remove in format:</b>\n\n"
+                                        "<code>Coin</code>\n"
+                                        "<code>Coin-Exchange</code>\n\n"
+                                        "<b>For example:</b> <code>BTC-Binance</code>"
+                            }
+                        }
+                    },
+                    "success": {
+                        "add_coin_for_exchange": {
+                            "ru": "<b>✅ Монета {coin} к бирже {exchange} успешно добавлена в чёрный список!</b>\n\n",
+                            "en": "<b>✅ Coin {coin} for exchange {exchange} successfully added to the blacklist!</b>\n\n"
+                        },
+                        "remove_coin_for_exchange": {
+                            "ru": "<b>✅ Монета {coin} к бирже {exchange} успешно удалена из чёрного списка!</b>\n\n",
+                            "en": "<b>✅ Coin {coin} for exchange {exchange} successfully removed from the blacklist!</b>\n\n"
+                        }
+                    }
                 }
             }
         },
@@ -1022,6 +1156,16 @@ TEXTS = {
                     "remove_network": {
                         "ru": "➖ Удалить сеть",
                         "en": "➖ Remove network"
+                    }
+                },
+                "coin_for_exchange_blacklist": {
+                    "add_coin_for_exchange": {
+                        "ru": "➕ Добавить монету к бирже",
+                        "en": "➕ Add coin for exchange"
+                    },
+                    "remove_coin_for_exchange": {
+                        "ru": "➖ Удалить монету к бирже",
+                        "en": "➖ Remove coin for exchange"
                     }
                 }
             }

@@ -48,3 +48,8 @@ class SetBlacklistCoinsActionGroup(StatesGroup):
 class SetBlacklistNetworksActionGroup(StatesGroup):
     SetAddNetwork = State()
     SetRemoveNetwork = State()
+
+
+class SetBlacklistCoinForExchangeActionGroup(StatesGroup):
+    SetAddCoinForExchange = State()
+    SetRemoveCoinForExchange = State()

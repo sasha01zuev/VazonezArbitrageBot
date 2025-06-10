@@ -75,7 +75,7 @@ class SetLoanHedgingCallbackFactory(CallbackData, prefix="set_loan_hedging"):
 class SetBlacklistTypesCallbackFactory(CallbackData, prefix="set_blacklist_types"):
     blacklist_type: str
 
-
+# region COINS BLACKLIST CALLBACK FACTORIES
 class SetCoinsBlacklistCallbackFactory(CallbackData, prefix="set_coins_blacklist"):
     action: str
 
@@ -86,8 +86,9 @@ class SetCoinsBlacklistCoinCallbackFactory(CallbackData, prefix="set_coins_black
 
 class SetCoinsInCoinsBlacklistCallbackFactory(CallbackData, prefix="set_coins_blacklist_coin"):
     coin: str
+#endregion
 
-
+# region NETWORKS BLACKLIST CALLBACK FACTORIES
 class SetNetworksBlacklistCallbackFactory(CallbackData, prefix="set_networks_blacklist"):
     action: str
 
@@ -98,6 +99,21 @@ class SetNetworksBlacklistNetworkCallbackFactory(CallbackData, prefix="set_netwo
 
 class SetNetworksInNetworksBlacklistCallbackFactory(CallbackData, prefix="set_networks_blacklist_coin"):
     network: str
+#endregion
 
 
+# region COIN FOR EXCHANGE BLACKLIST CALLBACK FACTORIES
+class SetCoinForExchangeBlacklistCallbackFactory(CallbackData, prefix="set_coin_for_exchange_blacklist"):
+    action: str
 
+
+class SetCoinForExchangeBlacklistCoinForExchangeCoinCallbackFactory(CallbackData, prefix="set_cfe_blacklist_cfe"):
+    coin_for_exchange: str
+    action: str
+
+
+class SelectExchangeForCoinForExchangeBlacklistCallbackFactory(CallbackData, prefix="sel_exc_for_bl_cfe"):
+    exchange: str
+    coin: str
+    action: str
+# endregion

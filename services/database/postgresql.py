@@ -444,7 +444,7 @@ class Database:
 
     async def remove_blacklist_networks(self, user_id: int, network: str):
         """
-        coin: str
+        network: str
         """
         sql = f"""
         UPDATE user_inter_exchange_settings
@@ -483,3 +483,61 @@ class Database:
         except Exception as e:
             logging.exception(f"Ошибка получения топ сетей из черного списка без учёта пользователя {user_id}: {e}")
             return []
+
+    async def add_blacklist_coin_for_exchange(self, user_id: int, coin_for_exchange: str):
+        """
+        coin_for_exchange: str
+        """
+        sql = f"""
+        UPDATE user_inter_exchange_settings
+        SET blacklist_coin_for_exchange = array_append(blacklist_coin_for_exchange, $2)
+        WHERE user_id = $1 AND NOT ($2 = ANY(blacklist_coin_for_exchange));
+        """
+        try:
+            await self.pool.execute(sql, user_id, coin_for_exchange)
+            logging.info(f"Обновлено значение blacklist_coin_for_exchange для пользователя {user_id}: {coin_for_exchange}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления значения blacklist_coin_for_exchange для пользователя {user_id}: {e}")
+
+    async def remove_blacklist_coin_for_exchange(self, user_id: int, coin_for_exchange: str):
+        """
+        coin_for_exchange: str
+        """
+        sql = f"""
+        UPDATE user_inter_exchange_settings
+        SET blacklist_coin_for_exchange = array_remove(blacklist_coin_for_exchange, $2)
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, coin_for_exchange)
+            logging.info(f"Удалено значение coin_for_exchange для пользователя {user_id}: {coin_for_exchange}")
+        except Exception as e:
+            logging.exception(f"Ошибка удаления значения coin_for_exchange для пользователя {user_id}: {e}")
+
+    async def get_top_blacklist_coin_for_exchange(self, user_id: int, top_n: int = 5) -> list[tuple[str, int]]:
+        sql = """
+        WITH user_blacklist AS (
+            SELECT unnest(blacklist_coin_for_exchange) AS coin_for_exchange
+            FROM user_inter_exchange_settings
+            WHERE user_id = $1
+        ),
+        all_blacklists AS (
+            SELECT unnest(blacklist_coin_for_exchange) AS coin_for_exchange
+            FROM user_inter_exchange_settings
+        )
+        SELECT coin_for_exchange, COUNT(*) AS frequency
+        FROM all_blacklists
+        WHERE coin_for_exchange NOT IN (SELECT coin_for_exchange FROM user_blacklist)
+        GROUP BY coin_for_exchange
+        ORDER BY frequency DESC
+        LIMIT $2;
+        """
+        try:
+            top_coin_for_exchange = await self.pool.fetch(sql, user_id, top_n)
+            logging.debug(
+                f"Получены топ {top_n} монет к бирже из чёрного списка, которых нет у пользователя {user_id}: {top_coin_for_exchange}")
+            return [(row['coin_for_exchange'], row['frequency']) for row in top_coin_for_exchange]
+        except Exception as e:
+            logging.exception(f"Ошибка получения топ монет к бирже из черного списка без учёта пользователя {user_id}: {e}")
+            return []
+

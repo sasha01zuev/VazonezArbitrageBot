@@ -8,7 +8,10 @@ from .callback_factories import (SetBlacklistTypesCallbackFactory, SetMarginHedg
                                  SetLoanHedgingCallbackFactory, SetCoinsBlacklistCallbackFactory,
                                  SetCoinsBlacklistCoinCallbackFactory, SetCoinsInCoinsBlacklistCallbackFactory,
                                  SetNetworksBlacklistCallbackFactory, SetNetworksBlacklistNetworkCallbackFactory,
-                                 SetNetworksInNetworksBlacklistCallbackFactory
+                                 SetNetworksInNetworksBlacklistCallbackFactory,
+                                 SetCoinForExchangeBlacklistCallbackFactory,
+                                 SetCoinForExchangeBlacklistCoinForExchangeCoinCallbackFactory,
+                                 SelectExchangeForCoinForExchangeBlacklistCallbackFactory
                                  )
 
 
@@ -37,6 +40,7 @@ def get_settings_blacklist_types_keyboard(texts: TextProxy) -> InlineKeyboardMar
     return builder.as_markup()
 
 
+# region COINS BLACKLIST KEYBOARDS
 def get_settings_coins_blacklist_keyboard(texts: TextProxy, blacklist_coins: List[str]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
@@ -116,8 +120,9 @@ def get_settings_coins_blacklist_remove_coin_keyboard(texts: TextProxy, blacklis
         builder.adjust(1)
 
     return builder.as_markup()
+# endregion
 
-
+# region NETWORKS BLACKLIST KEYBOARDS
 def get_settings_networks_blacklist_keyboard(texts: TextProxy, blacklist_networks: List[str]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(
@@ -187,3 +192,111 @@ def get_settings_networks_blacklist_remove_networks_keyboard(texts: TextProxy, b
 
     return builder.as_markup()
 
+# endregion
+
+
+# region COINS FOR EXCHANGE BLACKLIST KEYBOARDS
+def get_settings_coin_for_exchange_blacklist_keyboard(texts: TextProxy, blacklist_coin_for_exchange: List[str]) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text=texts.keyboard.settings.blacklist_types.coin_for_exchange_blacklist.add_coin_for_exchange,
+        callback_data=SetCoinForExchangeBlacklistCallbackFactory(action="add_coin_for_exchange")
+    )
+
+    if blacklist_coin_for_exchange:
+        builder.button(
+            text=texts.keyboard.settings.blacklist_types.coin_for_exchange_blacklist.remove_coin_for_exchange,
+            callback_data=SetCoinForExchangeBlacklistCallbackFactory(action="remove_coin_for_exchange")
+        )
+
+    builder.add(back_button(texts=texts, callback_data="settings:blacklist_types"))
+
+    builder.adjust(1)
+
+    return builder.as_markup()
+
+
+def get_settings_coin_for_exchange_blacklist_add_coin_keyboard(texts: TextProxy, top_blacklisted_coin_for_exchange: List[str]) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    # Эмодзи для цифр 1️⃣, 2️⃣, 3️⃣ и т.д. — максимум 10 (по желанию можно расширить)
+    number_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
+
+    if top_blacklisted_coin_for_exchange:
+        builder.button(
+            text=texts.button.most_often_blocked,
+            callback_data="None"  # Заголовок, неактивная кнопка
+        )
+
+        for i, coin_for_exchange in enumerate(top_blacklisted_coin_for_exchange):
+            emoji = number_emojis[i] if i < len(number_emojis) else f"{i + 1}."
+            builder.button(
+                text=f"{emoji} {coin_for_exchange}",
+                callback_data=SetCoinForExchangeBlacklistCoinForExchangeCoinCallbackFactory(
+                    coin_for_exchange=coin_for_exchange, action="add")
+            )
+
+        builder.add(back_button(texts=texts, callback_data="set_blacklist_types:coin_for_exchange_blacklist"))
+
+        builder.adjust(1)
+    else:
+        builder.add(back_button(texts=texts, callback_data="set_blacklist_types:coin_for_exchange_blacklist"))
+
+        builder.adjust(1)
+
+    return builder.as_markup()
+
+
+def get_settings_coin_for_exchange_blacklist_remove_coin_for_exchange_keyboard(texts: TextProxy,
+                                                                               blacklisted_coin_for_exchange: List[str]) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    # Эмодзи для цифр 1️⃣, 2️⃣, 3️⃣ и т.д. — максимум 10 (по желанию можно расширить)
+    number_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
+
+    if blacklisted_coin_for_exchange:
+        builder.button(
+            text=texts.button.last_blocked,
+            callback_data="None"  # Заголовок, неактивная кнопка
+        )
+
+        for i, coin_for_exchange in enumerate(blacklisted_coin_for_exchange):
+            emoji = number_emojis[i] if i < len(number_emojis) else f"{i + 1}."
+            builder.button(
+                text=f"{emoji} {coin_for_exchange}",
+                callback_data=SetCoinForExchangeBlacklistCoinForExchangeCoinCallbackFactory(
+                    coin_for_exchange=coin_for_exchange, action="remove"))
+
+        builder.add(back_button(texts=texts, callback_data="set_blacklist_types:coin_for_exchange_blacklist"))
+
+        builder.adjust(1)
+    else:
+        builder.add(back_button(texts=texts, callback_data="set_blacklist_types:coin_for_exchange_blacklist"))
+
+        builder.adjust(1)
+
+    return builder.as_markup()
+
+
+def get_settings_coin_for_exchange_blacklist_select_exchange_keyboard(texts: TextProxy, coin: str,
+                                                              exchanges: dict,
+                                                              action: str) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    for exchange_name, value in exchanges.items():
+        if "s_" in exchange_name:
+            continue
+        else:
+            builder.button(
+                text=f"{exchange_name.capitalize()}",
+                callback_data=SelectExchangeForCoinForExchangeBlacklistCallbackFactory(exchange=exchange_name,
+                                                                                       coin=coin,
+                                                                                       action=action).pack()
+            )
+
+    builder.add(back_button(texts=texts, callback_data="set_blacklist_types:coin_for_exchange_blacklist"))
+
+    builder.adjust(1)
+    return builder.as_markup()
+# endregion

@@ -9,8 +9,11 @@ from .callback_factories import (SettingsCallbackFactory, LanguageCallbackFactor
                                  SetBlacklistTypesCallbackFactory, SetCoinsBlacklistCallbackFactory,
                                  SetCoinsBlacklistCoinCallbackFactory, SetCoinsInCoinsBlacklistCallbackFactory,
                                  SetNetworksBlacklistCallbackFactory, SetNetworksBlacklistNetworkCallbackFactory,
-                                 SetNetworksInNetworksBlacklistCallbackFactory)
-
+                                 SetNetworksInNetworksBlacklistCallbackFactory,
+                                 SetCoinForExchangeBlacklistCallbackFactory,
+                                 SetCoinForExchangeBlacklistCoinForExchangeCoinCallbackFactory,
+                                 SelectExchangeForCoinForExchangeBlacklistCallbackFactory
+                                 )
 
 from .settings_blacklist_types_keyboard import (get_settings_blacklist_types_keyboard,
                                                 get_settings_coins_blacklist_keyboard,
@@ -18,7 +21,11 @@ from .settings_blacklist_types_keyboard import (get_settings_blacklist_types_key
                                                 get_settings_coins_blacklist_remove_coin_keyboard,
                                                 get_settings_networks_blacklist_keyboard,
                                                 get_settings_networks_blacklist_add_network_keyboard,
-                                                get_settings_networks_blacklist_remove_networks_keyboard)
+                                                get_settings_networks_blacklist_remove_networks_keyboard,
+                                                get_settings_coin_for_exchange_blacklist_keyboard,
+                                                get_settings_coin_for_exchange_blacklist_add_coin_keyboard,
+                                                get_settings_coin_for_exchange_blacklist_remove_coin_for_exchange_keyboard,
+                                                get_settings_coin_for_exchange_blacklist_select_exchange_keyboard)
 from .settings_hedging_types_keyboard import (get_settings_hedging_types_keyboard,
                                               get_settings_futures_hedging_keyboard,
                                               get_settings_margin_hedging_keyboard,

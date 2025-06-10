@@ -3,8 +3,9 @@ import copy
 import logging
 
 from aiogram import Router
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
-from aiogram.filters import Command
+from aiogram.filters import Command, StateFilter
 
 from filters.admin import IsMainAdmin
 from data.get_files import load_channel_monitoring_available
@@ -13,12 +14,18 @@ from pprint import pprint
 from aiogram.exceptions import TelegramRetryAfter
 from utils.filter_pairs import (recalculate_spread_from_net_profit, filter_significant_pairs_changes,
                                 recalculate_and_filter_by_net_profit, group_and_pack_pairs_into_messages)
+from utils.i18n import TextProxy
 
 admin_channel_router = Router()
 
 
-@admin_channel_router.message(Command("start_arbitrage_channel_monitoring"), IsMainAdmin())
-async def arbitrage_channel_monitoring(message: Message):
+@admin_channel_router.message(Command("start_arbitrage_channel_monitoring"), IsMainAdmin(), StateFilter("*"))
+async def arbitrage_channel_monitoring(message: Message, state: FSMContext, texts: TextProxy):
+    if await state.get_state() is not None:
+        await message.answer(text=texts.commands.state.canceled_state,
+                             disable_web_page_preview=True, parse_mode="HTML")
+    await state.clear()
+
     await message.answer("✅ Начинаю мониторинг")
     prev_pairs = {}
 
