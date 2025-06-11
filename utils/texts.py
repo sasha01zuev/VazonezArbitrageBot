@@ -17,8 +17,9 @@ TEXTS = {
                     "- Максимальная фильтрация связок\n\n"
                     "🎁 Приглашай пользователей и получай вознаграждения\n\n"
                     "💬 Все действия выполняются через кнопки или команды:\n"
-                    "<b>[/start,  /menu,  /arbitrage, /settings,\n"
-                    "/language,  /referral_program,  /help ]</b>"
+                    "<b>[ /start,  /menu,  /arbitrage, /settings,\n"
+                    "/language,  /referral_program,  /help,\n"
+                    "/subscriptions ]</b>"
                 ),
                 "en": (
                     "🚀 <b>Arbitrage Screener</b>\n\n"
@@ -27,8 +28,9 @@ TEXTS = {
                     "- Advanced filtering\n\n"
                     "🎁 Invite users and get rewards\n\n"
                     "💬 Use buttons or commands:\n"
-                    "<b>[/start,  /menu,  /arbitrage, /settings,\n"
-                    "/language,  /referral_program,  /help ]</b>"
+                    "<b>[ /start,  /menu,  /arbitrage, /settings,\n"
+                    "/language,  /referral_program,  /help,\n"
+                    "/subscriptions ]</b>"
                 )
             }
         },
@@ -880,6 +882,34 @@ TEXTS = {
                           "Оформить подписку можно по команде <b>/subscriptions</b> или в меню бота.",
                     "en": "<b>❗️ You don't have a subscription for inter-exchange arbitrage!</b>\n\n"
                           "You can subscribe by using the command <b>/subscriptions</b> or in the bot menu."
+                }
+            }
+        },
+        "subscriptions": {
+            "inter_exchange": {
+                "price_list": {
+                    "ru": "<b>💳 Цены на подписки на межбиржевой арбитраж:</b>\n\n"
+                          "<b>1 неделя:</b> <code>{one_week_price}$</code>\n"
+                          "<b>1 месяц:</b> <code>{one_month_price}$</code>\n"
+                          "<b>3 месяца:</b> <code>{three_month_price}$</code>\n"
+                          "<b>НАВСЕГДА:</b> <code>{lifetime_price}$</code>\n\n\n"
+                          "<b>USDT. Network - BSC (BEP20)</b>\n"
+                          "<code>{bep20_address}</code>\n\n"
+                          "<b>USDT. Network - Tron (TRC20)</b>\n"
+                          "<code>{trc20_address}</code>\n\n"
+                          "После оплаты сообщите в поддержку бота — отправьте скриншот транзакции с вашей "
+                          "биржи/кошелька, или отправьте хеш транзакции.",
+                    "en": "<b>💳 Prices for inter-exchange arbitrage subscriptions:</b>\n\n"
+                          "<b>1 week:</b> <code>{1_week_price}$</code>\n"
+                          "<b>1 month:</b> <code>{1_month_price}$</code>\n"
+                          "<b>3 months:</b> <code>{3_month_price}$</code>\n"
+                          "<b>LIFETIME:</b> <code>{lifetime_price}$</code>\n\n\n"
+                          "<b>USDT. Network - BSC (BEP20)</b>\n"
+                          "<code>{bep20_address}</code>\n\n"
+                          "<b>USDT. Network - Tron (TRC20)</b>\n"
+                          "<code>{trc20_address}</code>\n\n"
+                          "After payment, please contact the bot support — send a screenshot of the transaction "
+                          "from your exchange/wallet or send the transaction hash."
                 }
             }
         }

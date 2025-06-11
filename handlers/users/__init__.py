@@ -5,6 +5,7 @@ from .settings import routers as settings_routers
 from .arbitrage_menu import arbitrage_menu_router
 from .menu import menu_router
 from .referrals import referral_router
+from .subscriptions import subscriptions_router
 from .arbitrage import routers as arbitrage_routers
 from .settings_menu import settings_menu_router
 from .start import start_router
@@ -15,6 +16,7 @@ routers_list = [
     start_router,
     menu_router,
     referral_router,
+    subscriptions_router,
     arbitrage_menu_router,
     settings_menu_router,
 
