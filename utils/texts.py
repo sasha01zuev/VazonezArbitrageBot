@@ -812,15 +812,15 @@ TEXTS = {
                             },
                             "wrong_exchange": {
                                 "ru": "<b>❗️ Биржа {exchange} к монете {coin} не найдена!</b>\n\n"
-                                        "<b>Введите название монеты или монеты к бирже для удаления в формате:</b>\n\n"
-                                        "<code>Монета</code>\n"
-                                        "<code>Монета-Биржа</code>\n\n"
-                                        "<b>Например:</b> <code>BTC-Binance</code>",
+                                      "<b>Введите название монеты или монеты к бирже для удаления в формате:</b>\n\n"
+                                      "<code>Монета</code>\n"
+                                      "<code>Монета-Биржа</code>\n\n"
+                                      "<b>Например:</b> <code>BTC-Binance</code>",
                                 "en": "<b>❗️ Exchange {exchange} for coin {coin} not found!</b>\n\n"
-                                        "<b>Input coin name or coins for exchange to remove in format:</b>\n\n"
-                                        "<code>Coin</code>\n"
-                                        "<code>Coin-Exchange</code>\n\n"
-                                        "<b>For example:</b> <code>BTC-Binance</code>"
+                                      "<b>Input coin name or coins for exchange to remove in format:</b>\n\n"
+                                      "<code>Coin</code>\n"
+                                      "<code>Coin-Exchange</code>\n\n"
+                                      "<b>For example:</b> <code>BTC-Binance</code>"
                             }
                         }
                     },
@@ -842,6 +842,46 @@ TEXTS = {
                 "ru": "<b>❗ Действие отменено</b>",
                 "en": "<b>❗ Action has been canceled</b>"
             },
+        },
+        "arbitrage": {
+            "choose_arbitrage_type": {
+                "ru": "<b>Выберите тип арбитража:</b>",
+                "en": "<b>Select arbitrage type:</b>"
+            },
+            "day": {
+                "ru": "д.",
+                "en": "d."
+            },
+            "hour": {
+                "ru": "ч.",
+                "en": "h."
+            },
+            "minute": {
+                "ru": "м.",
+                "en": "m."
+            },
+            "seconds": {
+                "ru": "с.",
+                "en": "s."
+            },
+            "remain": {
+                "ru": "осталось",
+                "en": "remain"
+            },
+            "inter_exchange": {
+                "active_subscription": {
+                    "ru": "<b>✅ Подписка на межбиржевой арбитраж активная!</b>\n\n"
+                          "Время подписки: <b>{subscription_status}</b>",
+                    "en": "<b>✅ Inter-exchange arbitrage subscription is active!</b>\n\n"
+                          "Subscription time: <b>{subscription_status}</b>"
+                },
+                "no_subscription": {
+                    "ru": "<b>❗️ У вас нет подписки на межбиржевой арбитраж!</b>\n\n"
+                          "Оформить подписку можно по команде <b>/subscriptions</b> или в меню бота.",
+                    "en": "<b>❗️ You don't have a subscription for inter-exchange arbitrage!</b>\n\n"
+                          "You can subscribe by using the command <b>/subscriptions</b> or in the bot menu."
+                }
+            }
         }
     },
     "callback": {
@@ -904,6 +944,10 @@ TEXTS = {
                 "referrals": {
                     "ru": "🔗 Реферальная программа",
                     "en": "🔗 Referral program"
+                },
+                "subscriptions": {
+                    "ru": "💳 Подписки",
+                    "en": "💳 Subscriptions"
                 },
                 "support": {
                     "ru": "👨‍💻 Поддержка",
@@ -1167,6 +1211,14 @@ TEXTS = {
                         "ru": "➖ Удалить монету к бирже",
                         "en": "➖ Remove coin for exchange"
                     }
+                }
+            }
+        },
+        "arbitrage": {
+            "buttons": {
+                "inter_exchange": {
+                    "ru": "Межбиржевой",
+                    "en": "Inter-exchange"
                 }
             }
         }

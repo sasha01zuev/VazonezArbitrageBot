@@ -117,3 +117,7 @@ class SelectExchangeForCoinForExchangeBlacklistCallbackFactory(CallbackData, pre
     coin: str
     action: str
 # endregion
+
+
+class ArbitrageMenuCallbackFactory(CallbackData, prefix="arbitrage"):
+    arbitrage_type: str

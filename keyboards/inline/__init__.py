@@ -12,9 +12,11 @@ from .callback_factories import (SettingsCallbackFactory, LanguageCallbackFactor
                                  SetNetworksInNetworksBlacklistCallbackFactory,
                                  SetCoinForExchangeBlacklistCallbackFactory,
                                  SetCoinForExchangeBlacklistCoinForExchangeCoinCallbackFactory,
-                                 SelectExchangeForCoinForExchangeBlacklistCallbackFactory
+                                 SelectExchangeForCoinForExchangeBlacklistCallbackFactory,
+                                 ArbitrageMenuCallbackFactory
                                  )
 
+from .arbitrage_menu_keyboard import get_arbitrage_menu_keyboard
 from .settings_blacklist_types_keyboard import (get_settings_blacklist_types_keyboard,
                                                 get_settings_coins_blacklist_keyboard,
                                                 get_settings_coins_blacklist_add_coin_keyboard,
