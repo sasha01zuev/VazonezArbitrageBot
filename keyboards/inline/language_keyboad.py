@@ -7,7 +7,8 @@ from .callback_factories import LanguageCallbackFactory
 from utils.i18n import TextProxy
 
 
-def get_language_keyboard(texts: TextProxy, current_lang: str, is_from_settings: bool) -> InlineKeyboardMarkup:
+def get_language_keyboard(texts: TextProxy, current_lang: str, is_from_settings: bool,
+                          is_start_command: bool = False) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     logging.debug(f"Ru {texts.keyboard.language.buttons.russian}")
@@ -26,7 +27,8 @@ def get_language_keyboard(texts: TextProxy, current_lang: str, is_from_settings:
             callback_data=LanguageCallbackFactory(item=code).pack()
         )
 
-    builder.add(back_button(texts=texts, callback_data="settings" if is_from_settings else "menu"))
+    if not is_start_command:
+        builder.add(back_button(texts=texts, callback_data="settings" if is_from_settings else "menu"))
 
     builder.adjust(2, 1)  # 1 кнопка в строке
 

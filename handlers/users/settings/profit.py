@@ -60,7 +60,7 @@ async def set_profit_value(callback: CallbackQuery, texts: TextProxy, state: FSM
     await state.set_state(SetProfitGroup.SetMinProfit)
 
 
-@router.message(SetProfitGroup.SetMinProfit, StateFilter("*"))
+@router.message(SetProfitGroup.SetMinProfit)
 async def set_min_profit(message: Message, state: FSMContext, texts: TextProxy, db: Database):
     user_id = message.from_user.id
 

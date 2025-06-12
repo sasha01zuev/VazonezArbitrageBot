@@ -4,9 +4,11 @@ from .settings import routers as settings_routers
 
 from .arbitrage_menu import arbitrage_menu_router
 from .menu import menu_router
-from .referrals import referral_router
+from .referrals_menu import referral_router
+from .referrals import routers as referrals_statistics_routers
 from .subscriptions import subscriptions_router
 from .arbitrage import routers as arbitrage_routers
+
 from .settings_menu import settings_menu_router
 from .start import start_router
 from .echo import echo_router
@@ -20,6 +22,7 @@ routers_list = [
     arbitrage_menu_router,
     settings_menu_router,
 
+    *referrals_statistics_routers,
     *arbitrage_routers,
     *settings_routers,
     echo_router,  # echo_router must be last

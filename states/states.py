@@ -53,3 +53,13 @@ class SetBlacklistNetworksActionGroup(StatesGroup):
 class SetBlacklistCoinForExchangeActionGroup(StatesGroup):
     SetAddCoinForExchange = State()
     SetRemoveCoinForExchange = State()
+
+
+class SetLanguageStartGroup(StatesGroup):
+    SetLanguage = State()
+
+
+class SetReferralWithdrawGroup(StatesGroup):
+    SetNetwork = State()
+    SetAddress = State()
+    ConfirmWithdraw = State()

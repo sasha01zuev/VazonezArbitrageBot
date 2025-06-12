@@ -22,7 +22,7 @@ async def referrals_handler(message: Message, db: Database, texts: TextProxy, st
     await state.clear()
 
     user_referral_link = await create_start_link(bot=bot, payload=f"ref-{message.from_user.id}",)
-    await message.answer(text=texts.commands.referrals.format(user_referral_link=user_referral_link),
+    await message.answer(text=texts.commands.referrals.set_referrals.format(user_referral_link=user_referral_link),
                          disable_web_page_preview=True, parse_mode="HTML",
                          reply_markup=get_referral_keyboard(texts=texts, user_referral_link=user_referral_link))
 
@@ -39,6 +39,6 @@ async def referrals_handler(call: Message, db: Database, texts: TextProxy, state
     await call.answer(cache_time=1)
     user_referral_link = await create_start_link(bot=bot, payload=f"ref-{call.from_user.id}",)
     await call.message.edit_text(
-        text=texts.commands.referrals.format(user_referral_link=user_referral_link),
+        text=texts.commands.referrals.set_referrals.format(user_referral_link=user_referral_link),
         disable_web_page_preview=True, parse_mode="HTML",
         reply_markup=get_referral_keyboard(texts=texts, user_referral_link=user_referral_link))

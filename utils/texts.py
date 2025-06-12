@@ -32,6 +32,14 @@ TEXTS = {
                     "/language,  /referral_program,  /help,\n"
                     "/subscriptions ]</b>"
                 )
+            },
+            "referral_invitation": {
+                "ru": "<b>🔗 {first_name} был приглашён по вашей ссылке!\n\n"
+                      "🎁 Если ваш реферал совершит платёж за подписку, вы получите вознаграждение.</b>\n\n"
+                      "Подробнее о реферальной программе: <b>/referral_program</b>",
+                "en": "<b>🔗 {first_name} was invited by your link!\n\n"
+                      "🎁 If your referral makes a subscription payment, you will receive a reward.</b>\n\n"
+                      "Learn more about the referral program: <b>/referral_program</b>"
             }
         },
         "menu": {
@@ -39,33 +47,87 @@ TEXTS = {
             "en": "<b>MENU:</b>"
         },
         "referrals": {
-            "ru": "<b>💸 РЕФЕРАЛЬНАЯ ПРОГРАММА:</b>\n\n"
-                  ""
-                  "Приглашай друзей и зарабатывай вместе с нами!\n"
-                  "Ты получаешь <b>40%</b> от стоимости подписки, оформленной приглашённым пользователем.\n\n"
-                  ""
-                  "<b>👥 Как это работает:\n</b>"
-                  "    1. Отправь свою уникальную ссылку другу.\n"
-                  "    2. Он запускает бота и покупает подписку.\n"
-                  "    3. Ты моментально получаешь <b>40%</b> от его оплаты.\n\n"
-                  ""
-                  "🔗 Твоя ссылка:\n"
-                  "<b>{user_referral_link}</b>\n\n"
-                  ""
-                  "📌 Бонусы начисляются автоматически после каждой оплаты.",
-            "en": "<b>💸 REFERRAL PROGRAM:</b>\n\n"
-                  ""
-                  "Invite your friends and earn with us!\n"
-                  "You receive <b>40%</b> of the subscription amount paid by the referred user.\n\n"
-                  ""
-                  "<b>👥 How it works:\n</b>"
-                  "    1. Send your unique link to a friend.\n"
-                  "    2. They start the bot and purchase a subscription.\n"
-                  "    3. You instantly receive <b>40%</b> of their payment.\n\n"
-                  ""
-                  "🔗 Your link:\n"
-                  "<b>{user_referral_link}</b>\n\n"
-                  "📌 Bonuses are credited automatically after each payment."
+            "set_referrals": {
+                "ru": "<b>💸 РЕФЕРАЛЬНАЯ ПРОГРАММА:</b>\n\n"
+                      ""
+                      "Приглашай друзей и зарабатывай вместе с нами!\n"
+                      "Ты получаешь <b>40%</b> от стоимости подписки, оформленной приглашённым пользователем.\n\n"
+                      ""
+                      "<b>👥 Как это работает:\n</b>"
+                      "    1. Отправь свою уникальную ссылку другу.\n"
+                      "    2. Он запускает бота и покупает подписку.\n"
+                      "    3. Ты моментально получаешь <b>40%</b> от его оплаты.\n\n"
+                      ""
+                      "🔗 Твоя ссылка:\n"
+                      "<b>{user_referral_link}</b>\n\n"
+                      ""
+                      "📌 Бонусы начисляются автоматически после каждой оплаты.",
+                "en": "<b>💸 REFERRAL PROGRAM:</b>\n\n"
+                      ""
+                      "Invite your friends and earn with us!\n"
+                      "You receive <b>40%</b> of the subscription amount paid by the referred user.\n\n"
+                      ""
+                      "<b>👥 How it works:\n</b>"
+                      "    1. Send your unique link to a friend.\n"
+                      "    2. They start the bot and purchase a subscription.\n"
+                      "    3. You instantly receive <b>40%</b> of their payment.\n\n"
+                      ""
+                      "🔗 Your link:\n"
+                      "<b>{user_referral_link}</b>\n\n"
+                      "📌 Bonuses are credited automatically after each payment.",
+            },
+            "common_statistics": {
+                "ru": "<b>📊 ОБЩАЯ СТАТИСТИКА:</b>\n\n"
+                      "Приглашено пользователей: <b>{referrals_count}</b>\n"
+                      "Оплачено подписок: <b>{paid_subscriptions_quantity}</b>\n"
+                      "Баланс: <b>${referral_balance}</b>\n\n"
+                      "💰 <b>Всего заработано: ${total_earned}</b>",
+                "en": "<b>📊 GENERAL STATISTICS:</b>\n\n"
+                      "Users invited: <b>{referrals_count}</b>\n"
+                      "Subscriptions paid: <b>{paid_subscriptions_quantity}</b>\n"
+                      "Balance: <b>${referral_balance}</b>\n\n"
+                      "💰 <b>Total earned: ${total_earned}</b>"
+            },
+            "withdraw": {
+                "set_network": {
+                    "ru": "<b>💸 ВЫВОД СРЕДСТВ:</b>\n\n"
+                          "🔽 Впишите ниже сеть для вывода средств в монете USDT.\n\n"
+                          "Например: <b>TRC20, ERC20, BEP20</b> и т.д.",
+                    "en": "<b>💸 WITHDRAW FUNDS:</b>\n\n"
+                          "🔽 Enter the network for withdrawing funds in USDT below.\n\n"
+                          "For example: <b>TRC20, ERC20, BEP20</b> etc."
+                },
+                "set_address": {
+                    "ru": "<b>💸 ВЫВОД СРЕДСТВ:</b>\n\n"
+                          "🔽 Впишите ниже адрес для вывода средств в монете USDT.\n\n"
+                          "После ввода адреса, вы сможете подтвердить вывод средств.",
+                    "en": "<b>💸 WITHDRAW FUNDS:</b>\n\n"
+                          "🔽 Enter the address for withdrawing funds in USDT below.\n\n"
+                          "After entering the address, you will be able to confirm the withdrawal."
+                },
+                "confirm_withdraw": {
+                    "ru": "<b>💸 ПОДТВЕРДИТЕ ВЫВОД:</b>\n\n"
+                          "Вывод <b>${amount}</b> USDT\n"
+                          "Сеть: <b>{network}</b>\n"
+                          "Адрес вывода: <code>{address}</code>\n\n"
+                          "После подтверждения ожидайте зачисление в течении 3 часов.\n\n"
+                          "Если была не полностью или некорректно указана сеть или адрес, "
+                          "то мы свяжемся с вами напрямую для уточнения.",
+                    "en": "<b>💸 CONFIRM WITHDRAW:</b>\n\n"
+                          "Withdrawal of <b>${amount}</b> USDT\n"
+                          "Network: <b>{network}</b>\n"
+                          "Withdrawal address: <code>{address}</code>\n\n"
+                          "After confirmation, please wait for the deposit within 3 hours.\n\n"
+                          "If the network or address was not fully or correctly specified, "
+                          "we will contact you directly for clarification."
+                },
+                "success": {
+                    "ru": "<b>✅ Вывод успешно инициирован, а ваш баланс обнулен!</b>\n\n"
+                          "Ожидайте поступление средств в течении 3 часов.\n\n",
+                    "en": "<b>✅ Withdrawal successfully initiated, and your balance has been reset!</b>\n\n"
+                          "Please wait for the funds to arrive within 3 hours.\n\n"
+                }
+            }
         },
         "settings": {
             "ru": "<b>⚙️ НАСТРОЙКИ:</b>\n\n"
@@ -958,6 +1020,32 @@ TEXTS = {
         "successfully_removed": {
             "ru": "✅ Успешно удалено!",
             "en": "✅ Successfully removed!"
+        },
+        "referrals": {
+            "referrals_statistics": {
+                "withdraw": {
+                    "errors": {
+                        "zero_balance": {
+                            "ru": "❗️ У вас недостаточно средств для вывода!",
+                            "en": "❗️ You don't have enough funds to withdraw!"
+                        },
+                        "balance_less_than_5": {
+                            "ru": "❗️ Минимальная сумма для вывода: 5$",
+                            "en": "❗️ Minimum withdrawal amount: 5$"
+                        },
+                        "paid_subscriptions_quantity_less_than_2": {
+                            "ru": "❗️ Вывод доступен после 2 оплат от приглашённых — в целях защиты от абуза!",
+                            "en": "❗️ Withdrawal is available after 2 payments from referrals — to prevent abuse!"
+                        }
+                    }
+                }
+            }
+        },
+        "state": {
+            "canceled_state": {
+                "ru": "❗ Действие отменено",
+                "en": "❗ Action has been canceled"
+            },
         }
     },
     "keyboard": {
@@ -1006,6 +1094,40 @@ TEXTS = {
                 "copy": {
                     "ru": "📋 Копировать ссылку",
                     "en": "📋 Copy link"
+                },
+                "statistics": {
+                    "set_statistics": {
+                        "ru": "📊 Статистика",
+                        "en": "📊 Statistics"
+                    },
+                    "one_day": {
+                        "ru": "1 день",
+                        "en": "1 day"
+                    },
+                    "one_week": {
+                        "ru": "1 неделя",
+                        "en": "1 week"
+                    },
+                    "one_month": {
+                        "ru": "1 месяц",
+                        "en": "1 month"
+                    },
+                    "one_year": {
+                        "ru": "1 год",
+                        "en": "1 year"
+                    },
+                    "withdraw": {
+                        "ru": "💰 Вывод средств",
+                        "en": "💰 Withdraw funds"
+                    },
+                    "convert_to_subscription": {
+                        "ru": "💳 Конвертировать в подписку",
+                        "en": "💳 Convert to subscription"
+                    },
+                    "confirm_withdraw": {
+                        "ru": "✅ Подтвердить вывод",
+                        "en": "✅ Confirm withdrawal"
+                    }
                 }
             }
         },

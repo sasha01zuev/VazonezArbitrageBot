@@ -121,3 +121,16 @@ class SelectExchangeForCoinForExchangeBlacklistCallbackFactory(CallbackData, pre
 
 class ArbitrageMenuCallbackFactory(CallbackData, prefix="arbitrage"):
     arbitrage_type: str
+
+
+class ReferralsCallbackFactory(CallbackData, prefix="referrals"):
+    item: str
+
+
+class ReferralsStatisticsCallbackFactory(CallbackData, prefix="referrals_statistics"):
+    time: str
+    action: str
+
+
+class ReferralsConfirmWithdrawCallbackFactory(CallbackData, prefix="referrals_confirm_withdraw"):
+    action: str

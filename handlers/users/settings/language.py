@@ -7,6 +7,7 @@ from aiogram.types import CallbackQuery, Message
 from keyboards.inline import SettingsCallbackFactory, LanguageCallbackFactory, get_language_keyboard
 from services.database.postgresql import Database
 from utils.i18n import TextProxy
+from utils.texts import TEXTS
 
 router = Router()
 
@@ -55,6 +56,11 @@ async def selected_language(callback: CallbackQuery, texts: TextProxy, state: FS
     await state.clear()
 
     language = callback_data.item
+    if language == 'ru':
+        texts = TextProxy(data=TEXTS, lang='ru')
+    elif language == 'en':
+        texts = TextProxy(data=TEXTS, lang='en')
+
     user_current_lang = await db.get_user_language(user_id=callback.from_user.id)
 
     if language != user_current_lang:  # Не выбран ли текущий язык (Предотвращает ошибку message is not modified)

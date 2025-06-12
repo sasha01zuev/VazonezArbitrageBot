@@ -40,6 +40,7 @@ class RegisterUserMiddleware(BaseMiddleware):
         db_user_subscriptions = await db.get_availability_user_subscriptions(user_id=user.id)
         db_get_user_inter_exchange_exchanges = await db.get_availability_user_inter_exchange_exchanges(user_id=user.id)
         db_get_user_inter_exchange_settings = await db.get_user_inter_exchange_settings(user_id=user.id)
+        db_get_user_referral_info = await db.get_user_referral_info(user_id=user.id)
 
         if not db_user:
             user_language = "ru" if user.language_code == "ru" else "en"
@@ -70,6 +71,10 @@ class RegisterUserMiddleware(BaseMiddleware):
             logging.debug(f"Межбиржевые настройки для пользователя {user.id} добавлены в базу данных.")
         else:
             logging.debug(f"Межбиржевые настройки для пользователя {user.id} уже существуют в базе данных.")
+
+        if not db_get_user_referral_info:
+            await db.set_default_user_referral_info(user_id=user.id)
+            logging.debug(f"Реферальная информация для пользователя {user.id} добавлена в базу данных.")
 
 
         # TODO: В будущем добавить проверку на другие параметры, например на подписку, настройки и т.д.

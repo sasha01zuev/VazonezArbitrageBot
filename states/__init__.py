@@ -1,3 +1,5 @@
-from .states import (ExampleGroup, ExampleSoloState, SetSpreadGroup, SetProfitGroup, SetVolumeGroup, SetWithdrawFeeGroup,
+from .states import (ExampleGroup, ExampleSoloState, SetSpreadGroup, SetProfitGroup, SetVolumeGroup,
+                     SetWithdrawFeeGroup,
                      SetCoinVolume24hGroup, SetLastTradeTimeGroup, SetBlacklistCoinsActionGroup,
-                     SetBlacklistNetworksActionGroup, SetBlacklistCoinForExchangeActionGroup)
+                     SetBlacklistNetworksActionGroup, SetBlacklistCoinForExchangeActionGroup,
+                     SetLanguageStartGroup, SetReferralWithdrawGroup)

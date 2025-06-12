@@ -181,6 +181,37 @@ class Database:
         except Exception as e:
             logging.exception(f"{user_id} - ошибка при добавлении межбиржевых настроек в базу: {e}")
 
+    async def get_user_referral_info(self, user_id: int):
+        """
+        Получает информацию о рефералах пользователя.
+        :param user_id: ID пользователя
+        :return: Словарь с информацией о рефералах или None в случае ошибки
+        """
+        sql = "SELECT * FROM referrals_info WHERE user_id = $1"
+        try:
+            referral_info = await self.pool.fetchrow(sql, user_id)
+            logging.debug(f"Получена реферальная информация пользователя {user_id}: {referral_info}")
+            return referral_info
+        except Exception as e:
+            logging.exception(f"Ошибка получения реферальной информации пользователя {user_id}: {e}")
+            return None
+
+    async def set_default_user_referral_info(self, user_id: int):
+        """
+        Устанавливает значения по умолчанию для реферальной информации пользователя.
+        :param user_id: ID пользователя
+        """
+        sql = """
+        INSERT INTO referrals_info(user_id)
+        VALUES($1)
+        ON CONFLICT (user_id) DO NOTHING;
+        """
+        try:
+            await self.pool.execute(sql, user_id)
+            logging.info(f"Реферальная информация для пользователя {user_id} добавлена в базу данных.")
+        except Exception as e:
+            logging.exception(f"{user_id} - ошибка при добавлении реферальной информации в базу: {e}")
+
     async def set_user_inter_exchange_spread(self, user_id: int, spread_type: str, spread: float):
         """
         spread_type: min_spread, max_spread
@@ -540,4 +571,110 @@ class Database:
         except Exception as e:
             logging.exception(f"Ошибка получения топ монет к бирже из черного списка без учёта пользователя {user_id}: {e}")
             return []
+
+    async def add_referral(self, user_id: int, referral_id: int):
+        """
+        Добавляет реферала в базу данных.
+        :param user_id: ID пользователя, который пригласил реферала.
+        :param referral_id: ID пользователя, который является рефералом.
+        """
+        sql = """
+        INSERT INTO referrals(user_id, referral_id)
+        VALUES($1, $2)
+        ON CONFLICT (user_id) DO NOTHING;
+        """
+        try:
+            await self.pool.execute(sql, user_id, referral_id)
+            logging.info(f"{user_id} пригласил {referral_id}.")
+        except Exception as e:
+            logging.exception(f"Ошибка при добавлении реферала {user_id} с рефералом {referral_id}: {e}")
+
+    async def get_referrals(self, user_id: int) -> list[int]:
+        """
+        Получить список referral_id всех пользователей, приглашённых данным user_id.
+
+        :param user_id: ID пригласившего пользователя (реферера)
+        :return: Список ID всех его рефералов
+        """
+        sql = "SELECT referral_id FROM referrals WHERE user_id = $1"
+        try:
+            rows = await self.pool.fetch(sql, user_id)
+            return [row["referral_id"] for row in rows]
+        except Exception as e:
+            logging.exception(f"Ошибка при получении списка рефералов для user_id={user_id}: {e}")
+            return []
+
+    async def check_if_user_already_referred(self, referral_id: int) -> bool:
+        """
+        Проверить, был ли пользователь уже кем-то приглашён.
+
+        :param referral_id: ID пользователя, которого могли пригласить
+        :return: True — если он уже есть в таблице как приглашённый, иначе False
+        """
+        sql = "SELECT 1 FROM referrals WHERE referral_id = $1"
+        try:
+            row = await self.pool.fetchrow(sql, referral_id)
+            return row is not None
+        except Exception as e:
+            logging.exception(f"Ошибка при проверке приглашения referral_id={referral_id}: {e}")
+            return False
+
+    async def add_referrals_quantity(self, user_id: int, quantity: int = 1):
+        """
+        Добавляет количество рефералов для пользователя.
+        :param user_id: ID пользователя
+        :param quantity: Количество рефералов
+        """
+        sql = """
+        UPDATE referrals_info
+        SET referrals_quantity = referrals_quantity + $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, quantity)
+            logging.info(f"Обновлено количество рефералов для пользователя {user_id}: {quantity}")
+        except Exception as e:
+            logging.exception(f"Ошибка обновления количества рефералов для пользователя {user_id}: {e}")
+
+    async def is_user_recently_registered(self, user_id: int, datetime: str = "1 minute") -> bool:
+        """
+        Проверяет, был ли пользователь зарегистрирован менее минуты назад (на уровне SQL).
+
+        :param user_id: ID пользователя
+        :param datetime: Время для проверки, по умолчанию "1 minute"
+        :return: True — если зарегистрирован < datetime назад, иначе False
+        """
+        sql = f"""
+        SELECT registration_datetime >= NOW() - INTERVAL '{datetime}'
+        FROM users
+        WHERE id = $1
+        """
+        try:
+            result = await self.pool.fetchval(sql, user_id)
+            return bool(result)
+        except Exception as e:
+            logging.exception(f"Ошибка при SQL-проверке времени регистрации пользователя {user_id}: {e}")
+            return False
+
+    async def get_user_referrals_info(self, user_id: int):
+        sql = "SELECT * FROM referrals_info WHERE user_id = $1"
+        try:
+            referrals_info = await self.pool.fetchrow(sql, user_id)
+            logging.debug(f"Получена реферальная информация пользователя {user_id}: {referrals_info}")
+            return referrals_info
+        except Exception as e:
+            logging.exception(f"Ошибка получения реферальной информации пользователя: {e}")
+            return None
+
+    async def reset_user_referral_balance(self, user_id: int):
+        sql = """
+        UPDATE referrals_info
+        SET balance = 0
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id)
+            logging.info(f"Обнулен баланс рефералов для пользователя {user_id}")
+        except Exception as e:
+            logging.exception(f"Ошибка обнуления баланса рефералов для пользователя {user_id}: {e}")
 
