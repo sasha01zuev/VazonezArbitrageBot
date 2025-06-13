@@ -25,7 +25,7 @@ SUBSCRIPTION_PRICE = {
     "inter_exchange": {
         "one_week": 35,
         "one_month": 65,
-        "three_month": 120,
+        "three_month": 145,
         "lifetime": 490,
     }
 }

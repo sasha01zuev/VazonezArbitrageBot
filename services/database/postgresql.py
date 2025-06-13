@@ -113,6 +113,48 @@ class Database:
             logging.exception(f"Ошибка получения подписки {subscription_type} пользователя {user_id}: {e}")
             return None
 
+    async def add_user_subscription(self, user_id: int, subscription_type: str, subscription_time: str):
+        """
+        Продлевает подписку пользователя:
+        - если подписка ещё активна — прибавляет время к текущей дате окончания
+        - если уже истекла — ставит подписку от текущего момента
+
+        :param user_id: ID пользователя
+        :param subscription_type: Название поля подписки (например: 'inter_exchange')
+        :param subscription_time: строка интервала, например '1 week', '1 month', '3 month', '999 year'
+        """
+        sql = f"""
+        UPDATE user_subscriptions
+        SET {subscription_type} = 
+            CASE
+                WHEN {subscription_type} > NOW() THEN {subscription_type} + INTERVAL '{subscription_time}'
+                ELSE NOW() + INTERVAL '{subscription_time}'
+            END
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id)
+            logging.info(f"Подписка [{subscription_type}] пользователя {user_id} продлена на {subscription_time}")
+        except Exception as e:
+            logging.exception(f"Ошибка при продлении подписки [{subscription_type}] для пользователя {user_id}: {e}")
+
+    async def delete_user_subscription(self, user_id: int, subscription_type: str):
+        """
+        Сбрасывает подписку пользователя.
+        :param user_id: ID пользователя
+        :param subscription_type: Название поля подписки (например: 'inter_exchange')
+        """
+        sql = f"""
+        UPDATE user_subscriptions
+        SET {subscription_type} = NOW()
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id)
+            logging.info(f"Подписка [{subscription_type}] пользователя {user_id} сброшена")
+        except Exception as e:
+            logging.exception(f"Ошибка при сбросе подписки [{subscription_type}] для пользователя {user_id}: {e}")
+
     async def get_availability_user_inter_exchange_exchanges(self, user_id: int):
         sql = "SELECT * FROM user_inter_exchange_exchanges WHERE user_id = $1"
         try:
@@ -677,4 +719,21 @@ class Database:
             logging.info(f"Обнулен баланс рефералов для пользователя {user_id}")
         except Exception as e:
             logging.exception(f"Ошибка обнуления баланса рефералов для пользователя {user_id}: {e}")
+
+    async def subtract_from_user_referral_balance(self, user_id: int, amount: float):
+        """
+        Вычитает указанную сумму из баланса рефералов пользователя.
+        :param user_id: ID пользователя
+        :param amount: Сумма для вычитания
+        """
+        sql = """
+        UPDATE referrals_info
+        SET balance = balance - $2
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, amount)
+            logging.info(f"Сумма {amount} вычтена из баланса рефералов пользователя {user_id}")
+        except Exception as e:
+            logging.exception(f"Ошибка при вычитании суммы {amount} из баланса рефералов пользователя {user_id}: {e}")
 

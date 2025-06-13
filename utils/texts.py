@@ -127,6 +127,43 @@ TEXTS = {
                     "en": "<b>✅ Withdrawal successfully initiated, and your balance has been reset!</b>\n\n"
                           "Please wait for the funds to arrive within 3 hours.\n\n"
                 }
+            },
+            "convert_to_subscription": {
+                "set_exchanges": {
+                    "ru": "<b>💳 ВЫБЕРИТЕ ТИП ПОДПИСКИ В КОТОРЫЙ ХОТИТЕ КОНВЕРТИРОВАТЬ СВОЙ БАЛАНС</b>\n\n"
+                          "❕ После нажатия кнопки сразу будет оформлена подписка, а с вашего баланса "
+                          "будет списана сумма, соответствующая выбранной подписке.\n\n"
+                          "<b>Ваш баланс: {balance}$</b>",
+                    "en": "<b>💳 CHOOSE THE TYPE OF SUBSCRIPTION YOU WANT TO CONVERT YOUR BALANCE TO</b>\n\n"
+                          "❕ After clicking the button, the subscription will be activated immediately, "
+                          "and the amount corresponding to the selected subscription will be deducted "
+                          "from your balance.\n\n"
+                          "<b>Your balance: {balance}$</b>"
+                },
+                "errors": {
+                    "insufficient_balance": {
+                        "ru": "<b>❗️ У вас недостаточно средств для конвертации!\n\n"
+                              "Ваш баланс: <code>{balance}$</code></b>\n\n"
+                              "<b>💳 Цены на подписки на межбиржевой арбитраж:</b>\n\n"
+                              "<b>1 неделя:</b> <code>{one_week_price}$</code>\n"
+                              "<b>1 месяц:</b> <code>{one_month_price}$</code>\n"
+                              "<b>3 месяца:</b> <code>{three_month_price}$</code>\n"
+                              "<b>НАВСЕГДА:</b> <code>{lifetime_price}$</code>",
+                        "en": "<b>❗️ You have insufficient funds for conversion!\n\n"
+                              "Your balance: <code>{balance}$</code></b>\n\n"
+                              "<b>💳 Prices for inter-exchange arbitrage subscriptions:</b>\n\n"
+                              "<b>1 week:</b> <code>{one_week_price}$</code>\n"
+                              "<b>1 month:</b> <code>{one_month_price}$</code>\n"
+                              "<b>3 months:</b> <code>{three_month_price}$</code>\n"
+                              "<b>FOREVER:</b> <code>{lifetime_price}$</code>"
+                    }
+                },
+                "success": {
+                    "ru": "<b>✅ Подписка успешно оформлена!</b>\n\n"
+                          "<b>Ваш баланс: {balance}$</b>",
+                    "en": "<b>✅ Subscription successfully activated!</b>\n\n"
+                          "<b>Your balance: {balance}$</b>"
+                }
             }
         },
         "settings": {
@@ -1371,6 +1408,28 @@ TEXTS = {
                 "inter_exchange": {
                     "ru": "Межбиржевой",
                     "en": "Inter-exchange"
+                }
+            }
+        },
+        "subscriptions": {
+            "inter_exchange": {
+                "buttons": {
+                    "one_week": {
+                        "ru": "1 неделя",
+                        "en": "1 week"
+                    },
+                    "one_month": {
+                        "ru": "1 месяц",
+                        "en": "1 month"
+                    },
+                    "three_month": {
+                        "ru": "3 месяца",
+                        "en": "3 months"
+                    },
+                    "lifetime": {
+                        "ru": "НАВСЕГДА",
+                        "en": "LIFETIME"
+                    }
                 }
             }
         }

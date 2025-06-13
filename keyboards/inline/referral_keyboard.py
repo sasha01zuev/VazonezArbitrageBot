@@ -1,7 +1,8 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types import InlineKeyboardMarkup, CopyTextButton
 
-from . import ReferralsCallbackFactory, ReferralsStatisticsCallbackFactory, ReferralsConfirmWithdrawCallbackFactory
+from . import ReferralsCallbackFactory, ReferralsStatisticsCallbackFactory, ReferralsConfirmWithdrawCallbackFactory, \
+    ReferralsConvertToSubscriptionCallbackFactory
 from .back_button import back_button
 from utils.i18n import TextProxy
 
@@ -50,6 +51,36 @@ def get_confirm_withdraw_keyboard(texts: TextProxy) -> InlineKeyboardMarkup:
         text=texts.keyboard.referrals.buttons.statistics.confirm_withdraw,
         callback_data=ReferralsConfirmWithdrawCallbackFactory(action="confirm").pack()
     )
+    builder.add(back_button(texts=texts, callback_data="referrals:statistics"))
+    builder.adjust(1)  # 1 button in a row
+    return builder.as_markup()
+
+
+def get_subscriptions_for_convert_keyboard(texts: TextProxy, subscriptions: dict,
+                                           balance: float) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    if balance >= subscriptions['one_week']:
+        builder.button(
+            text=texts.keyboard.subscriptions.inter_exchange.buttons.one_week + " - " + str(subscriptions['one_week']) + "$",
+            callback_data=ReferralsConvertToSubscriptionCallbackFactory(time="one_week").pack()
+        )
+    if balance >= subscriptions['one_month']:
+        builder.button(
+            text=texts.keyboard.subscriptions.inter_exchange.buttons.one_month + " - " + str(subscriptions['one_month']) + "$",
+            callback_data=ReferralsConvertToSubscriptionCallbackFactory(time="one_month").pack()
+        )
+    if balance >= subscriptions['three_month']:
+        builder.button(
+            text=texts.keyboard.subscriptions.inter_exchange.buttons.three_month + " - " + str(subscriptions['three_month']) + "$",
+            callback_data=ReferralsConvertToSubscriptionCallbackFactory(time="three_month").pack()
+        )
+    if balance >= subscriptions['lifetime']:
+        builder.button(
+            text=texts.keyboard.subscriptions.inter_exchange.buttons.lifetime + " - " + str(subscriptions['lifetime']) + "$",
+            callback_data=ReferralsConvertToSubscriptionCallbackFactory(time="lifetime").pack()
+        )
+
     builder.add(back_button(texts=texts, callback_data="referrals:statistics"))
     builder.adjust(1)  # 1 button in a row
     return builder.as_markup()

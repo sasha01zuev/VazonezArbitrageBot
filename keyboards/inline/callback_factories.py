@@ -134,3 +134,7 @@ class ReferralsStatisticsCallbackFactory(CallbackData, prefix="referrals_statist
 
 class ReferralsConfirmWithdrawCallbackFactory(CallbackData, prefix="referrals_confirm_withdraw"):
     action: str
+
+
+class ReferralsConvertToSubscriptionCallbackFactory(CallbackData, prefix="referrals_convert_to_subscription"):
+    time: str
