@@ -12,6 +12,7 @@ from keyboards.inline import get_main_keyboard, get_language_keyboard, LanguageC
     get_referrer_invite_notification_keyboard
 from services.database.postgresql import Database
 from states import SetLanguageStartGroup
+from utils.bot_commands import set_user_bot_commands
 from utils.i18n import TextProxy
 from utils.texts import TEXTS
 from config.config import MAIN_ADMIN
@@ -92,9 +93,10 @@ async def change_language_start_handler(message: Message, texts: TextProxy, stat
 
 @start_router.callback_query(LanguageCallbackFactory.filter(F.item), SetLanguageStartGroup.SetLanguage)
 async def start_handler_callback(callback: CallbackQuery, db: Database, texts: TextProxy, state: FSMContext,
-                                 callback_data: LanguageCallbackFactory):
+                                 callback_data: LanguageCallbackFactory, bot: Bot):
     language = callback_data.item
     await db.set_user_language(user_id=callback.from_user.id, language=language)
+    await set_user_bot_commands(bot=bot, user_id=callback.from_user.id, lang=language)
 
     state_data = await state.get_data()
     referral = state_data.get('ref')

@@ -6,6 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 from keyboards.inline import SettingsCallbackFactory, LanguageCallbackFactory, get_language_keyboard
 from services.database.postgresql import Database
+from utils.bot_commands import set_user_bot_commands
 from utils.i18n import TextProxy
 from utils.texts import TEXTS
 
@@ -65,6 +66,8 @@ async def selected_language(callback: CallbackQuery, texts: TextProxy, state: FS
 
     if language != user_current_lang:  # Не выбран ли текущий язык (Предотвращает ошибку message is not modified)
         await db.set_user_language(user_id=callback.from_user.id, language=language)
+        await set_user_bot_commands(bot=bot, user_id=callback.from_user.id, lang=language)
+
         await callback.answer(cache_time=1, text=texts.callback.language.language_changed)
         await callback.message.edit_text(texts.commands.settings.language,
                                          disable_web_page_preview=True, parse_mode="HTML",

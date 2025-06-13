@@ -7,6 +7,7 @@ import logging
 from keyboards.inline import get_main_keyboard
 from services.database.postgresql import Database
 from utils.i18n import TextProxy
+from services.wallets import BEP20Wallet, TRC20Wallet
 
 menu_router = Router()
 
@@ -30,7 +31,7 @@ async def menu_handler(call: Message, db: Database, texts: TextProxy, state: FSM
     if await state.get_state() is not None:
         logging.debug(f"Очищаем состояние {await state.get_state()} для пользователя {call.from_user.id}")
         await call.message.answer(text=texts.commands.state.canceled_state,
-                             disable_web_page_preview=True, parse_mode="HTML")
+                                  disable_web_page_preview=True, parse_mode="HTML")
     await state.clear()
 
     await call.answer(cache_time=1)

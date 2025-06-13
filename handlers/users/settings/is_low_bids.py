@@ -22,17 +22,20 @@ async def set_is_low_bids(callback: CallbackQuery, texts: TextProxy, state: FSMC
                                       disable_web_page_preview=True, parse_mode="HTML")
     await state.clear()
 
-    await callback.answer(cache_time=1)
-
     user_id = callback.from_user.id
+    inter_exchange_subscription = await db.get_user_subscription(user_id=user_id, subscription_type="inter_exchange")
 
-    user_settings = await db.get_user_inter_exchange_settings(user_id=user_id)
-    is_low_bids = user_settings['is_low_bids']
-    await callback.message.edit_text(texts.commands.settings.is_low_bids.current_is_low_bids,
-                                     disable_web_page_preview=True, parse_mode="HTML",
-                                     reply_markup=get_settings_is_low_bids_keyboard(texts=texts,
-                                                                                    is_low_bids=is_low_bids)
-                                     )
+    if inter_exchange_subscription:
+        await callback.answer(cache_time=1)
+        user_settings = await db.get_user_inter_exchange_settings(user_id=user_id)
+        is_low_bids = user_settings['is_low_bids']
+        await callback.message.edit_text(texts.commands.settings.is_low_bids.current_is_low_bids,
+                                         disable_web_page_preview=True, parse_mode="HTML",
+                                         reply_markup=get_settings_is_low_bids_keyboard(texts=texts,
+                                                                                        is_low_bids=is_low_bids)
+                                         )
+    else:
+        await callback.answer(cache_time=1, text=texts.callback.no_subscription)
 
 
 @router.callback_query(SetIsLowBidsCallbackFactory.filter(), StateFilter("*"))

@@ -21,16 +21,19 @@ async def set_contracts(callback: CallbackQuery, texts: TextProxy, state: FSMCon
                              disable_web_page_preview=True, parse_mode="HTML")
     await state.clear()
 
-    await callback.answer(cache_time=1)
-
     user_id = callback.from_user.id
 
-    user_settings = await db.get_user_inter_exchange_settings(user_id=user_id)
-    contracts = user_settings['contracts']
-    await callback.message.edit_text(texts.commands.settings.contracts.set_contracts,
-                                     disable_web_page_preview=True, parse_mode="HTML",
-                                     reply_markup=get_settings_contracts_keyboard(texts=texts, contracts=contracts)
-                                     )
+    inter_exchange_subscription = await db.get_user_subscription(user_id=user_id, subscription_type="inter_exchange")
+    if inter_exchange_subscription:
+        await callback.answer(cache_time=1)
+        user_settings = await db.get_user_inter_exchange_settings(user_id=user_id)
+        contracts = user_settings['contracts']
+        await callback.message.edit_text(texts.commands.settings.contracts.set_contracts,
+                                         disable_web_page_preview=True, parse_mode="HTML",
+                                         reply_markup=get_settings_contracts_keyboard(texts=texts, contracts=contracts)
+                                         )
+    else:
+        await callback.answer(cache_time=1, text=texts.callback.no_subscription)
 
 
 @router.callback_query(SetContractsCallbackFactory.filter(), StateFilter("*"))

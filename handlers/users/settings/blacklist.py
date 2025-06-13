@@ -25,8 +25,14 @@ async def select_blacklist_type(callback: CallbackQuery, texts: TextProxy, state
                                       disable_web_page_preview=True, parse_mode="HTML")
     await state.clear()
 
-    await callback.answer(cache_time=1)
+    user_id = callback.from_user.id
 
-    await callback.message.edit_text(texts.commands.settings.blacklist_types.current_blacklist_types,
+    inter_exchange_subscription = await db.get_user_subscription(user_id=user_id, subscription_type="inter_exchange")
+    if inter_exchange_subscription:
+        await callback.answer(cache_time=1)
+
+        await callback.message.edit_text(texts.commands.settings.blacklist_types.current_blacklist_types,
                                      disable_web_page_preview=True, parse_mode="HTML",
                                      reply_markup=get_settings_blacklist_types_keyboard(texts=texts))
+    else:
+        await callback.answer(cache_time=1, text=texts.callback.no_subscription)

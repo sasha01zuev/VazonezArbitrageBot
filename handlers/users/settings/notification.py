@@ -21,17 +21,22 @@ async def set_notification(callback: CallbackQuery, texts: TextProxy, state: FSM
                              disable_web_page_preview=True, parse_mode="HTML")
     await state.clear()
 
-    await callback.answer(cache_time=1)
-
     user_id = callback.from_user.id
 
-    user_settings = await db.get_user_inter_exchange_settings(user_id=user_id)
-    notification = user_settings['notification']
-    await callback.message.edit_text(texts.commands.settings.notification.current_notification,
-                                     disable_web_page_preview=True, parse_mode="HTML",
-                                     reply_markup=get_settings_notification_keyboard(texts=texts,
-                                                                                     notification=notification)
-                                     )
+    inter_exchange_subscription = await db.get_user_subscription(user_id=user_id, subscription_type="inter_exchange")
+
+    if inter_exchange_subscription:
+        await callback.answer(cache_time=1)
+
+        user_settings = await db.get_user_inter_exchange_settings(user_id=user_id)
+        notification = user_settings['notification']
+        await callback.message.edit_text(texts.commands.settings.notification.current_notification,
+                                         disable_web_page_preview=True, parse_mode="HTML",
+                                         reply_markup=get_settings_notification_keyboard(texts=texts,
+                                                                                         notification=notification)
+                                         )
+    else:
+        await callback.answer(cache_time=1, text=texts.callback.no_subscription)
 
 
 @router.callback_query(SetNotificationCallbackFactory.filter(), StateFilter("*"))
