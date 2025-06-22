@@ -1,6 +1,6 @@
 from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, StateFilter
 import logging
 
@@ -13,7 +13,7 @@ menu_router = Router()
 
 
 @menu_router.message(Command("menu"), StateFilter("*"))
-async def menu_handler(message: Message, db: Database, texts: TextProxy, state: FSMContext):
+async def menu_handler_message(message: Message, db: Database, texts: TextProxy, state: FSMContext):
     if await state.get_state() is not None:
         logging.debug(f"Очищаем состояние {await state.get_state()} для пользователя {message.from_user.id}")
         await message.answer(text=texts.commands.state.canceled_state,
@@ -27,7 +27,7 @@ async def menu_handler(message: Message, db: Database, texts: TextProxy, state: 
 
 
 @menu_router.callback_query(F.data == "menu", StateFilter("*"))
-async def menu_handler(call: Message, db: Database, texts: TextProxy, state: FSMContext):
+async def menu_handler_callback(call: CallbackQuery, db: Database, texts: TextProxy, state: FSMContext):
     if await state.get_state() is not None:
         logging.debug(f"Очищаем состояние {await state.get_state()} для пользователя {call.from_user.id}")
         await call.message.answer(text=texts.commands.state.canceled_state,

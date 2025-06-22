@@ -7,6 +7,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 import middlewares
 from handlers import routers_list
 from utils.notify_admins import on_startup_notify
+from utils.payments_monitoring import monitor_pending_wallets
 from config import config
 import betterlogging as blog
 from services.database.postgresql import Database
@@ -73,6 +74,9 @@ async def main():
 
     # Регистрация роутеров
     dp.include_routers(*routers_list)
+
+    # 👇 Запускаем фоновую задачу
+    asyncio.create_task(monitor_pending_wallets(bot=bot, db=db))
 
     await on_startup_notify(bot)
     await dp.start_polling(bot)

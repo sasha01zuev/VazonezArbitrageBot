@@ -4,6 +4,7 @@ from aiogram import BaseMiddleware
 from typing import Callable, Awaitable, Dict, Any
 from aiogram.types import TelegramObject
 from services.database.postgresql import Database  # путь от корня
+from services.wallets import TRC20Wallet, BEP20Wallet
 
 
 class RegisterUserMiddleware(BaseMiddleware):
@@ -41,6 +42,7 @@ class RegisterUserMiddleware(BaseMiddleware):
         db_get_user_inter_exchange_exchanges = await db.get_availability_user_inter_exchange_exchanges(user_id=user.id)
         db_get_user_inter_exchange_settings = await db.get_user_inter_exchange_settings(user_id=user.id)
         db_get_user_referral_info = await db.get_user_referral_info(user_id=user.id)
+        db_get_user_wallets = await db.get_user_wallets(user_id=user.id)
 
         if not db_user:
             user_language = "ru" if user.language_code == "ru" else "en"
@@ -75,6 +77,37 @@ class RegisterUserMiddleware(BaseMiddleware):
         if not db_get_user_referral_info:
             await db.set_default_user_referral_info(user_id=user.id)
             logging.debug(f"Реферальная информация для пользователя {user.id} добавлена в базу данных.")
+
+        if not db_get_user_wallets:
+            trc20_wallet = TRC20Wallet()
+            bep20_wallet = BEP20Wallet()
+
+            try:
+                trc20_wallet = await trc20_wallet.create_wallet()
+                bep20_wallet = await bep20_wallet.create_wallet()
+                trc20_address = trc20_wallet['address']
+                trc20_key = trc20_wallet['private_key']
+                bep20_address = bep20_wallet['address']
+                bep20_key = bep20_wallet['private_key']
+                logging.debug(f"Кошельки созданы для пользователя {user.id}: "
+                              f"TRC20 - {trc20_address}, BEP20 - {bep20_address}\n\n"
+                              f"TRC20 Key - {trc20_key}, BEP20 Key - {bep20_key}")
+            except Exception as e:
+                trc20_address, trc20_key = 'N/A', 'N/A'
+                bep20_address, bep20_key = 'N/A', 'N/A'
+
+            wallets = {
+                "usdt_bep20_address": bep20_address,
+                "usdt_trc20_address": trc20_address,
+                "usdt_bep20_key": bep20_key,
+                "usdt_trc20_key": trc20_key
+
+
+            }
+            await db.set_default_user_wallets(user_id=user.id, wallets=wallets)
+            logging.debug(f"Кошельки для пользователя {user.id} добавлены в базу данных.")
+        else:
+            logging.debug(f"Кошельки для пользователя {user.id} уже существуют в базе данных.")
 
 
         # TODO: В будущем добавить проверку на другие параметры, например на подписку, настройки и т.д.

@@ -98,11 +98,11 @@ async def referrals_selected_type_subscription_to_convert(callback: CallbackQuer
                 "999 year" if subscription_time == "lifetime" else None
             if user_subscription:
                 logging.info(f"Пользователь {user_id} уже имеет подписку, обновляем её")
-                await db.add_user_subscription(user_id=user_id, subscription_type="inter_exchange",
+                await db.add_user_subscription(user_id=user_id, arbitrage_type="inter_exchange",
                                                subscription_time=subscription_time)
             else:
                 logging.info(f"Пользователь {user_id} не имеет подписки, создаем новую")
-                await db.add_user_subscription(user_id=user_id, subscription_type="inter_exchange",
+                await db.add_user_subscription(user_id=user_id, arbitrage_type="inter_exchange",
                                                subscription_time=subscription_time)
 
             referrals_info = await db.get_user_referrals_info(user_id=user_id)

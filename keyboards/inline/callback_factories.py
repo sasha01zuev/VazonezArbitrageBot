@@ -138,3 +138,21 @@ class ReferralsConfirmWithdrawCallbackFactory(CallbackData, prefix="referrals_co
 
 class ReferralsConvertToSubscriptionCallbackFactory(CallbackData, prefix="referrals_convert_to_subscription"):
     time: str
+
+
+class SubscriptionsArbitrageTypeCallbackFactory(CallbackData, prefix="subscriptions_arbitrage"):
+    arbitrage_type: str
+
+
+class SubscriptionsTypeCallbackFactory(CallbackData, prefix="subscriptions_type"):
+    subscription_type: str
+    payment_type: str
+
+
+class SubscriptionsPayCallbackFactory(CallbackData, prefix="subscriptions_pay"):
+    subscription_type: str
+    arbitrage_type: str
+
+
+class SubscriptionsCancelMonitoringCallbackFactory(CallbackData, prefix="subscriptions_cancel_monitoring"):
+    action: str

@@ -1,3 +1,5 @@
+import json
+
 import asyncpg
 from asyncpg.pool import Pool
 import logging
@@ -113,30 +115,30 @@ class Database:
             logging.exception(f"Ошибка получения подписки {subscription_type} пользователя {user_id}: {e}")
             return None
 
-    async def add_user_subscription(self, user_id: int, subscription_type: str, subscription_time: str):
+    async def add_user_subscription(self, user_id: int, arbitrage_type: str, subscription_time: str):
         """
         Продлевает подписку пользователя:
         - если подписка ещё активна — прибавляет время к текущей дате окончания
         - если уже истекла — ставит подписку от текущего момента
 
         :param user_id: ID пользователя
-        :param subscription_type: Название поля подписки (например: 'inter_exchange')
+        :param arbitrage_type: Название поля подписки (например: 'inter_exchange')
         :param subscription_time: строка интервала, например '1 week', '1 month', '3 month', '999 year'
         """
         sql = f"""
         UPDATE user_subscriptions
-        SET {subscription_type} = 
+        SET {arbitrage_type} = 
             CASE
-                WHEN {subscription_type} > NOW() THEN {subscription_type} + INTERVAL '{subscription_time}'
+                WHEN {arbitrage_type} > NOW() THEN {arbitrage_type} + INTERVAL '{subscription_time}'
                 ELSE NOW() + INTERVAL '{subscription_time}'
             END
         WHERE user_id = $1;
         """
         try:
             await self.pool.execute(sql, user_id)
-            logging.info(f"Подписка [{subscription_type}] пользователя {user_id} продлена на {subscription_time}")
+            logging.info(f"Подписка [{arbitrage_type}] пользователя {user_id} продлена на {subscription_time}")
         except Exception as e:
-            logging.exception(f"Ошибка при продлении подписки [{subscription_type}] для пользователя {user_id}: {e}")
+            logging.exception(f"Ошибка при продлении подписки [{arbitrage_type}] для пользователя {user_id}: {e}")
 
     async def delete_user_subscription(self, user_id: int, subscription_type: str):
         """
@@ -253,6 +255,256 @@ class Database:
             logging.info(f"Реферальная информация для пользователя {user_id} добавлена в базу данных.")
         except Exception as e:
             logging.exception(f"{user_id} - ошибка при добавлении реферальной информации в базу: {e}")
+
+    async def get_user_wallets(self, user_id: int):
+        """
+        Получает информацию о кошельках пользователя.
+        :param user_id: ID пользователя
+        :return: Словарь с информацией о кошельках или None в случае ошибки
+        """
+        sql = "SELECT * FROM user_wallets WHERE user_id = $1"
+        try:
+            wallets = await self.pool.fetchrow(sql, user_id)
+            logging.debug(f"Получены кошельки пользователя {user_id}: {wallets}")
+            return wallets
+        except Exception as e:
+            logging.exception(f"Ошибка получения кошельков пользователя {user_id}: {e}")
+            return None
+
+    async def set_default_user_wallets(self, user_id: int, wallets: Optional[dict] = None):
+        """
+        Устанавливает значения по умолчанию для кошельков пользователя.
+        :param user_id: ID пользователя
+        :param wallets: кошельки пользователя в формате словаря:
+        """
+        sql = """
+        INSERT INTO user_wallets(user_id, usdt_bep20_address, usdt_bep20_key, usdt_trc20_address, usdt_trc20_key)
+        VALUES($1, $2, $3, $4, $5);
+        """
+        try:
+            await self.pool.execute(sql, user_id,
+                                    wallets["usdt_bep20_address"],
+                                    wallets["usdt_bep20_key"],
+                                    wallets["usdt_trc20_address"],
+                                    wallets["usdt_trc20_key"]
+                                    )
+            logging.info(f"Кошельки для пользователя {user_id} добавлены в базу данных.")
+        except Exception as e:
+            logging.exception(f"{user_id} - ошибка при добавлении кошельков в базу: {e}")
+
+    async def set_new_user_wallets(self, user_id: int, wallets: dict):
+        """
+        Обновляет кошельки пользователя (каждое поле отдельно)
+        """
+        sql = """
+        UPDATE user_wallets
+        SET
+            usdt_bep20_address = $2,
+            usdt_bep20_key = $3,
+            usdt_trc20_address = $4,
+            usdt_trc20_key = $5,
+            created_at = NOW(),
+            updated_at = NOW()
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql,
+                                    user_id,
+                                    wallets["usdt_bep20_address"],
+                                    wallets["usdt_bep20_key"],
+                                    wallets["usdt_trc20_address"],
+                                    wallets["usdt_trc20_key"]
+                                    )
+            logging.info(f"Кошельки для пользователя {user_id} обновлены.")
+        except Exception as e:
+            logging.exception(f"{user_id} — ошибка обновления кошельков: {e}")
+
+    async def get_all_monitoring_wallets(self):
+        """
+        Получает информацию о всех кошельках пользователей для мониторинга.
+        :return: Список словарей с информацией о кошельках или None в случае ошибки
+        """
+        sql = "SELECT * FROM user_wallets WHERE expires_at > NOW()"
+        try:
+            wallets = await self.pool.fetch(sql)
+            logging.debug(f"Получены все кошельки для мониторинга: {wallets}")
+            return wallets
+        except Exception as e:
+            logging.exception(f"Ошибка получения всех кошельков для мониторинга: {e}")
+            return None
+
+    async def get_next_available_wallet_delay(self):
+        """
+        Получает время ожидания до ближайшего освобождения кошелька.
+        :return: Кортеж (минуты, секунды) или None, если кошельков нет
+        """
+        sql = """
+            SELECT expires_at - NOW() AS time_left
+            FROM user_wallets
+            WHERE expires_at > NOW()
+            ORDER BY expires_at ASC
+            LIMIT 1
+        """
+        try:
+            result = await self.pool.fetchrow(sql)
+            if result and result['time_left']:
+                time_left = result['time_left']
+                total_seconds = time_left.total_seconds()
+                minutes = int(total_seconds // 60)
+                seconds = int(total_seconds % 60)
+                logging.debug(f"Ближайшее время ожидания до освобождения кошелька: {minutes} мин {seconds} сек")
+                return minutes, seconds
+            else:
+                logging.debug("Нет активных кошельков — все слоты свободны")
+                return None
+        except Exception as e:
+            logging.exception(f"Ошибка при получении ближайшего времени освобождения кошелька: {e}")
+            return None
+
+    async def add_user_wallets_to_monitoring(self, user_id: int, time: str, subscription_price: int,
+                                             subscription_type: str, arbitrage_type: str):
+        """
+        Добавляет кошелек пользователя в мониторинг, если срок действия истёк.
+        :param user_id: ID пользователя
+        :param time: время в формате 'HH:MM:SS'
+        :param subscription_price: Цена подписки
+        :param subscription_type: Тип подписки (например, 'one_month', 'three_month', 'lifetime')
+        :param arbitrage_type: Тип арбитража (например, 'inter_exchange')
+        """
+        sql = f"""
+        UPDATE user_wallets
+        SET expires_at = NOW() + INTERVAL '{time}', subscription_price = $2, arbitrage_type = $3, subscription_type = $4 
+        WHERE user_id = $1 AND expires_at < NOW();
+        """
+        try:
+            result = await self.pool.execute(sql, user_id, subscription_price, arbitrage_type, subscription_type)
+            if result == "UPDATE 0":
+                logging.info(f"Кошелек пользователя {user_id} уже находится в мониторинге. Обновление не требуется.")
+            else:
+                logging.info(f"Кошелек пользователя {user_id} добавлен в мониторинг на {time} "
+                             f"с ценой подписки {subscription_price}, "
+                             f"типом подписки {subscription_type} и типом арбитража {arbitrage_type}.")
+        except Exception as e:
+            logging.exception(f"{user_id} - ошибка при добавлении кошелька в мониторинг: {e}")
+
+    async def get_user_wallets_in_monitoring(self, user_id: int):
+        """
+        Получает информацию о кошельках пользователя в мониторинге.
+        :param user_id: ID пользователя
+        :return: Словарь с информацией о кошельках или None в случае ошибки
+        """
+        sql = "SELECT * FROM user_wallets WHERE user_id = $1 AND expires_at > NOW()"
+        try:
+            wallets = await self.pool.fetchrow(sql, user_id)
+            logging.debug(f"Получены кошельки пользователя {user_id} в мониторинге: {wallets}")
+            return wallets
+        except Exception as e:
+            logging.exception(f"Ошибка получения кошельков пользователя {user_id} в мониторинге: {e}")
+            return None
+
+    async def get_user_available_time_wallet(self, user_id: int):
+        """
+        Получает время ожидания до ближайшего освобождения кошелька.
+        :return: Кортеж (минуты, секунды) или None, если кошельков нет
+        """
+        sql = """
+            SELECT expires_at - NOW() AS time_left
+            FROM user_wallets
+            WHERE expires_at > NOW() AND user_id = $1
+        """
+        try:
+            result = await self.pool.fetchrow(sql, user_id)
+            if result and result['time_left']:
+                time_left = result['time_left']
+                total_seconds = time_left.total_seconds()
+                minutes = int(total_seconds // 60)
+                seconds = int(total_seconds % 60)
+                logging.debug(f"Ближайшее время ожидания до освобождения кошелька пользователя {user_id}: "
+                              f"{minutes} мин {seconds} сек")
+                return minutes, seconds
+            else:
+                logging.debug(f"Нет активных кошельков для пользователя {user_id}")
+                return None
+        except Exception as e:
+            logging.exception(f"Ошибка при получении ближайшего времени освобождения кошелька: {e}")
+            return None
+
+    async def update_time_reminder(self, user_id: int, time_reminder: dict):
+        """
+        Обновляет поле time_reminder (JSONB) для пользователя.
+        """
+        sql = "UPDATE user_wallets SET time_reminder = $1 WHERE user_id = $2"
+        try:
+            await self.pool.execute(sql, json.dumps(time_reminder), user_id)
+            logging.info(f"Обновлены уведомления time_reminder для {user_id}")
+        except Exception as e:
+            logging.exception(f"Ошибка при обновлении time_reminder: {e}")
+
+    async def update_payment_status(self, user_id: int, payment_status: dict):
+        """
+        Обновляет поле payment_status (JSONB) для пользователя.
+        """
+        sql = "UPDATE user_wallets SET payment_status = $1 WHERE user_id = $2"
+        try:
+            await self.pool.execute(sql, json.dumps(payment_status), user_id)
+            logging.info(f"Обновлен payment_status для {user_id}")
+        except Exception as e:
+            logging.exception(f"Ошибка при обновлении payment_status: {e}")
+
+    async def get_all_expired_wallets(self):
+        """
+        Получает информацию о всех кошельках пользователей, срок действия которых истёк.
+        :return: Список словарей с информацией о кошельках или None в случае ошибки
+        """
+        sql = "SELECT * FROM user_wallets WHERE expires_at < NOW()"
+        try:
+            expired_wallets = await self.pool.fetch(sql)
+            logging.debug(f"Получены все истекшие кошельки: {expired_wallets}")
+            return expired_wallets
+        except Exception as e:
+            logging.exception(f"Ошибка получения всех истекших кошельков: {e}")
+            return None
+
+    async def reset_user_wallets_in_monitoring(self, user_id: int, usdt_bep_20_address: str, usdt_bep_20_key: str,
+                                               usdt_trc_20_address: str, usdt_trc_20_key: str, time_reminder: dict,
+                                               payment_status: dict):
+        sql = f"""
+        UPDATE user_wallets
+        SET usdt_bep20_address = $2, usdt_bep20_key = $3, usdt_trc20_address = $4, usdt_trc20_key = $5,
+        created_at = NOW(), expires_at = NOW(), subscription_price = 0, arbitrage_type = 'inter_exchange',
+        subscription_type = 'one_month', time_reminder = $6, payment_status = $7
+        WHERE user_id = $1;
+        """
+        try:
+            await self.pool.execute(sql, user_id, usdt_bep_20_address, usdt_bep_20_key,
+                                    usdt_trc_20_address, usdt_trc_20_key, json.dumps(time_reminder),
+                                    json.dumps(payment_status))
+
+            logging.info(f"Кошельки пользователя {user_id} сброшены в мониторинге. \n"
+                         f"usdt_bep_20_address: {usdt_bep_20_address}\n"
+                         f"usdt_bep_20_key: {usdt_bep_20_key}\n"
+                         f"usdt_trc_20_address: {usdt_trc_20_address}\n"
+                         f"usdt_trc_20_key: {usdt_trc_20_key}\n"
+                         f"time_reminder: {time_reminder}\n"
+                         f"payment_status: {payment_status}")
+        except Exception as e:
+            logging.exception(f"{user_id} - ошибка при сбросе мониторинга кошельков: {e}")
+
+    async def cancel_user_wallets_in_monitoring(self, user_id: int):
+        """
+        Отменяет мониторинг кошельков пользователя.
+        :param user_id: ID пользователя
+        """
+        sql = """
+        UPDATE user_wallets
+        SET expires_at = NOW()
+        WHERE user_id = $1 AND expires_at > NOW();
+        """
+        try:
+            await self.pool.execute(sql, user_id)
+            logging.info(f"Мониторинг кошельков пользователя {user_id} отменен.")
+        except Exception as e:
+            logging.exception(f"{user_id} - ошибка при отмене мониторинга кошельков: {e}")
 
     async def set_user_inter_exchange_spread(self, user_id: int, spread_type: str, spread: float):
         """

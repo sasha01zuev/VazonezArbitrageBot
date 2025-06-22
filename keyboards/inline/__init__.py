@@ -15,10 +15,16 @@ from .callback_factories import (SettingsCallbackFactory, LanguageCallbackFactor
                                  SelectExchangeForCoinForExchangeBlacklistCallbackFactory,
                                  ArbitrageMenuCallbackFactory, ReferralsCallbackFactory,
                                  ReferralsStatisticsCallbackFactory, ReferralsConfirmWithdrawCallbackFactory,
-ReferralsConvertToSubscriptionCallbackFactory
+                                 ReferralsConvertToSubscriptionCallbackFactory,
+                                 SubscriptionsArbitrageTypeCallbackFactory,
+                                 SubscriptionsTypeCallbackFactory,
+                                 SubscriptionsPayCallbackFactory,
+                                 SubscriptionsCancelMonitoringCallbackFactory
                                  )
 
-
+from .subscriptions_arbitrage_type_keyboard import (subscriptions_arbitrage_type_keyboard_keyboard,
+                                                    subscriptions_type_keyboard, subscriptions_pay_keyboard,
+                                                    subscriptions_monitoring_keyboard)
 from .referrer_invite_notification_keyboard import get_referrer_invite_notification_keyboard
 from .support_keyboard import get_support_keyboard
 from .arbitrage_menu_keyboard import get_arbitrage_menu_keyboard

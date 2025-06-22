@@ -985,8 +985,12 @@ TEXTS = {
             }
         },
         "subscriptions": {
+            "choose_arbitrage_type": {
+                "ru": "<b>Выберите тип арбитража:</b>",
+                "en": "<b>Select arbitrage type:</b>"
+            },
             "inter_exchange": {
-                "price_list": {
+                "price_list_legacy": {
                     "ru": "<b>💳 Цены на подписки на межбиржевой арбитраж:</b>\n\n"
                           "<b>1 неделя:</b> <code>{one_week_price}$</code>\n"
                           "<b>1 месяц:</b> <code>{one_month_price}$</code>\n"
@@ -1009,6 +1013,156 @@ TEXTS = {
                           "<code>{trc20_address}</code>\n\n"
                           "After payment, please contact the bot support — send a screenshot of the transaction "
                           "from your exchange/wallet or send the transaction hash."
+                },
+                "price_list": {
+                    "ru": "<b>💳 Цены на подписки на межбиржевой арбитраж:</b>\n\n"
+                          "<b>1 неделя:</b> <code>{one_week_price}$</code>\n"
+                          "<b>1 месяц:</b> <code>{one_month_price}$</code>\n"
+                          "<b>3 месяца:</b> <code>{three_month_price}$</code>\n"
+                          "<b>НАВСЕГДА:</b> <code>{lifetime_price}$</code>\n\n\n"
+                          "<b>❕ Оплата в USDT BEP20/TRC20</b>"
+                          "{current_subscription_message}\n\n\n"
+                          "<b>ВЫБЕРИТЕ НИЖЕ ТИП ПОДПИСКИ, КОТОРЫЙ ХОТИТЕ ОФОРМИТЬ ⬇️</b>",
+                    "en": "<b>💳 Prices for inter-exchange arbitrage subscriptions:</b>\n\n"
+                          "<b>1 week:</b> <code>{one_week_price}$</code>\n"
+                          "<b>1 month:</b> <code>{one_month_price}$</code>\n"
+                          "<b>3 months:</b> <code>{three_month_price}$</code>\n"
+                          "<b>LIFETIME:</b> <code>{lifetime_price}$</code>\n\n\n"
+                          "<b>❕ Payment in USDT BEP20/TRC20</b>"
+                          "{current_subscription_message}\n\n\n"
+                          "<b>SELECT BELOW THE TYPE OF SUBSCRIPTION YOU WANT TO SUBSCRIBE TO ⬇️</b>"
+
+                },
+                "current_subscription_message": {
+                    "ru": "\n\n<b>💎 У вас уже есть подписка на межбиржевой арбитраж!\n"
+                          "Поэтому текущая подписка и оформленная подписка будут суммироваться</b>"
+                },
+                "confirm_payment": {
+                    "ru": "<b>💳 Подтверждение выбраного типа подписки:</b>\n\n"
+                          "<b>Тип арбитража:</b> <code>{arbitrage_type}</code>\n"
+                          "<b>Время подписки:</b> <code>{subscription_type}</code>\n\n"
+                          "❕ После нажатия кнопки <b>«💳 ОПЛАТИТЬ»</b> у вас будет <b>20 минут</b>, "
+                          "чтобы оплатить выбранный вами тип подписки на сумму <b>не менее {price} USDT</b>\n\n"
+                          "✅ Оплата определяется автоматически в течении 5 минут",
+                    "en": "<b>💳 Confirmation of the selected subscription type:</b>\n\n"
+                          "<b>Arbitrage type:</b> <code>{arbitrage_type}</code>\n"
+                          "<b>Subscription time:</b> <code>{subscription_type}</code>\n\n"
+                          "❕ After clicking the <b>«💳 PAY»</b> button, you will have <b>20 minutes</b> "
+                          "to pay for the selected subscription type in the amount of <b>at least {price} USDT</b>\n\n"
+                          "✅ Payment is automatically determined within 5 minutes"
+
+                },
+                "monitoring_payment": {
+                    "ru": "<b>💳 Ожидание оплаты...</b>\n\n"
+                          "⏳ У вас есть <b>{minutes} минут {seconds} секунд</b> на оплату подписки!\n\n"
+                          "Тип арбитража: <code>{arbitrage_type}</code>\n"
+                          "Время подписки: <code>{subscription_type}</code>\n"
+                          "Сумма оплаты: <code>{price} USDT</code>\n\n\n"
+                          "<b>ОПЛАТИТЕ НА ОДИН ИЗ АДРЕСОВ НИЖЕ</b>\n\n"
+                          "<code>{usdt_bep20_address}</code>\n"
+                          "<b>Монета - USDT. Сеть - BSC (BEP20)</b>\n\n"
+                          "<code>{usdt_trc20_address}</code>\n"
+                          "<b>Монета - USDT. Сеть - Tron (TRC20)</b>\n\n\n"
+                          "🤖 Оплата будет автоматически определена в течении 5 минут после оплаты, "
+                          "а подписка будет моментально "
+                          "подключена после подтверждения оплаты в системе.",
+                    "en": "<b>💳 Waiting for payment...</b>\n\n"
+                          "⏳ You have <b>{minutes} minutes {seconds} seconds</b> to pay for the subscription!\n\n"
+                          "Arbitrage type: <code>{arbitrage_type}</code>\n"
+                          "Subscription time: <code>{subscription_type}</code>\n"
+                          "Payment amount: <code>{price} USDT</code>\n\n\n"
+                          "<b>PAY TO ONE OF THE ADDRESSES BELOW</b>\n\n"
+                          "<code>{usdt_bep20_address}</code>\n"
+                          "<b>Coin - USDT. Network - BSC (BEP20)</b>\n\n"
+                          "<code>{usdt_trc20_address}</code>\n"
+                          "<b>Coin - USDT. Network - Tron (TRC20)</b>\n\n\n"
+                          "🤖 Payment will be automatically determined within 5 minutes after payment, "
+                          "and the subscription will be instantly "
+                          "connected after payment confirmation in the system."
+                }
+            }
+        },
+        "subscriptions_monitoring": {
+            "notifications": {
+                "time_reminder": {
+                    "payment_pending": {
+                        "ru": "<b>⏳ Внимание!</b>\n\n"
+                              "До окончания времени проверки оплаты осталось {minutes_left} минут.\n\n"
+                              "Тип арбитража: <code>{arbitrage_type}</code>\n"
+                              "Время подписки: <code>{subscription_type}</code>\n"
+                              "Сумма оплаты: <code>{subscription_price} USDT</code>\n\n\n"
+                              "<b>ОПЛАТИТЕ НА ОДИН ИЗ АДРЕСОВ НИЖЕ</b>\n\n"
+                              "<code>{usdt_bep20_address}</code>\n"
+                              "<b>Монета - USDT. Сеть - BSC (BEP20)</b>\n\n"
+                              "<code>{usdt_trc20_address}</code>\n"
+                              "<b>Монета - USDT. Сеть - Tron (TRC20)</b>\n\n\n"
+                              "🤖 Оплата будет автоматически определена в течении 5 минут после оплаты, "
+                              "а подписка будет моментально "
+                              "подключена после подтверждения оплаты в системе.",
+                        "en": "<b>⏳ Attention!</b>\n\n"
+                              "There are {minutes_left} minutes left until the end of the payment "
+                              "verification time.\n\n"
+                              "Arbitrage type: <code>{arbitrage_type}</code>\n"
+                              "Subscription time: <code>{subscription_type}</code>\n"
+                              "Payment amount: <code>{subscription_price} USDT</code>\n\n\n"
+                              "<b>PAY TO ONE OF THE ADDRESSES BELOW</b>\n\n"
+                              "<code>{usdt_bep20_address}</code>\n"
+                              "<b>Coin - USDT. Network - BSC (BEP20)</b>\n\n"
+                              "<code>{usdt_trc20_address}</code>\n"
+                              "<b>Coin - USDT. Network - Tron (TRC20)</b>\n\n\n"
+                              "🤖 Payment will be automatically determined within 5 minutes after payment, "
+                              "and the subscription will be instantly "
+                              "connected after payment confirmation in the system."
+                    },
+                    "payment_time_expired": {
+                        "ru": "<b>⏳ Внимание!</b>\n\n"
+                              "Время ожидания оплаты истекло!",
+                        "en": "<b>⏳ Attention!</b>\n\n"
+                              "Payment waiting time has expired!"
+                    }
+
+                },
+                "pending_confirmation_trc20": {
+                    "ru": "👍 <b>Оплата обнаружена!</b>\n\n"
+                          "Оплачено: <code>{amount} USDT</code>\n\n"
+                          "Хэш транзакции: <code>{transaction_hash}</code>\n\n"
+                          "<b><a href='https://tronscan.org/#/transaction/{transaction_hash}'>"
+                          "Посмотртеь в обозревателе</a></b>\n\n"
+                          "Ожидается подтверждение транзакции в сети Tron (TRC20)...",
+                    "en": "👍 <b>Payment detected!</b>\n\n"
+                          "Paid: <code>{amount} USDT</code>\n\n"
+                          "Transaction hash: <code>{transaction_hash}</code>\n\n"
+                          "<b><a href='https://tronscan.org/#/transaction/{transaction_hash}'>"
+                          "View in explorer</a></b>\n\n"
+                          "Waiting for transaction confirmation in the Tron (TRC20) network..."
+                },
+                "insufficient_trc20": {
+                    "ru": "❗️ <b>Оплачена недостаточная сумма!</b>\n\n"
+                          "Цена подписки: <code>{subscription_price} USDT</code>\n"
+                          "Оплачено: <code>{paid_amount} USDT</code>\n\n"
+                          "Для активации подписки необходимо <b>ДОПЛАТИТЬ</b> <code>{missing_amount} USDT</code>\n\n"
+                          "USDT (TRC20): <code>{usdt_trc20_address}</code>\n\n\n"
+                          "<b>До окончания времени проверки оплаты осталось {available_minutes} минут "
+                          "{available_seconds} секунд!</b>",
+                    "en": "❗️ <b>Insufficient amount paid!</b>\n\n"
+                          "Subscription price: <code>{subscription_price} USDT</code>\n"
+                          "Paid: <code>{paid_amount} USDT</code>\n\n"
+                          "To activate the subscription, you need to <b>TOP UP</b> <code>{missing_amount} USDT</code>\n\n"
+                          "USDT (TRC20): <code>{usdt_trc20_address}</code>\n\n\n"
+                          "<b>There are {available_minutes} minutes "
+                          "{available_seconds} seconds left until the end of the payment verification time!</b>"
+                },
+                "payment_success_trc20": {
+                    "ru": "🎉 <b>Оплата успешно подтверждена!</b>\n\n"
+                          "Оплаченная сумма: <code>{current_usdt_trc20_balance} USDT</code>\n"
+                          "Тип арбитража: <code>{arbitrage_type_message}</code>\n"
+                          "Тип подписки: <code>{subscription_type_message}</code>\n\n"
+                          "<b>Подписка успешно активирована!</b>",
+                    "en": "🎉 <b>Payment successfully confirmed!</b>\n\n"
+                          "Total paid amount: <code>{current_usdt_trc20_balance} USDT</code>\n"
+                          "Arbitrage type: <code>{arbitrage_type_message}</code>\n"
+                          "Subscription type: <code>{subscription_type_message}</code>\n\n"
+                          "<b>Subscription successfully activated!</b>"
                 }
             }
         }
@@ -1076,6 +1230,18 @@ TEXTS = {
                         }
                     }
                 }
+            }
+        },
+        "subscriptions": {
+            "too_many_wallets": {
+                "ru": "⚠️ Слишком много оплат на проверке. Попробуйте через {minutes} мин. {seconds} сек., "
+                      "либо воспользуйтесь ручной оплатой.",
+                "en": "⚠️ Too many payments under verification. Try again in {minutes} min. {seconds} sec. "
+                      "or use manual payment."
+            },
+            "cancel_monitoring": {
+                "ru": "✅ Проверка оплаты успешно отменена",
+                "en": "✅ Payment verification has been successfully canceled"
             }
         },
         "state": {
@@ -1431,6 +1597,18 @@ TEXTS = {
                         "en": "LIFETIME"
                     }
                 }
+            },
+            "pay": {
+                "ru": "💳 Оплатить",
+                "en": "💳 Pay"
+            },
+            "manual_payment": {
+                "ru": "💳 Ручная оплата",
+                "en": "💳 Manual payment"
+            },
+            "cancel_monitoring": {
+                "ru": "❌ Отменить проверку оплаты",
+                "en": "❌ Cancel payment verification"
             }
         }
     },
