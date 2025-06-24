@@ -27,6 +27,7 @@ class BlacklistMiddleware(BaseMiddleware):
         is_banned = await db.get_user_from_blacklist(user.id)
 
         if is_banned:
+            logging.info(f"Пользователь {user.id} заблокирован в черном списке.")
             raise CancelHandler()
 
         return await handler(event, data)
