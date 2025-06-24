@@ -1163,6 +1163,49 @@ TEXTS = {
                           "Arbitrage type: <code>{arbitrage_type_message}</code>\n"
                           "Subscription type: <code>{subscription_type_message}</code>\n\n"
                           "<b>Subscription successfully activated!</b>"
+                },
+                "pending_confirmation_bep20": {
+                    "ru": "👍 <b>Оплата обнаружена!</b>\n\n"
+                          "Оплачено: <code>{amount} USDT</code>\n\n"
+                          "Хэш транзакции: <code>{transaction_hash}</code>\n\n"
+                          "<b><a href='https://bscscan.com/tx/{transaction_hash}'>"
+                          "Посмотртеь в обозревателе</a></b>\n\n"
+                          "Ожидается подтверждение транзакции в сети BSC (BEP20)...",
+                    "en": "👍 <b>Payment detected!</b>\n\n"
+                          "Paid: <code>{amount} USDT</code>\n\n"
+                          "Transaction hash: <code>{transaction_hash}</code>\n\n"
+                          "<b><a href='https://bscscan.com/tx/{transaction_hash}'>"
+                          "View in explorer</a></b>\n\n"
+                          "Waiting for transaction confirmation in the BSC (BEP20) network..."
+
+                },
+                "insufficient_bep20": {
+                    "ru": "❗️ <b>Оплачена недостаточная сумма!</b>\n\n"
+                          "Цена подписки: <code>{subscription_price} USDT</code>\n"
+                          "Оплачено: <code>{paid_amount} USDT</code>\n\n"
+                          "Для активации подписки необходимо <b>ДОПЛАТИТЬ</b> <code>{missing_amount} USDT</code>\n\n"
+                          "USDT (BEP20): <code>{usdt_bep20_address}</code>\n\n\n"
+                          "<b>До окончания времени проверки оплаты осталось {available_minutes} минут "
+                          "{available_seconds} секунд!</b>",
+                    "en": "❗️ <b>Insufficient amount paid!</b>\n\n"
+                          "Subscription price: <code>{subscription_price} USDT</code>\n"
+                          "Paid: <code>{paid_amount} USDT</code>\n\n"
+                          "To activate the subscription, you need to <b>TOP UP</b> <code>{missing_amount} USDT</code>\n\n"
+                          "USDT (BEP20): <code>{usdt_bep20_address}</code>\n\n\n"
+                          "<b>There are {available_minutes} minutes "
+                          "{available_seconds} seconds left until the end of the payment verification time!</b>"
+                },
+                "payment_success_bep20": {
+                    "ru": "🎉 <b>Оплата успешно подтверждена!</b>\n\n"
+                          "Оплаченная сумма: <code>{current_usdt_bep20_balance} USDT</code>\n"
+                          "Тип арбитража: <code>{arbitrage_type_message}</code>\n"
+                          "Тип подписки: <code>{subscription_type_message}</code>\n\n"
+                          "<b>Подписка успешно активирована!</b>",
+                    "en": "🎉 <b>Payment successfully confirmed!</b>\n\n"
+                          "Total paid amount: <code>{current_usdt_bep20_balance} USDT</code>\n"
+                          "Arbitrage type: <code>{arbitrage_type_message}</code>\n"
+                          "Subscription type: <code>{subscription_type_message}</code>\n\n"
+                          "<b>Subscription successfully activated!</b>"
                 }
             }
         }

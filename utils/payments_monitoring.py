@@ -19,8 +19,9 @@ async def monitor_pending_wallets(bot: Bot, db: Database, interval: int = 30):
     """
     Циклическая проверка кошельков с неистекшим временем оплаты.
     """
+    BEP20_API_KEY = "MR79S3MPDAM3YAW8PY2BH9XRQJY7X83HMP"
     trc20_wallet = TRC20Wallet()
-    bep20_wallet = BEP20Wallet()
+    bep20_wallet = BEP20Wallet(api_key=BEP20_API_KEY)
 
     base_interval = interval  # сохраняем исходный "базовый" интервал
 
@@ -226,6 +227,8 @@ async def monitor_pending_wallets(bot: Bot, db: Database, interval: int = 30):
                                   f"Проверка баланса кошелька в режиме ПОДТВЕРЖДЕННОЙ НЕ ДОСТАТОЧНОЙ ОПЛАТЫ для пользователя {user_id}:\n"
                                   f"TRC20: {usdt_trc20_balance}\n"
                                   f"BEP20: {usdt_bep20_balance}")
+
+                # region ПРОВЕРКА И ПОДТВЕРЖДЕНИЕ ПЛАТЕЖА В TRC20
 
                 # region ОПЛАТА В TRC20 ПОДТВЕРЖДЕНА НО СУММА ОПЛАТЫ НЕДОСТАТОЧНА. ПРОВЕРКА ОБЩЕГО БАЛАНСА КОШЕЛЬКА
                 if usdt_trc20_balance and usdt_trc20_balance['status'] == 'success':
@@ -433,6 +436,224 @@ async def monitor_pending_wallets(bot: Bot, db: Database, interval: int = 30):
 
                     await asyncio.sleep(current_interval)
                     continue
+                # endregion
+
+                # endregion
+
+                # region ПРОВЕРКА И ПОДТВЕРЖДЕНИЕ ПЛАТЕЖА В BEP20
+
+                # region ОПЛАТА В BEP20 ПОДТВЕРЖДЕНА НО СУММА ОПЛАТЫ НЕДОСТАТОЧНА. ПРОВЕРКА ОБЩЕГО БАЛАНСА КОШЕЛЬКА
+                if usdt_bep20_balance and usdt_bep20_balance['status'] == 'success':
+                    current_usdt_bep20_balance, current_bnb_balance = usdt_bep20_balance['current_balance']
+
+                    new_wallet = await bep20_wallet.create_wallet()
+                    bep20_address = new_wallet['address']
+                    bep20_key = new_wallet['private_key']
+
+                    time_reminder = {
+                        "15_minutes": False,
+                        "10_minutes": False,
+                        "5_minutes": False,
+                        "3_minutes": False,
+                        "1_minutes": False,
+                        "0_minutes": False,
+                        "expired": True
+                    }
+                    payment_status = {
+                        "pending_confirmation": False,
+                        "confirmed": False,
+                        "insufficient": False
+                    }
+
+                    await db.reset_user_wallets_in_monitoring(user_id=user_id,
+                                                              usdt_bep_20_address=bep20_address,
+                                                              usdt_bep_20_key=usdt_bep20_key,
+                                                              usdt_trc_20_address=usdt_trc20_address,
+                                                              usdt_trc_20_key=usdt_trc20_key,
+                                                              time_reminder=time_reminder,
+                                                              payment_status=payment_status)
+
+                    arbitrage_type_message = texts.keyboard.arbitrage.buttons.inter_exchange if arbitrage_type == "inter_exchange" else "Unknown"
+                    subscription_type_message = texts.keyboard.subscriptions.inter_exchange.buttons.one_week if subscription_type == 'one_week' else \
+                        texts.keyboard.subscriptions.inter_exchange.buttons.one_month if subscription_type == 'one_month' else \
+                            texts.keyboard.subscriptions.inter_exchange.buttons.three_month if subscription_type == 'three_month' else \
+                                texts.keyboard.subscriptions.inter_exchange.buttons.lifetime
+
+                    subscription_time = "1 week" if subscription_type == 'one_week' else \
+                        "1 month" if subscription_type == 'one_month' else \
+                            "3 month" if subscription_type == 'three_month' else \
+                                "999 year"
+
+                    await db.add_user_subscription(user_id=user_id, arbitrage_type=arbitrage_type,
+                                                   subscription_time=subscription_time)
+                    await bot.send_message(
+                        chat_id=user_id,
+                        text=texts.commands.subscriptions_monitoring.notifications.payment_success_trc20.format(
+                            current_usdt_trc20_balance=current_usdt_bep20_balance,
+                            arbitrage_type_message=arbitrage_type_message,
+                            subscription_type_message=subscription_type_message
+                        ),
+                        disable_web_page_preview=True, parse_mode="HTML",
+                        reply_markup=get_back_keyboard(texts=texts)
+                    )
+
+                    await bot.send_message(
+                        chat_id=MAIN_ADMIN,
+                        text=f"Платеж для пользователя {user_id} в BEP20 успешно подтвержден\n\n"
+                             f"Адрес BEP20: <code>{usdt_bep20_address}</code>\n"
+                             f"Ключ BEP20: <code>{usdt_bep20_key}</code>\n\n"
+                             f"Текущий баланс BEP20: {current_usdt_bep20_balance}\n"
+                             f"Текущий баланс BNB: {current_bnb_balance}\n"
+                             f"Сумма подписки: {subscription_price}\n"
+                             f"Арбитражный тип: {arbitrage_type}\n"
+                             f"Тип подписки: {subscription_type}",
+                        disable_web_page_preview=True, parse_mode="HTML"
+                    )
+                    await asyncio.sleep(current_interval)
+                    continue
+                # endregion
+
+                # region ОПЛАТА В BEP20 ПОДТВЕРЖДЕНА И СУММА ОПЛАТЫ ДОСТАТОЧНА
+                if payment_usdt_bep20_status and payment_usdt_bep20_status['status'] == 'success':
+                    logging.debug(f"Платеж для пользователя {user_id} в BEP20 успешно подтвержден.")
+                    payment_amount = payment_usdt_bep20_status['amount']
+
+                    new_wallet = await bep20_wallet.create_wallet()
+                    bep20_address = new_wallet['address']
+                    bep20_key = new_wallet['private_key']
+
+                    time_reminder = {
+                        "15_minutes": False,
+                        "10_minutes": False,
+                        "5_minutes": False,
+                        "3_minutes": False,
+                        "1_minutes": False,
+                        "0_minutes": False,
+                        "expired": True
+                    }
+                    payment_status = {
+                        "pending_confirmation": False,
+                        "confirmed": True,
+                        "insufficient": False
+                    }
+
+                    await db.reset_user_wallets_in_monitoring(user_id=user_id,
+                                                              usdt_bep_20_address=bep20_address,
+                                                              usdt_bep_20_key=bep20_key,
+                                                              usdt_trc_20_address=usdt_trc20_address,
+                                                              usdt_trc_20_key=usdt_trc20_key,
+                                                              time_reminder=time_reminder,
+                                                              payment_status=payment_status)
+
+                    subscription_time = "1 week" if subscription_type == 'one_week' else \
+                        "1 month" if subscription_type == 'one_month' else \
+                            "3 month" if subscription_type == 'three_month' else \
+                                "999 year"
+                    await db.add_user_subscription(user_id=user_id, arbitrage_type=arbitrage_type,
+                                                   subscription_time=subscription_time)
+
+                    arbitrage_type_message = texts.keyboard.arbitrage.buttons.inter_exchange if arbitrage_type == "inter_exchange" else "Unknown"
+                    subscription_type_message = texts.keyboard.subscriptions.inter_exchange.buttons.one_week if subscription_type == 'one_week' else \
+                        texts.keyboard.subscriptions.inter_exchange.buttons.one_month if subscription_type == 'one_month' else \
+                            texts.keyboard.subscriptions.inter_exchange.buttons.three_month if subscription_type == 'three_month' else \
+                                texts.keyboard.subscriptions.inter_exchange.buttons.lifetime
+
+                    await bot.send_message(
+                        chat_id=user_id,
+                        text=texts.commands.subscriptions_monitoring.notifications.payment_success_bep20.format(
+                            current_usdt_bep20_balance=payment_amount,
+                            arbitrage_type_message=arbitrage_type_message,
+                            subscription_type_message=subscription_type_message
+                        ),
+                        disable_web_page_preview=True, parse_mode="HTML",
+                        reply_markup=get_back_keyboard(texts=texts)
+                    )
+                    await bot.send_message(
+                        chat_id=MAIN_ADMIN,
+                        text=f"Платеж для пользователя {user_id} в BEP20 успешно подтвержден\n\n"
+                             f"Адрес BEP20: <code>{usdt_bep20_address}</code>\n"
+                             f"Ключ BEP20: <code>{usdt_bep20_key}</code>\n\n"
+                             f"Сумма оплаты: {payment_amount}\n"
+                             f"Сумма подписки: {subscription_price}\n"
+                             f"Арбитражный тип: {arbitrage_type}\n"
+                             f"Тип подписки: {subscription_type}",
+                        disable_web_page_preview=True, parse_mode="HTML"
+                    )
+                    await asyncio.sleep(current_interval)
+                    continue
+
+                # endregion
+
+                # region ОПЛАТА В BEP20 ОБНАРУЖЕНА
+                if payment_usdt_bep20_status and payment_usdt_bep20_status['status'] == 'pending_confirmation':
+                    logging.debug(f"Платеж для пользователя {user_id} в ожидании подтверждения: "
+                                  f"{payment_usdt_bep20_status}")
+
+                    if not payment_status['pending_confirmation']:
+                        await bot.send_message(
+                            chat_id=user_id,
+                            text=texts.commands.subscriptions_monitoring.notifications.pending_confirmation_bep20.format(
+                                transaction_hash=payment_usdt_bep20_status.get('tx_hash', 'Unknown'),
+                                amount=payment_usdt_bep20_status.get('amount', 'Unknown')
+                            ),
+                            disable_web_page_preview=True, parse_mode="HTML")
+
+                        await bot.send_message(
+                            chat_id=MAIN_ADMIN,
+                            text=f"Платеж для пользователя {user_id} в ожидании подтверждения.\n"
+                                 f"Транзакция: {payment_usdt_bep20_status.get('tx_hash', 'Unknown')}\n"
+                                 f"Сумма: {payment_usdt_bep20_status.get('amount', 'Unknown')}\n\n"
+                                 f"Адрес BEP20: <code>{usdt_bep20_address}</code>\n"
+                                 f"Ключ BEP20: <code>{usdt_bep20_key}</code>\n\n"
+                                 f"Сумма подписки: {subscription_price}",
+                            disable_web_page_preview=True, parse_mode="HTML"
+                        )
+                        payment_status['pending_confirmation'] = True
+                        await db.update_payment_status(user_id, payment_status)
+
+                    await asyncio.sleep(current_interval)
+                    continue
+                # endregion
+
+                # region ОПЛАТА В BEP20 ПОДТВЕРЖДЕНА НО СУММА ОПЛАТЫ НЕДОСТАТОЧНА
+                if payment_usdt_bep20_status and payment_usdt_bep20_status['status'] == 'insufficient':
+                    logging.debug(f"Платеж для пользователя {user_id} в BEP20 подтвержден, но сумма недостаточна.")
+                    missing_amount = round(float(payment_usdt_bep20_status['missing']), 2)
+                    paid_amount = round(float(payment_usdt_bep20_status['amount']), 2)
+                    if not payment_status['insufficient']:
+                        available_wallet_time = await db.get_user_available_time_wallet(user_id)
+                        available_minutes, available_seconds = available_wallet_time
+
+                        payment_status['insufficient'] = True
+                        await db.update_payment_status(user_id, payment_status)
+
+                        await bot.send_message(
+                            chat_id=user_id,
+                            text=texts.commands.subscriptions_monitoring.notifications.insufficient_bep20.format(
+                                usdt_bep20_address=usdt_bep20_address,
+                                missing_amount=missing_amount + 0.5,  # Добавляем 0.5 для округления
+                                paid_amount=paid_amount,
+                                subscription_price=subscription_price,
+                                available_minutes=available_minutes,
+                                available_seconds=available_seconds,
+                            ),
+                            disable_web_page_preview=True, parse_mode="HTML")
+
+                        await bot.send_message(
+                            chat_id=MAIN_ADMIN,
+                            text=f"Платеж для пользователя {user_id} в BEP20 подтвержден, но сумма недостаточна.\n\n"
+                                 f"Адрес BEP20: <code>{usdt_bep20_address}</code>\n"
+                                 f"Ключ BEP20: <code>{usdt_bep20_key}</code>\n"
+                                 f"Недостаточная сумма: {missing_amount}\n"
+                                 f"Оплаченная сумма: {paid_amount}\n"
+                                 f"Сумма подписки: {subscription_price}",
+                            disable_web_page_preview=True, parse_mode="HTML"
+                        )
+
+                    await asyncio.sleep(current_interval)
+                    continue
+                # endregion
+
                 # endregion
 
                 # endregion

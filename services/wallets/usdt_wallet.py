@@ -23,22 +23,22 @@ ERC20_ABI = [
         "type": "function",
     },
     {
-        "constant": False,
-        "inputs": [
-            {"name": "_to", "type": "address"},
-            {"name": "_value", "type": "uint256"},
-        ],
-        "name": "transfer",
-        "outputs": [{"name": "", "type": "bool"}],
-        "type": "function",
-    },
-    {
         "constant": True,
         "inputs": [],
         "name": "decimals",
         "outputs": [{"name": "", "type": "uint8"}],
         "type": "function",
     },
+    {
+        "anonymous": False,
+        "inputs": [
+            {"indexed": True, "name": "from", "type": "address"},
+            {"indexed": True, "name": "to", "type": "address"},
+            {"indexed": False, "name": "value", "type": "uint256"}
+        ],
+        "name": "Transfer",
+        "type": "event"
+    }
 ]
 
 TRC20_ABI = [
@@ -62,9 +62,11 @@ TRC20_ABI = [
 class BEP20Wallet:
     """Простой помощник для работы с USDT в сети BSC."""
 
+    BSC_RPC = "https://bsc-dataseed.binance.org/"
     USDT_CONTRACT = "0x55d398326f99059fF775485246999027B3197955"
+    API_KEY = "MR79S3MPDAM3YAW8PY2BH9XRQJY7X83HMP"
 
-    def __init__(self, rpc_url: str = "https://bsc-dataseed.binance.org/", api_key: str | None = None):
+    def __init__(self, rpc_url: str = "https://bsc-dataseed.binance.org/", api_key: str = API_KEY):
         """Создаёт объект для работы с сетью BSC."""
         logging.debug("Инициализация BEP20Wallet: %s", rpc_url)
         self.w3 = Web3(Web3.HTTPProvider(rpc_url))
@@ -88,60 +90,88 @@ class BEP20Wallet:
         logging.info("Создан новый BSC кошелёк: %s", wallet["address"])
         return wallet
 
-    async def _get_last_tx(self, address: str) -> Optional[Dict[str, Any]]:
-        """Возвращает последнюю USDT-транзакцию адреса через API BscScan."""
-        params = {
-            "module": "account",
-            "action": "tokentx",
-            "contractaddress": self.USDT_CONTRACT,
-            "address": address,
-            "page": 1,
-            "offset": 1,
-            "sort": "desc",
-            "apikey": self.api_key or "",
-        }
+    async def get_last_tx_event(self, address: str) -> Optional[Dict[str, Any]]:
         try:
-            logging.debug("Запрашиваем последнюю транзакцию BSC для %s", address)
-            async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    "https://api.bscscan.com/api", params=params, timeout=10
-                ) as resp:
-                    data = await resp.json()
-        except aiohttp.ClientError as e:
-            logging.error("Ошибка запроса BscScan: %s", e)
+            w3 = Web3(Web3.HTTPProvider(self.BSC_RPC))
+            w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
+
+            contract = w3.eth.contract(address=w3.to_checksum_address(self.USDT_CONTRACT), abi=ERC20_ABI)
+            latest_block = w3.eth.block_number
+            from_block = max(latest_block - 3000, 0)  # можно адаптировать диапазон
+
+            event_filter = contract.events.Transfer.create_filter(
+                from_block=from_block,
+                to_block="latest",
+                argument_filters={"to": w3.to_checksum_address(address)}
+            )
+
+            events = event_filter.get_all_entries()
+            if not events:
+                logging.debug("Нет входящих транзакций USDT для адреса %s", address)
+                return None
+
+            event = events[-1]
+            logging.debug("Последний входящий трансфер: %s", event)
+
+            return {
+                "hash": event.transactionHash.hex(),
+                "from": event.args["from"],
+                "to": event.args["to"],
+                "value": int(event.args["value"]),
+                "amount": int(event.args["value"]) / (10 ** 18),
+                "blockNumber": event.blockNumber
+            }
+        except Exception as e:
+            logging.exception(f"Ошибка при получении события Transfer: {e}")
             return None
 
-        result = data.get("result")
-        if isinstance(result, list) and result:
-            logging.debug("Последняя транзакция найдена")
-            return result[0]
-        return None
-
     async def check_payment(self, address: str, subscription_price: float) -> Dict[str, Any]:
-        """Проверяет, была ли произведена оплата подписки."""
-        tx = await self._get_last_tx(address)
+        """
+        Проверяет, была ли произведена оплата подписки в USDT (BEP20).
+        Возвращает: статус транзакции, сумму, подтверждения, и недостающую сумму (если есть).
+        """
+        tx = await self.get_last_tx_event(address)
         if not tx:
             logging.debug("Транзакции для %s не найдены", address)
             return {"status": "not_found"}
 
-        amount = int(tx.get("value", 0)) / 10 ** int(tx.get("tokenDecimal", 18))
-        threshold = max(subscription_price - 0.5, 0)
-        confirmations = int(tx.get("confirmations", 0))
-        info: Dict[str, Any] = {
-            "tx_hash": tx.get("hash"),
-            "amount": amount,
-        }
-        if confirmations == 0:
-            info["status"] = "pending_confirmation"
-            logging.debug("Транзакция %s ожидает подтверждения", info["tx_hash"])
-        elif amount >= threshold:
+        logging.debug("Последняя транзакция: %s", tx)
+
+        try:
+            latest_block = self.w3.eth.block_number
+            confirmations = latest_block - tx["blockNumber"]
+
+            amount = tx["amount"]
+            threshold = max(subscription_price - 0.5, 0)
+
+            info: Dict[str, Any] = {
+                "tx_hash": tx["hash"],
+                "amount": amount,
+                "confirmations": confirmations
+            }
+
+            # Мало подтверждений (например <3)
+            if confirmations < 30:
+                info["status"] = "pending_confirmation"
+                logging.debug("Транзакция %s ожидает подтверждения (%s)", tx["hash"], confirmations)
+                return info
+
+            # Недостаточная сумма
+            if amount < threshold:
+                missing = round(threshold - amount, 2)
+                info["status"] = "insufficient"
+                info["missing"] = missing
+                logging.info("Недостаточная оплата: %s USDT, не хватает %s", amount, missing)
+                return info
+
+            # Всё ок
             info["status"] = "success"
-            logging.info("Оплата успешно обнаружена: %s USDT", amount)
-        else:
-            info["status"] = "insufficient"
-            info["missing"] = max(threshold - amount, 0)
-            logging.info("Недостаточная оплата: %s USDT, не хватает %s", amount, info["missing"])
-        return info
+            logging.info("Оплата успешно подтверждена: %s USDT с %s подтверждениями", amount, confirmations)
+            return info
+
+        except Exception as e:
+            logging.exception(f"Ошибка при проверке статуса транзакции: {e}")
+            return {"status": "error", "message": str(e)}
 
     async def get_balance(self, address: str, subscription_price: float) -> Dict[str, Any]:
         """
