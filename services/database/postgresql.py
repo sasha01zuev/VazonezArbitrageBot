@@ -989,3 +989,12 @@ class Database:
         except Exception as e:
             logging.exception(f"Ошибка при вычитании суммы {amount} из баланса рефералов пользователя {user_id}: {e}")
 
+    async def get_user_from_blacklist(self, user_id: int):
+        try:
+            sql = """
+            SELECT user_id FROM blacklist WHERE user_id = $1;
+            """
+            return await self.pool.fetchval(sql, user_id)
+        except:
+            return None
+
